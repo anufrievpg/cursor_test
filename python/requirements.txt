@@ -1,3 +1,5 @@
+boto3>=1.34.0
+botocore>=1.34.0
 requests>=2.31.0
 tqdm>=4.66.0
 urllib3>=2.0.0
