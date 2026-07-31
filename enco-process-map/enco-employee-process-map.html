@@ -3,35 +3,28 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Карта процессов сотрудника ЭНКО — тендерные роли</title>
+  <title>Карта процессов сотрудника ЭНКО — HTML5 Canvas</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
     :root {
       --navy: #122A4B;
       --navy-2: #1B4987;
       --blue: #0072BC;
-      --blue-soft: #4098FF;
-      --teal: #173D50;
       --bg: #EAEFF2;
       --bg-2: #F7F9FC;
       --surface: #FFFFFF;
       --line: #D5DEE8;
       --text: #262626;
       --muted: #758795;
-      --ok: #27AD30;
-      --warn: #C9841A;
-      --danger: #C62828;
       --initiator: #0072BC;
       --estimator: #1F8A70;
       --security: #5B6B8C;
       --committee: #B35C1E;
       --lifecycle: #1B4987;
       --shadow: 0 10px 30px rgba(18, 42, 75, 0.08);
-      --radius: 16px;
     }
-
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html, body { height: 100%; }
     body {
@@ -43,373 +36,182 @@
         linear-gradient(180deg, #F4F7FA 0%, var(--bg) 100%);
       overflow: hidden;
     }
-
-    .app {
-      display: grid;
-      grid-template-rows: auto 1fr;
-      height: 100%;
-    }
-
+    .app { display: grid; grid-template-rows: auto 1fr; height: 100%; }
     header {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
+      display: flex; align-items: center; gap: 1rem;
       padding: 0.85rem 1.25rem;
       background: rgba(255,255,255,.86);
       backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--line);
       z-index: 20;
     }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 0.85rem;
-      min-width: 0;
-    }
-
-    .brand img { height: 28px; width: auto; display: block;  }
+    .brand { display: flex; align-items: center; gap: 0.85rem; min-width: 0; }
+    .brand img { height: 28px; width: auto; display: block; }
     .brand-text h1 {
-      font-size: 1.05rem;
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      color: var(--navy);
-      line-height: 1.15;
+      font-size: 1.05rem; font-weight: 800; letter-spacing: -0.02em;
+      color: var(--navy); line-height: 1.15;
     }
-    .brand-text p {
-      font-size: 0.78rem;
-      color: var(--muted);
-      margin-top: 0.1rem;
+    .brand-text p { font-size: 0.78rem; color: var(--muted); margin-top: 0.1rem; }
+    .badge-canvas {
+      display: inline-flex; align-items: center; gap: 0.35rem;
+      margin-left: 0.35rem; padding: 0.15rem 0.5rem;
+      border-radius: 999px; background: #122A4B; color: #fff;
+      font-size: 0.65rem; font-weight: 800; letter-spacing: .04em;
+      vertical-align: middle;
     }
-
     .toolbar {
-      margin-left: auto;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      align-items: center;
-      justify-content: flex-end;
+      margin-left: auto; display: flex; flex-wrap: wrap; gap: 0.5rem;
+      align-items: center; justify-content: flex-end;
     }
-
     .chip, .tool-btn, .search input {
-      border: 1px solid var(--line);
-      background: var(--surface);
-      border-radius: 999px;
-      font: inherit;
-      color: var(--text);
+      border: 1px solid var(--line); background: var(--surface);
+      border-radius: 999px; font: inherit; color: var(--text);
     }
-
     .chip, .tool-btn {
-      padding: 0.45rem 0.85rem;
-      cursor: pointer;
-      font-size: 0.82rem;
-      font-weight: 600;
-      transition: .18s ease;
+      padding: 0.45rem 0.85rem; cursor: pointer;
+      font-size: 0.82rem; font-weight: 600; transition: .18s ease;
     }
     .chip:hover, .tool-btn:hover { border-color: var(--blue); color: var(--blue); }
-    .chip.active {
-      background: var(--navy);
-      border-color: var(--navy);
-      color: #fff;
-    }
+    .chip.active { background: var(--navy); border-color: var(--navy); color: #fff; }
     .chip[data-role="initiator"].active { background: var(--initiator); border-color: var(--initiator); }
     .chip[data-role="estimator"].active { background: var(--estimator); border-color: var(--estimator); }
     .chip[data-role="security"].active { background: var(--security); border-color: var(--security); }
     .chip[data-role="committee"].active { background: var(--committee); border-color: var(--committee); }
     .chip[data-role="lifecycle"].active { background: var(--lifecycle); border-color: var(--lifecycle); }
-
     .search input {
-      width: min(240px, 28vw);
-      padding: 0.5rem 0.95rem;
-      outline: none;
+      width: min(240px, 28vw); padding: 0.5rem 0.95rem; outline: none;
     }
     .search input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(0,114,188,.12); }
-
     .main {
-      display: grid;
-      grid-template-columns: 300px 1fr 420px;
-      min-height: 0;
+      display: grid; grid-template-columns: 300px 1fr 420px; min-height: 0;
     }
-
     .side, .detail {
-      background: rgba(255,255,255,.92);
-      border-right: 1px solid var(--line);
-      overflow: auto;
-      min-height: 0;
+      background: rgba(255,255,255,.92); border-right: 1px solid var(--line);
+      overflow: auto; min-height: 0;
     }
-    .detail {
-      border-right: none;
-      border-left: 1px solid var(--line);
-    }
-
+    .detail { border-right: none; border-left: 1px solid var(--line); }
     .side-block { padding: 1rem 1rem 0.25rem; }
     .side-block h2 {
-      font-size: 0.72rem;
-      text-transform: uppercase;
-      letter-spacing: .08em;
-      color: var(--muted);
-      margin-bottom: 0.65rem;
+      font-size: 0.72rem; text-transform: uppercase; letter-spacing: .08em;
+      color: var(--muted); margin-bottom: 0.65rem;
     }
-
-    .tree {
-      list-style: none;
-      padding: 0 0.65rem 1.5rem;
-    }
+    .tree { list-style: none; padding: 0 0.65rem 1.5rem; }
     .tree details { margin: 0.15rem 0; }
     .tree summary {
-      list-style: none;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.55rem 0.65rem;
-      border-radius: 12px;
-      font-size: 0.88rem;
-      font-weight: 600;
-      color: var(--navy);
-      transition: .15s ease;
+      list-style: none; cursor: pointer; display: flex; align-items: center;
+      gap: 0.5rem; padding: 0.55rem 0.65rem; border-radius: 12px;
+      font-size: 0.88rem; font-weight: 600; color: var(--navy); transition: .15s ease;
     }
     .tree summary::-webkit-details-marker { display: none; }
     .tree summary:hover, .tree .leaf:hover { background: #F0F5FA; }
     .tree .leaf.active, .tree summary.active {
-      background: rgba(0,114,188,.1);
-      color: var(--blue);
+      background: rgba(0,114,188,.1); color: var(--blue);
     }
     .tree .leaf {
-      display: block;
-      width: 100%;
-      text-align: left;
-      border: 0;
-      background: transparent;
-      padding: 0.45rem 0.65rem 0.45rem 1.85rem;
-      border-radius: 10px;
-      cursor: pointer;
-      font: inherit;
-      font-size: 0.84rem;
-      color: var(--text);
+      display: block; width: 100%; text-align: left; border: 0; background: transparent;
+      padding: 0.45rem 0.65rem 0.45rem 1.85rem; border-radius: 10px;
+      cursor: pointer; font: inherit; font-size: 0.84rem; color: var(--text);
     }
-    .dot {
-      width: 9px; height: 9px; border-radius: 50%; flex: 0 0 auto;
-    }
+    .dot { width: 9px; height: 9px; border-radius: 50%; flex: 0 0 auto; display: inline-block; }
     .dot.initiator { background: var(--initiator); }
     .dot.estimator { background: var(--estimator); }
     .dot.security { background: var(--security); }
     .dot.committee { background: var(--committee); }
     .dot.lifecycle { background: var(--lifecycle); }
-
     .canvas-wrap {
-      position: relative;
-      min-width: 0;
-      min-height: 0;
-      overflow: hidden;
-      background:
-        linear-gradient(90deg, rgba(18,42,75,.035) 1px, transparent 1px),
-        linear-gradient(rgba(18,42,75,.035) 1px, transparent 1px);
-      background-size: 28px 28px;
-      background-color: rgba(247,249,252,.65);
+      position: relative; min-width: 0; min-height: 0; overflow: hidden;
+      background: #F3F6FA;
       cursor: grab;
     }
     .canvas-wrap.dragging { cursor: grabbing; }
-
-    .canvas-world {
-      position: absolute;
-      left: 0; top: 0;
-      transform-origin: 0 0;
-      will-change: transform;
+    #mapCanvas {
+      display: block; width: 100%; height: 100%;
+      touch-action: none;
     }
-
-    .map-svg { display: block; overflow: visible; }
-
-    .node {
-      cursor: pointer;
-      transition: filter .15s ease;
-    }
-    .node:hover { filter: brightness(1.03); }
-    .node.dim { opacity: .28; }
-    .node.selected .node-card {
-      stroke: var(--blue);
-      stroke-width: 2.5;
-      filter: drop-shadow(0 8px 18px rgba(0,114,188,.22));
-    }
-
     .hint-bar {
-      position: absolute;
-      left: 1rem;
-      bottom: 1rem;
-      display: flex;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-      z-index: 5;
+      position: absolute; left: 1rem; bottom: 1rem;
+      display: flex; gap: 0.5rem; flex-wrap: wrap; z-index: 5; pointer-events: none;
     }
     .hint {
-      background: rgba(255,255,255,.92);
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      padding: 0.4rem 0.75rem;
-      font-size: 0.75rem;
-      color: var(--muted);
-      box-shadow: var(--shadow);
+      background: rgba(255,255,255,.94); border: 1px solid var(--line);
+      border-radius: 999px; padding: 0.4rem 0.75rem; font-size: 0.75rem;
+      color: var(--muted); box-shadow: var(--shadow);
     }
-
+    .hint strong { color: var(--navy); }
     .zoom-controls {
-      position: absolute;
-      right: 1rem;
-      top: 1rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.4rem;
-      z-index: 5;
+      position: absolute; right: 1rem; top: 1rem;
+      display: flex; flex-direction: column; gap: 0.4rem; z-index: 5;
     }
     .zoom-controls button {
-      width: 38px; height: 38px;
-      border-radius: 12px;
-      border: 1px solid var(--line);
-      background: rgba(255,255,255,.95);
-      cursor: pointer;
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: var(--navy);
-      box-shadow: var(--shadow);
+      width: 38px; height: 38px; border-radius: 12px; border: 1px solid var(--line);
+      background: rgba(255,255,255,.95); cursor: pointer; font-size: 1.1rem;
+      font-weight: 700; color: var(--navy); box-shadow: var(--shadow);
     }
-
     .detail-empty, .detail-content { padding: 1.15rem 1.2rem 1.8rem; }
     .detail-empty {
-      color: var(--muted);
-      display: grid;
-      place-items: center;
-      text-align: center;
-      min-height: 100%;
-      gap: 0.75rem;
+      color: var(--muted); display: grid; place-items: center; text-align: center;
+      min-height: 100%; gap: 0.75rem;
     }
     .detail-empty strong { color: var(--navy); font-size: 1.05rem; }
-
     .hero {
-      position: relative;
-      border-radius: 18px;
-      overflow: hidden;
-      border: 1px solid var(--line);
-      margin-bottom: 1rem;
-      aspect-ratio: 16 / 9;
+      position: relative; border-radius: 18px; overflow: hidden;
+      border: 1px solid var(--line); margin-bottom: 1rem; aspect-ratio: 16 / 9;
       background: #dfe7f0;
     }
     .hero img { width: 100%; height: 100%; object-fit: cover; display: block; }
     .hero-badge {
-      position: absolute;
-      left: 0.75rem;
-      bottom: 0.75rem;
-      background: rgba(18,42,75,.88);
-      color: #fff;
-      padding: 0.35rem 0.7rem;
-      border-radius: 999px;
-      font-size: 0.72rem;
-      font-weight: 700;
+      position: absolute; left: 0.75rem; bottom: 0.75rem;
+      background: rgba(18,42,75,.88); color: #fff; padding: 0.35rem 0.7rem;
+      border-radius: 999px; font-size: 0.72rem; font-weight: 700;
     }
-
     .detail h2 {
-      font-size: 1.35rem;
-      line-height: 1.2;
-      letter-spacing: -0.02em;
-      color: var(--navy);
-      margin-bottom: 0.35rem;
+      font-size: 1.35rem; line-height: 1.2; letter-spacing: -0.02em;
+      color: var(--navy); margin-bottom: 0.35rem;
     }
-    .detail .lead {
-      color: var(--muted);
-      font-size: 0.92rem;
-      margin-bottom: 1rem;
-    }
-
+    .detail .lead { color: var(--muted); font-size: 0.92rem; margin-bottom: 1rem; }
     .meta-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.55rem;
-      margin-bottom: 1rem;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 0.55rem; margin-bottom: 1rem;
     }
     .meta {
-      background: var(--bg-2);
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      padding: 0.7rem 0.8rem;
+      background: var(--bg-2); border: 1px solid var(--line);
+      border-radius: 14px; padding: 0.7rem 0.8rem;
     }
     .meta span {
-      display: block;
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      letter-spacing: .06em;
-      color: var(--muted);
-      margin-bottom: 0.2rem;
+      display: block; font-size: 0.7rem; text-transform: uppercase;
+      letter-spacing: .06em; color: var(--muted); margin-bottom: 0.2rem;
     }
     .meta strong { font-size: 0.88rem; color: var(--navy); }
-
     .section-title {
-      margin: 1.1rem 0 0.55rem;
-      font-size: 0.78rem;
-      text-transform: uppercase;
-      letter-spacing: .08em;
-      color: var(--muted);
-      font-weight: 700;
+      margin: 1.1rem 0 0.55rem; font-size: 0.78rem; text-transform: uppercase;
+      letter-spacing: .08em; color: var(--muted); font-weight: 700;
     }
-
     .steps { list-style: none; display: grid; gap: 0.45rem; }
     .steps li {
-      display: grid;
-      grid-template-columns: 28px 1fr;
-      gap: 0.65rem;
-      align-items: start;
-      padding: 0.7rem 0.75rem;
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      background: #fff;
+      display: grid; grid-template-columns: 28px 1fr; gap: 0.65rem; align-items: start;
+      padding: 0.7rem 0.75rem; border: 1px solid var(--line); border-radius: 14px; background: #fff;
     }
     .steps .n {
-      width: 28px; height: 28px;
-      border-radius: 9px;
-      display: grid; place-items: center;
-      color: #fff;
-      font-size: 0.78rem;
-      font-weight: 800;
-      background: var(--navy);
+      width: 28px; height: 28px; border-radius: 9px; display: grid; place-items: center;
+      color: #fff; font-size: 0.78rem; font-weight: 800; background: var(--navy);
     }
     .steps h4 { font-size: 0.9rem; margin-bottom: 0.15rem; color: var(--navy); }
     .steps p { font-size: 0.82rem; color: var(--muted); }
-
     .tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
     .tag {
-      font-size: 0.75rem;
-      font-weight: 600;
-      padding: 0.3rem 0.6rem;
-      border-radius: 999px;
-      background: #EEF3FA;
-      color: var(--navy-2);
-      border: 1px solid #D7E3F2;
+      font-size: 0.75rem; font-weight: 600; padding: 0.3rem 0.6rem; border-radius: 999px;
+      background: #EEF3FA; color: var(--navy-2); border: 1px solid #D7E3F2;
     }
-
-    .io {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.55rem;
-    }
-    .io-box {
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      padding: 0.75rem;
-      background: #fff;
-    }
+    .io { display: grid; grid-template-columns: 1fr 1fr; gap: 0.55rem; }
+    .io-box { border: 1px solid var(--line); border-radius: 14px; padding: 0.75rem; background: #fff; }
     .io-box h4 { font-size: 0.82rem; margin-bottom: 0.4rem; color: var(--navy); }
     .io-box ul { margin-left: 1rem; color: var(--muted); font-size: 0.8rem; }
     .io-box li + li { margin-top: 0.2rem; }
-
     table.raci {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.78rem;
-      overflow: hidden;
-      border-radius: 12px;
-      border: 1px solid var(--line);
+      width: 100%; border-collapse: collapse; font-size: 0.78rem;
+      overflow: hidden; border-radius: 12px; border: 1px solid var(--line);
     }
     table.raci th, table.raci td {
-      border-bottom: 1px solid var(--line);
-      padding: 0.45rem 0.5rem;
-      text-align: center;
+      border-bottom: 1px solid var(--line); padding: 0.45rem 0.5rem; text-align: center;
     }
     table.raci th:first-child, table.raci td:first-child { text-align: left; }
     table.raci th { background: var(--bg-2); color: var(--muted); font-weight: 700; }
@@ -418,73 +220,31 @@
     .a { color: var(--committee); font-weight: 800; }
     .c { color: var(--estimator); font-weight: 700; }
     .i { color: var(--muted); }
-
-    .children {
-      display: grid;
-      gap: 0.45rem;
-    }
+    .children { display: grid; gap: 0.45rem; }
     .child-link {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 0.5rem;
-      text-align: left;
-      width: 100%;
-      border: 1px solid var(--line);
-      background: #fff;
-      border-radius: 12px;
-      padding: 0.7rem 0.8rem;
-      cursor: pointer;
-      font: inherit;
-      font-weight: 600;
-      color: var(--navy);
-      transition: .15s ease;
+      display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;
+      text-align: left; width: 100%; border: 1px solid var(--line); background: #fff;
+      border-radius: 12px; padding: 0.7rem 0.8rem; cursor: pointer; font: inherit;
+      font-weight: 600; color: var(--navy); transition: .15s ease;
     }
     .child-link:hover { border-color: var(--blue); color: var(--blue); }
     .child-link span { color: var(--muted); font-size: 0.78rem; font-weight: 500; }
-
-    .legend {
-      display: grid;
-      gap: 0.4rem;
-      padding: 0 1rem 1rem;
-    }
-    .legend-item {
-      display: flex;
-      align-items: center;
-      gap: 0.55rem;
-      font-size: 0.82rem;
-      color: var(--muted);
-    }
-
+    .legend { display: grid; gap: 0.4rem; padding: 0 1rem 1rem; }
+    .legend-item { display: flex; align-items: center; gap: 0.55rem; font-size: 0.82rem; color: var(--muted); }
     .breadcrumb {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.35rem;
-      margin-bottom: 0.85rem;
-      font-size: 0.78rem;
+      display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 0.85rem; font-size: 0.78rem;
     }
     .breadcrumb button {
-      border: 0;
-      background: transparent;
-      color: var(--blue);
-      cursor: pointer;
-      font: inherit;
-      font-weight: 600;
-      padding: 0;
+      border: 0; background: transparent; color: var(--blue); cursor: pointer;
+      font: inherit; font-weight: 600; padding: 0;
     }
     .breadcrumb em { color: var(--muted); font-style: normal; }
-
-    @media (max-width: 1180px) {
-      .main { grid-template-columns: 260px 1fr 360px; }
-    }
+    @media (max-width: 1180px) { .main { grid-template-columns: 260px 1fr 360px; } }
     @media (max-width: 980px) {
       body { overflow: auto; }
       .app { height: auto; min-height: 100%; }
-      .main {
-        grid-template-columns: 1fr;
-        grid-template-rows: auto 58vh auto;
-      }
-      .side, .detail { border: 0; border-bottom: 1px solid var(--line); max-height: none; }
+      .main { grid-template-columns: 1fr; grid-template-rows: auto 58vh auto; }
+      .side, .detail { border: 0; border-bottom: 1px solid var(--line); }
       .brand-text p { display: none; }
       .search input { width: 140px; }
     }
@@ -496,8 +256,8 @@
       <div class="brand">
         <img src="assets/enco-logo.svg" alt="ЭНКО" />
         <div class="brand-text">
-          <h1>Карта процессов сотрудника</h1>
-          <p>Иерархия ролей · тендерный контур · Canvas HTML</p>
+          <h1>Карта процессов сотрудника <span class="badge-canvas">HTML5 CANVAS</span></h1>
+          <p>Иерархия ролей · тендерный контур · отрисовка на &lt;canvas&gt;</p>
         </div>
       </div>
       <div class="toolbar">
@@ -527,17 +287,15 @@
         </div>
       </aside>
 
-      <section class="canvas-wrap" id="canvasWrap" aria-label="Canvas карта процессов">
-        <div class="canvas-world" id="canvasWorld">
-          <svg class="map-svg" id="mapSvg" width="1480" height="980"></svg>
-        </div>
+      <section class="canvas-wrap" id="canvasWrap" aria-label="HTML5 Canvas карта процессов">
+        <canvas id="mapCanvas" width="1200" height="800"></canvas>
         <div class="zoom-controls">
           <button type="button" id="zoomIn" title="Увеличить">+</button>
           <button type="button" id="zoomOut" title="Уменьшить">−</button>
           <button type="button" id="zoomReset" title="Сброс">⟲</button>
         </div>
         <div class="hint-bar">
-          <div class="hint">Клик по узлу — детали</div>
+          <div class="hint"><strong>&lt;canvas&gt;</strong> · клик по узлу</div>
           <div class="hint">Перетаскивание — панорама</div>
           <div class="hint">Колёсико — масштаб</div>
           <div class="hint">Двойной клик — фокус</div>
@@ -546,7 +304,7 @@
 
       <aside class="detail" id="detail">
         <div class="detail-empty">
-          <strong>Выберите процесс на карте</strong>
+          <strong>Выберите процесс на canvas</strong>
           <p>Откроется описание, шаги, входы/выходы, системы и связи ролей.</p>
         </div>
       </aside>
@@ -554,16 +312,7 @@
   </div>
 
   <script>
-    const COLORS = {
-      root: "#122A4B",
-      lifecycle: "#1B4987",
-      initiator: "#0072BC",
-      estimator: "#1F8A70",
-      security: "#5B6B8C",
-      committee: "#B35C1E"
-    };
-
-    const DATA = {
+const DATA = {
       id: "root",
       title: "Сотрудник ЭНКО",
       short: "Тендерный контур",
@@ -1172,6 +921,15 @@
       ]
     };
 
+    const COLORS = {
+      root: "#122A4B",
+      lifecycle: "#1B4987",
+      initiator: "#0072BC",
+      estimator: "#1F8A70",
+      security: "#5B6B8C",
+      committee: "#B35C1E"
+    };
+
     const byId = new Map();
     function indexTree(node, parent = null) {
       node.parentId = parent ? parent.id : null;
@@ -1188,15 +946,19 @@
     }
 
     let selectedId = "root";
+    let hoverId = null;
     let filterRole = "all";
     let searchQuery = "";
-    let transform = { x: 40, y: 30, k: 0.92 };
+    let transform = { x: 40, y: 30, k: 0.85 };
+    let hitRects = []; // {id,x,y,w,h} in world coords
+    let worldSize = { w: 1600, h: 900 };
+    const imageCache = new Map();
 
     const treeEl = document.getElementById("tree");
     const detailEl = document.getElementById("detail");
-    const svg = document.getElementById("mapSvg");
-    const world = document.getElementById("canvasWorld");
     const wrap = document.getElementById("canvasWrap");
+    const canvas = document.getElementById("mapCanvas");
+    const ctx = canvas.getContext("2d");
 
     function matchesFilter(node) {
       if (filterRole !== "all" && node.role !== filterRole && node.role !== "root") {
@@ -1210,12 +972,33 @@
       return (node.children || []).some(matchesFilter);
     }
 
+    function loadImage(src) {
+      if (!src) return Promise.resolve(null);
+      if (imageCache.has(src)) return Promise.resolve(imageCache.get(src));
+      return new Promise(resolve => {
+        const img = new Image();
+        img.onload = () => { imageCache.set(src, img); resolve(img); };
+        img.onerror = () => { imageCache.set(src, null); resolve(null); };
+        img.src = src;
+      });
+    }
+
+    async function preloadImages() {
+      const urls = new Set();
+      const walk = (n) => {
+        if (n.image) urls.add(n.image);
+        (n.children || []).forEach(walk);
+      };
+      walk(DATA);
+      await Promise.all([...urls].map(loadImage));
+    }
+
     function renderTree() {
       const roots = DATA.children.filter(matchesFilter);
       treeEl.innerHTML = `
         <li>
           <button class="leaf ${selectedId === "root" ? "active" : ""}" data-id="root">
-            <span class="dot lifecycle" style="display:inline-block;margin-right:.45rem;vertical-align:middle"></span>
+            <span class="dot lifecycle" style="margin-right:.45rem;vertical-align:middle"></span>
             Сотрудник ЭНКО
           </button>
         </li>
@@ -1244,48 +1027,34 @@
       });
     }
 
-    function wrapText(text, maxLen) {
-      const words = String(text).split(/\s+/);
-      const lines = [];
-      let line = "";
-      words.forEach(w => {
-        const next = line ? line + " " + w : w;
-        if (next.length > maxLen) { if (line) lines.push(line); line = w; }
-        else line = next;
-      });
-      if (line) lines.push(line);
-      return lines.slice(0, 3);
-    }
-
     function layout() {
       const roleNodes = DATA.children.filter(matchesFilter);
       const positions = new Map();
-      const colW = 250;
-      const colGap = 36;
-      const nodeW = 220;
-      const roleH = 72;
-      const leafH = 58;
-      const leafGap = 14;
-      const topPad = 70;
+      const colW = 268;
+      const colGap = 28;
+      const nodeW = 236;
+      const roleH = 118; // includes thumbnail
+      const leafH = 56;
+      const leafGap = 12;
+      const topPad = 56;
       const roleY = 210;
-      const leafStartY = 330;
+      const leafStartY = 360;
       const cols = Math.max(roleNodes.length, 1);
       const totalW = cols * colW + (cols - 1) * colGap;
-      const startX = 80;
-      const rootW = 240;
+      const startX = 70;
+      const rootW = 260;
 
       positions.set("root", {
         x: startX + totalW / 2 - rootW / 2,
         y: topPad,
         w: rootW,
-        h: 76
+        h: 96
       });
 
       roleNodes.forEach((rn, i) => {
         const colX = startX + i * (colW + colGap);
         const roleX = colX + (colW - nodeW) / 2;
         positions.set(rn.id, { x: roleX, y: roleY, w: nodeW, h: roleH, colX, colW });
-
         const kids = (rn.children || []).filter(matchesFilter);
         kids.forEach((k, ki) => {
           positions.set(k.id, {
@@ -1297,44 +1066,137 @@
         });
       });
 
+      let maxX = 1100, maxY = 700;
+      positions.forEach(p => {
+        maxX = Math.max(maxX, (p.colX != null ? p.colX + p.colW : p.x + p.w) + 80);
+        maxY = Math.max(maxY, p.y + p.h + 40);
+      });
+      worldSize = { w: maxX, h: maxY + 110 };
       return positions;
     }
 
-    function applyTransform() {
-      world.style.transform = `translate(${transform.x}px, ${transform.y}px) scale(${transform.k})`;
+    function roundRect(c, x, y, w, h, r) {
+      const rr = Math.min(r, w / 2, h / 2);
+      c.beginPath();
+      c.moveTo(x + rr, y);
+      c.arcTo(x + w, y, x + w, y + h, rr);
+      c.arcTo(x + w, y + h, x, y + h, rr);
+      c.arcTo(x, y + h, x, y, rr);
+      c.arcTo(x, y, x + w, y, rr);
+      c.closePath();
     }
 
-    function renderCanvas() {
+    function wrapLines(text, maxChars) {
+      const words = String(text).split(/\s+/);
+      const lines = [];
+      let line = "";
+      words.forEach(w => {
+        const next = line ? line + " " + w : w;
+        if (next.length > maxChars) { if (line) lines.push(line); line = w; }
+        else line = next;
+      });
+      if (line) lines.push(line);
+      return lines.slice(0, 3);
+    }
+
+    function resizeCanvas() {
+      const dpr = Math.max(1, window.devicePixelRatio || 1);
+      const rect = wrap.getBoundingClientRect();
+      canvas.width = Math.max(1, Math.floor(rect.width * dpr));
+      canvas.height = Math.max(1, Math.floor(rect.height * dpr));
+      canvas.style.width = rect.width + "px";
+      canvas.style.height = rect.height + "px";
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      draw();
+    }
+
+    function drawGrid(viewW, viewH) {
+      const step = 28 * transform.k;
+      const ox = transform.x % step;
+      const oy = transform.y % step;
+      ctx.save();
+      ctx.strokeStyle = "rgba(18,42,75,0.05)";
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      for (let x = ox; x < viewW; x += step) { ctx.moveTo(x, 0); ctx.lineTo(x, viewH); }
+      for (let y = oy; y < viewH; y += step) { ctx.moveTo(0, y); ctx.lineTo(viewW, y); }
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    function draw() {
+      const rect = wrap.getBoundingClientRect();
+      const viewW = rect.width;
+      const viewH = rect.height;
+      ctx.clearRect(0, 0, viewW, viewH);
+
+      // background
+      const g = ctx.createLinearGradient(0, 0, viewW, viewH);
+      g.addColorStop(0, "#F7F9FC");
+      g.addColorStop(1, "#EAEFF2");
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, viewW, viewH);
+      drawGrid(viewW, viewH);
+
       const positions = layout();
+      hitRects = [];
+
+      ctx.save();
+      ctx.translate(transform.x, transform.y);
+      ctx.scale(transform.k, transform.k);
+
       const visible = (id) => {
         const n = byId.get(id);
         return n && matchesFilter(n);
       };
 
-      let links = "";
-      const addLink = (a, b, color) => {
+      // columns
+      DATA.children.filter(matchesFilter).forEach(rn => {
+        const p = positions.get(rn.id);
+        if (!p || p.colX == null) return;
+        const kids = (rn.children || []).filter(matchesFilter);
+        const last = kids.length ? positions.get(kids[kids.length - 1].id) : p;
+        const top = 192;
+        const height = (last.y + last.h + 22) - top;
+        roundRect(ctx, p.colX, top, p.colW, height, 22);
+        ctx.fillStyle = "rgba(255,255,255,0.62)";
+        ctx.fill();
+        ctx.strokeStyle = COLORS[rn.role];
+        ctx.globalAlpha = 0.22;
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+        ctx.globalAlpha = 1;
+      });
+
+      // links parent->child
+      const drawLink = (a, b, color) => {
         if (!visible(a) || !visible(b)) return;
         const A = positions.get(a), B = positions.get(b);
         if (!A || !B) return;
         const x1 = A.x + A.w / 2, y1 = A.y + A.h;
         const x2 = B.x + B.w / 2, y2 = B.y;
         const mid = (y1 + y2) / 2;
-        links += `<path d="M${x1} ${y1} C${x1} ${mid}, ${x2} ${mid}, ${x2} ${y2}" fill="none" stroke="${color}" stroke-width="2" opacity=".45"/>`;
+        ctx.beginPath();
+        ctx.moveTo(x1, y1);
+        ctx.bezierCurveTo(x1, mid, x2, mid, x2, y2);
+        ctx.strokeStyle = color;
+        ctx.globalAlpha = 0.45;
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        ctx.globalAlpha = 1;
       };
 
       DATA.children.filter(matchesFilter).forEach(rn => {
-        addLink("root", rn.id, COLORS[rn.role] || COLORS.root);
-        (rn.children || []).filter(matchesFilter).forEach(ch => addLink(rn.id, ch.id, COLORS[rn.role]));
+        drawLink("root", rn.id, COLORS[rn.role] || COLORS.root);
+        (rn.children || []).filter(matchesFilter).forEach(ch => drawLink(rn.id, ch.id, COLORS[rn.role]));
       });
 
-      // Cross-role flow arrows (handoffs) between role headers
+      // handoff dashed arrows between role headers
       const flow = [
         ["initiator", "estimator", COLORS.estimator],
-        ["initiator", "security", COLORS.security],
-        ["estimator", "committee", COLORS.committee],
+        ["estimator", "security", COLORS.security],
         ["security", "committee", COLORS.committee]
       ];
-      let flows = "";
       flow.forEach(([a, b, color]) => {
         if (!visible(a) || !visible(b)) return;
         const A = positions.get(a), B = positions.get(b);
@@ -1342,42 +1204,101 @@
         const x1 = A.x + A.w, y1 = A.y + A.h / 2;
         const x2 = B.x, y2 = B.y + B.h / 2;
         if (x2 <= x1) return;
-        flows += `<path d="M${x1} ${y1} C${(x1+x2)/2} ${y1}, ${(x1+x2)/2} ${y2}, ${x2} ${y2}" fill="none" stroke="${color}" stroke-width="2" stroke-dasharray="6 6" opacity=".55" marker-end="url(#arrow)"/>`;
+        ctx.beginPath();
+        ctx.moveTo(x1, y1);
+        ctx.bezierCurveTo((x1 + x2) / 2, y1, (x1 + x2) / 2, y2, x2, y2);
+        ctx.setLineDash([6, 6]);
+        ctx.strokeStyle = color;
+        ctx.globalAlpha = 0.6;
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.globalAlpha = 1;
+        // arrow head
+        ctx.beginPath();
+        ctx.moveTo(x2, y2);
+        ctx.lineTo(x2 - 8, y2 - 5);
+        ctx.lineTo(x2 - 8, y2 + 5);
+        ctx.closePath();
+        ctx.fillStyle = color;
+        ctx.globalAlpha = 0.7;
+        ctx.fill();
+        ctx.globalAlpha = 1;
       });
 
-      // Column panels
-      let columns = "";
-      DATA.children.filter(matchesFilter).forEach(rn => {
-        const p = positions.get(rn.id);
-        if (!p || p.colX == null) return;
-        const kids = (rn.children || []).filter(matchesFilter);
-        const last = kids.length ? positions.get(kids[kids.length - 1].id) : p;
-        const top = 190;
-        const height = (last.y + last.h + 24) - top;
-        columns += `<rect x="${p.colX}" y="${top}" width="${p.colW}" height="${height}" rx="22" fill="rgba(255,255,255,.55)" stroke="${COLORS[rn.role]}" stroke-opacity=".18"/>`;
-      });
-
-      let nodes = "";
       const drawNode = (node) => {
         if (!visible(node.id) && node.id !== "root") return;
         const p = positions.get(node.id);
         if (!p) return;
         const color = COLORS[node.role] || COLORS.root;
-        const selected = selectedId === node.id ? "selected" : "";
-        const dim = (filterRole !== "all" && node.role !== filterRole && node.id !== "root" && node.role !== "root") ? "dim" : "";
-        const isLeaf = node.parentId && !DATA.children.some(c => c.id === node.id);
-        const useLines = wrapText(node.title, isLeaf ? 22 : 18);
-        nodes += `
-          <g class="node ${selected} ${dim}" data-id="${node.id}">
-            <rect class="node-card" x="${p.x}" y="${p.y}" width="${p.w}" height="${p.h}" rx="16" ry="16"
-              fill="#fff" stroke="${color}" stroke-width="1.6" filter="url(#soft)"/>
-            <rect x="${p.x}" y="${p.y}" width="8" height="${p.h}" rx="4" fill="${color}"/>
-            ${useLines.map((ln, i) => `
-              <text x="${p.x + 18 + (p.w - 18) / 2}" y="${p.y + (p.h - (useLines.length - 1) * 15) / 2 + i * 15 + 4}"
-                text-anchor="middle" font-family="Manrope, sans-serif" font-size="${isLeaf ? 12 : 13}"
-                font-weight="700" fill="#122A4B">${escapeXml(ln)}</text>
-            `).join("")}
-          </g>`;
+        const isRole = DATA.children.some(c => c.id === node.id);
+        const selected = selectedId === node.id;
+        const hovered = hoverId === node.id;
+
+        // shadow
+        ctx.save();
+        if (selected || hovered) {
+          ctx.shadowColor = "rgba(0,114,188,0.25)";
+          ctx.shadowBlur = 18;
+          ctx.shadowOffsetY = 6;
+        } else {
+          ctx.shadowColor = "rgba(18,42,75,0.10)";
+          ctx.shadowBlur = 10;
+          ctx.shadowOffsetY = 5;
+        }
+
+        roundRect(ctx, p.x, p.y, p.w, p.h, 16);
+        ctx.fillStyle = "#fff";
+        ctx.fill();
+        ctx.restore();
+
+        roundRect(ctx, p.x, p.y, p.w, p.h, 16);
+        ctx.strokeStyle = selected ? "#0072BC" : color;
+        ctx.lineWidth = selected ? 2.5 : 1.6;
+        ctx.stroke();
+
+        // left accent
+        ctx.fillStyle = color;
+        roundRect(ctx, p.x, p.y, 8, p.h, 4);
+        ctx.fill();
+
+        // role thumbnail
+        let textTop = p.y + p.h / 2;
+        if (isRole && node.image && imageCache.get(node.image)) {
+          const img = imageCache.get(node.image);
+          const ix = p.x + 16, iy = p.y + 12, iw = p.w - 28, ih = 52;
+          ctx.save();
+          roundRect(ctx, ix, iy, iw, ih, 10);
+          ctx.clip();
+          // cover fit
+          const scale = Math.max(iw / img.width, ih / img.height);
+          const dw = img.width * scale, dh = img.height * scale;
+          ctx.drawImage(img, ix + (iw - dw) / 2, iy + (ih - dh) / 2, dw, dh);
+          ctx.restore();
+          textTop = iy + ih + 22;
+        } else if (node.id === "root" && node.image && imageCache.get(node.image)) {
+          // small chip image for root not needed; just title
+          textTop = p.y + p.h / 2;
+        }
+
+        const lines = wrapLines(node.title, isRole || node.id === "root" ? 20 : 24);
+        ctx.fillStyle = "#122A4B";
+        ctx.font = `700 ${isRole || node.id === "root" ? 13 : 12}px Manrope, sans-serif`;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        const startY = isRole ? textTop : p.y + p.h / 2 - ((lines.length - 1) * 14) / 2;
+        lines.forEach((ln, i) => {
+          ctx.fillText(ln, p.x + 8 + (p.w - 8) / 2, startY + i * 14);
+        });
+
+        // canvas badge on root
+        if (node.id === "root") {
+          ctx.font = "800 9px Manrope, sans-serif";
+          ctx.fillStyle = "#758795";
+          ctx.fillText("HTML5 CANVAS", p.x + p.w / 2, p.y + p.h - 14);
+        }
+
+        hitRects.push({ id: node.id, x: p.x, y: p.y, w: p.w, h: p.h });
       };
 
       drawNode(DATA);
@@ -1386,58 +1307,66 @@
         (rn.children || []).filter(matchesFilter).forEach(drawNode);
       });
 
-      let maxX = 1200, maxY = 720;
-      positions.forEach(p => {
-        maxX = Math.max(maxX, (p.colX != null ? p.colX + p.colW : p.x + p.w) + 60);
-        maxY = Math.max(maxY, p.y + p.h + 40);
-      });
-      const legendY = maxY + 20;
-      const legend = `
-        <g>
-          <rect x="80" y="${legendY}" width="${Math.max(900, maxX - 140)}" height="70" rx="16" fill="rgba(255,255,255,.92)" stroke="#D5DEE8"/>
-          <text x="110" y="${legendY + 30}" font-family="Manrope" font-size="12" font-weight="700" fill="#758795">Handoff: Инициатор → Расчетчик / СБ → Тендерный комитет (пунктир)</text>
-          <text x="110" y="${legendY + 50}" font-family="Manrope" font-size="12" fill="#758795">Клик — детали · двойной клик — фокус · фильтры сверху сужают колонки</text>
-        </g>`;
+      // legend board
+      const legendY = worldSize.h - 90;
+      roundRect(ctx, 70, legendY, Math.max(900, worldSize.w - 150), 66, 16);
+      ctx.fillStyle = "rgba(255,255,255,0.94)";
+      ctx.fill();
+      ctx.strokeStyle = "#D5DEE8";
+      ctx.lineWidth = 1;
+      ctx.stroke();
+      ctx.fillStyle = "#758795";
+      ctx.font = "700 12px Manrope, sans-serif";
+      ctx.textAlign = "left";
+      ctx.textBaseline = "alphabetic";
+      ctx.fillText("Отрисовано на HTML5 <canvas> · картинки ролей · кликабельные hit-зоны", 95, legendY + 28);
+      ctx.font = "500 12px Manrope, sans-serif";
+      ctx.fillText("Handoff: Инициатор → Расчетчик → СБ → Тендерный комитет (пунктир)", 95, legendY + 48);
 
-      const lanes = `
-        <text x="28" y="110" font-family="Manrope" font-size="11" font-weight="800" fill="#758795" transform="rotate(-90 28 110)">КОРЕНЬ</text>
-        <text x="28" y="250" font-family="Manrope" font-size="11" font-weight="800" fill="#758795" transform="rotate(-90 28 250)">РОЛИ</text>
-        <text x="28" y="480" font-family="Manrope" font-size="11" font-weight="800" fill="#758795" transform="rotate(-90 28 480)">ПРОЦЕССЫ</text>
-      `;
+      // lane labels
+      ctx.save();
+      ctx.fillStyle = "#758795";
+      ctx.font = "800 11px Manrope, sans-serif";
+      ctx.translate(24, 110); ctx.rotate(-Math.PI / 2); ctx.fillText("КОРЕНЬ", 0, 0); ctx.restore();
+      ctx.save();
+      ctx.fillStyle = "#758795";
+      ctx.font = "800 11px Manrope, sans-serif";
+      ctx.translate(24, 270); ctx.rotate(-Math.PI / 2); ctx.fillText("РОЛИ", 0, 0); ctx.restore();
+      ctx.save();
+      ctx.fillStyle = "#758795";
+      ctx.font = "800 11px Manrope, sans-serif";
+      ctx.translate(24, 520); ctx.rotate(-Math.PI / 2); ctx.fillText("ПРОЦЕССЫ", 0, 0); ctx.restore();
 
-      svg.innerHTML = `
-        <defs>
-          <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-            <path d="M0 0 L10 5 L0 10 z" fill="#758795"/>
-          </marker>
-          <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
-            <feDropShadow dx="0" dy="6" stdDeviation="6" flood-color="rgba(18,42,75,.10)"/>
-          </filter>
-        </defs>
-        ${lanes}
-        ${columns}
-        ${links}
-        ${flows}
-        ${nodes}
-        ${legend}
-      `;
+      ctx.restore(); // end world transform
 
-      svg.setAttribute("width", String(Math.max(maxX, 1100)));
-      svg.setAttribute("height", String(legendY + 100));
-
-      svg.querySelectorAll(".node").forEach(g => {
-        g.addEventListener("click", (e) => {
-          e.stopPropagation();
-          selectNode(g.getAttribute("data-id"), false);
-        });
-        g.addEventListener("dblclick", (e) => {
-          e.stopPropagation();
-          selectNode(g.getAttribute("data-id"), true);
-        });
-      });
+      // HUD badge
+      ctx.fillStyle = "rgba(18,42,75,0.88)";
+      roundRect(ctx, 14, 14, 148, 28, 14);
+      ctx.fill();
+      ctx.fillStyle = "#fff";
+      ctx.font = "800 11px Manrope, sans-serif";
+      ctx.textAlign = "left";
+      ctx.textBaseline = "middle";
+      ctx.fillText("HTML5 <canvas>", 28, 28);
     }
 
-    function escapeXml(s) {
+    function screenToWorld(sx, sy) {
+      return {
+        x: (sx - transform.x) / transform.k,
+        y: (sy - transform.y) / transform.k
+      };
+    }
+
+    function hitTest(sx, sy) {
+      const w = screenToWorld(sx, sy);
+      for (let i = hitRects.length - 1; i >= 0; i--) {
+        const r = hitRects[i];
+        if (w.x >= r.x && w.x <= r.x + r.w && w.y >= r.y && w.y <= r.y + r.h) return r.id;
+      }
+      return null;
+    }
+
+    function escapeHtml(s) {
       return String(s).replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;" }[c]));
     }
 
@@ -1475,41 +1404,24 @@
             <div class="meta"><span>Системы</span><strong>${escapeHtml((node.systems || []).join(" · ") || "—")}</strong></div>
           </div>
           <div class="tags">${(node.tags || []).map(t => `<span class="tag">${escapeHtml(t)}</span>`).join("")}</div>
-
           ${(node.steps && node.steps.length) ? `
             <div class="section-title">Шаги процесса</div>
             <ol class="steps">
               ${node.steps.map((s, i) => `
                 <li>
                   <div class="n" style="background:${color}">${i + 1}</div>
-                  <div>
-                    <h4>${escapeHtml(s.t)}</h4>
-                    <p>${escapeHtml(s.d)}</p>
-                  </div>
-                </li>
-              `).join("")}
+                  <div><h4>${escapeHtml(s.t)}</h4><p>${escapeHtml(s.d)}</p></div>
+                </li>`).join("")}
             </ol>` : ""}
-
           <div class="section-title">Входы и выходы</div>
           <div class="io">
-            <div class="io-box">
-              <h4>Входы</h4>
-              <ul>${(node.inputs || ["—"]).map(x => `<li>${escapeHtml(x)}</li>`).join("")}</ul>
-            </div>
-            <div class="io-box">
-              <h4>Выходы</h4>
-              <ul>${(node.outputs || ["—"]).map(x => `<li>${escapeHtml(x)}</li>`).join("")}</ul>
-            </div>
+            <div class="io-box"><h4>Входы</h4><ul>${(node.inputs || ["—"]).map(x => `<li>${escapeHtml(x)}</li>`).join("")}</ul></div>
+            <div class="io-box"><h4>Выходы</h4><ul>${(node.outputs || ["—"]).map(x => `<li>${escapeHtml(x)}</li>`).join("")}</ul></div>
           </div>
-
           ${node.id === "root" || DATA.children.some(c => c.id === node.id) ? `
             <div class="section-title">RACI (упрощённо)</div>
             <table class="raci">
-              <thead>
-                <tr>
-                  <th>Этап</th><th>Иниц.</th><th>Расч.</th><th>СБ</th><th>ТК</th>
-                </tr>
-              </thead>
+              <thead><tr><th>Этап</th><th>Иниц.</th><th>Расч.</th><th>СБ</th><th>ТК</th></tr></thead>
               <tbody>
                 <tr><td>Подготовка и публикация</td><td class="r">R</td><td class="c">C</td><td class="i">I</td><td class="i">I</td></tr>
                 <tr><td>Ценовая экспертиза</td><td class="c">C</td><td class="r">R</td><td class="i">I</td><td class="i">I</td></tr>
@@ -1519,41 +1431,29 @@
             </table>
             <p style="margin-top:.5rem;font-size:.75rem;color:var(--muted)">R — исполняет, A — утверждает, C — консультирует, I — информируется</p>
           ` : ""}
-
           ${(node.children && node.children.length) ? `
             <div class="section-title">Дочерние процессы</div>
             <div class="children">
               ${node.children.map(ch => `
                 <button class="child-link" data-id="${ch.id}">
-                  ${escapeHtml(ch.title)}
-                  <span>${escapeHtml(ch.short || "")} →</span>
-                </button>
-              `).join("")}
-            </div>
-          ` : ""}
-
+                  ${escapeHtml(ch.title)}<span>${escapeHtml(ch.short || "")} →</span>
+                </button>`).join("")}
+            </div>` : ""}
           ${node.parentId ? `
             <div class="section-title">Навигация</div>
             <div class="children">
               <button class="child-link" data-id="${node.parentId}">← К родительскому процессу<span></span></button>
-            </div>
-          ` : ""}
-        </div>
-      `;
-
+            </div>` : ""}
+        </div>`;
       detailEl.querySelectorAll("[data-id]").forEach(btn => {
         btn.addEventListener("click", () => selectNode(btn.getAttribute("data-id"), true));
       });
     }
 
-    function escapeHtml(s) {
-      return String(s).replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;" }[c]));
-    }
-
     function selectNode(id, focus) {
       selectedId = id;
       renderTree();
-      renderCanvas();
+      draw();
       renderDetail(id);
       if (focus) focusNode(id);
     }
@@ -1566,46 +1466,72 @@
       const k = transform.k;
       transform.x = rect.width / 2 - (p.x + p.w / 2) * k;
       transform.y = rect.height / 2 - (p.y + p.h / 2) * k;
-      applyTransform();
+      draw();
     }
 
     function fitAll() {
-      transform = { x: 30, y: 20, k: Math.min(1, wrap.clientWidth / 1500) };
-      applyTransform();
+      const rect = wrap.getBoundingClientRect();
+      layout();
+      const k = Math.min(1, (rect.width - 40) / worldSize.w, (rect.height - 40) / worldSize.h);
+      transform.k = Math.max(0.45, k);
+      transform.x = (rect.width - worldSize.w * transform.k) / 2;
+      transform.y = Math.max(16, (rect.height - worldSize.h * transform.k) / 2);
+      draw();
     }
 
-    // Pan / zoom
-    let dragging = false, last = { x: 0, y: 0 };
+    // pointer interactions
+    let dragging = false, moved = false, last = { x: 0, y: 0 }, downId = null;
     wrap.addEventListener("pointerdown", (e) => {
-      if (e.target.closest(".node") || e.target.closest("button")) return;
-      dragging = true;
-      wrap.classList.add("dragging");
+      if (e.target.closest("button")) return;
+      const rect = canvas.getBoundingClientRect();
+      const sx = e.clientX - rect.left, sy = e.clientY - rect.top;
+      downId = hitTest(sx, sy);
+      dragging = true; moved = false;
       last = { x: e.clientX, y: e.clientY };
+      wrap.classList.add("dragging");
       wrap.setPointerCapture(e.pointerId);
     });
     wrap.addEventListener("pointermove", (e) => {
-      if (!dragging) return;
-      transform.x += e.clientX - last.x;
-      transform.y += e.clientY - last.y;
-      last = { x: e.clientX, y: e.clientY };
-      applyTransform();
+      const rect = canvas.getBoundingClientRect();
+      const sx = e.clientX - rect.left, sy = e.clientY - rect.top;
+      if (dragging) {
+        const dx = e.clientX - last.x, dy = e.clientY - last.y;
+        if (Math.abs(dx) + Math.abs(dy) > 3) moved = true;
+        transform.x += dx; transform.y += dy;
+        last = { x: e.clientX, y: e.clientY };
+        draw();
+      } else {
+        const id = hitTest(sx, sy);
+        canvas.style.cursor = id ? "pointer" : "grab";
+        if (id !== hoverId) { hoverId = id; draw(); }
+      }
     });
-    wrap.addEventListener("pointerup", () => { dragging = false; wrap.classList.remove("dragging"); });
+    wrap.addEventListener("pointerup", (e) => {
+      wrap.classList.remove("dragging");
+      if (dragging && !moved && downId) selectNode(downId, false);
+      dragging = false; downId = null;
+    });
+    wrap.addEventListener("dblclick", (e) => {
+      if (e.target.closest("button")) return;
+      const rect = canvas.getBoundingClientRect();
+      const id = hitTest(e.clientX - rect.left, e.clientY - rect.top);
+      if (id) selectNode(id, true);
+    });
     wrap.addEventListener("wheel", (e) => {
       e.preventDefault();
       const rect = wrap.getBoundingClientRect();
       const mx = e.clientX - rect.left;
       const my = e.clientY - rect.top;
       const prev = transform.k;
-      const next = Math.min(1.8, Math.max(0.45, prev * (e.deltaY > 0 ? 0.9 : 1.1)));
+      const next = Math.min(1.9, Math.max(0.4, prev * (e.deltaY > 0 ? 0.9 : 1.1)));
       transform.x = mx - (mx - transform.x) * (next / prev);
       transform.y = my - (my - transform.y) * (next / prev);
       transform.k = next;
-      applyTransform();
+      draw();
     }, { passive: false });
 
-    document.getElementById("zoomIn").onclick = () => { transform.k = Math.min(1.8, transform.k * 1.12); applyTransform(); };
-    document.getElementById("zoomOut").onclick = () => { transform.k = Math.max(0.45, transform.k / 1.12); applyTransform(); };
+    document.getElementById("zoomIn").onclick = () => { transform.k = Math.min(1.9, transform.k * 1.12); draw(); };
+    document.getElementById("zoomOut").onclick = () => { transform.k = Math.max(0.4, transform.k / 1.12); draw(); };
     document.getElementById("zoomReset").onclick = fitAll;
     document.getElementById("fitView").onclick = fitAll;
     document.getElementById("expandAll").onclick = () => {
@@ -1614,32 +1540,30 @@
       document.querySelectorAll(".chip").forEach(c => c.classList.toggle("active", c.dataset.filter === "all"));
       searchQuery = "";
       document.getElementById("search").value = "";
-      renderTree(); renderCanvas();
+      renderTree(); draw();
     };
-
     document.querySelectorAll(".chip").forEach(chip => {
       chip.addEventListener("click", () => {
         filterRole = chip.dataset.filter;
         document.querySelectorAll(".chip").forEach(c => c.classList.toggle("active", c === chip));
-        renderTree(); renderCanvas();
-        if (filterRole !== "all") {
-          const target = filterRole === "lifecycle" ? "lifecycle" : filterRole;
-          selectNode(target, true);
-        }
+        renderTree(); draw();
+        if (filterRole !== "all") selectNode(filterRole, true);
       });
     });
-
     document.getElementById("search").addEventListener("input", (e) => {
       searchQuery = e.target.value.trim();
-      renderTree(); renderCanvas();
+      renderTree(); draw();
     });
 
-    renderTree();
-    renderCanvas();
-    renderDetail("root");
-    applyTransform();
-    fitAll();
-    window.addEventListener("resize", () => applyTransform());
+    window.addEventListener("resize", resizeCanvas);
+
+    (async function init() {
+      renderTree();
+      renderDetail("root");
+      await preloadImages();
+      resizeCanvas();
+      fitAll();
+    })();
   </script>
 </body>
 </html>
