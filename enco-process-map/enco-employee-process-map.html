@@ -1,0 +1,1645 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Карта процессов сотрудника ЭНКО — тендерные роли</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --navy: #122A4B;
+      --navy-2: #1B4987;
+      --blue: #0072BC;
+      --blue-soft: #4098FF;
+      --teal: #173D50;
+      --bg: #EAEFF2;
+      --bg-2: #F7F9FC;
+      --surface: #FFFFFF;
+      --line: #D5DEE8;
+      --text: #262626;
+      --muted: #758795;
+      --ok: #27AD30;
+      --warn: #C9841A;
+      --danger: #C62828;
+      --initiator: #0072BC;
+      --estimator: #1F8A70;
+      --security: #5B6B8C;
+      --committee: #B35C1E;
+      --lifecycle: #1B4987;
+      --shadow: 0 10px 30px rgba(18, 42, 75, 0.08);
+      --radius: 16px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    body {
+      font-family: Manrope, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(1200px 600px at 10% -10%, rgba(64,152,255,.18), transparent 55%),
+        radial-gradient(900px 500px at 100% 0%, rgba(31,138,112,.12), transparent 50%),
+        linear-gradient(180deg, #F4F7FA 0%, var(--bg) 100%);
+      overflow: hidden;
+    }
+
+    .app {
+      display: grid;
+      grid-template-rows: auto 1fr;
+      height: 100%;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.85rem 1.25rem;
+      background: rgba(255,255,255,.86);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--line);
+      z-index: 20;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      min-width: 0;
+    }
+
+    .brand img { height: 28px; width: auto; display: block;  }
+    .brand-text h1 {
+      font-size: 1.05rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--navy);
+      line-height: 1.15;
+    }
+    .brand-text p {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 0.1rem;
+    }
+
+    .toolbar {
+      margin-left: auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      align-items: center;
+      justify-content: flex-end;
+    }
+
+    .chip, .tool-btn, .search input {
+      border: 1px solid var(--line);
+      background: var(--surface);
+      border-radius: 999px;
+      font: inherit;
+      color: var(--text);
+    }
+
+    .chip, .tool-btn {
+      padding: 0.45rem 0.85rem;
+      cursor: pointer;
+      font-size: 0.82rem;
+      font-weight: 600;
+      transition: .18s ease;
+    }
+    .chip:hover, .tool-btn:hover { border-color: var(--blue); color: var(--blue); }
+    .chip.active {
+      background: var(--navy);
+      border-color: var(--navy);
+      color: #fff;
+    }
+    .chip[data-role="initiator"].active { background: var(--initiator); border-color: var(--initiator); }
+    .chip[data-role="estimator"].active { background: var(--estimator); border-color: var(--estimator); }
+    .chip[data-role="security"].active { background: var(--security); border-color: var(--security); }
+    .chip[data-role="committee"].active { background: var(--committee); border-color: var(--committee); }
+    .chip[data-role="lifecycle"].active { background: var(--lifecycle); border-color: var(--lifecycle); }
+
+    .search input {
+      width: min(240px, 28vw);
+      padding: 0.5rem 0.95rem;
+      outline: none;
+    }
+    .search input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(0,114,188,.12); }
+
+    .main {
+      display: grid;
+      grid-template-columns: 300px 1fr 420px;
+      min-height: 0;
+    }
+
+    .side, .detail {
+      background: rgba(255,255,255,.92);
+      border-right: 1px solid var(--line);
+      overflow: auto;
+      min-height: 0;
+    }
+    .detail {
+      border-right: none;
+      border-left: 1px solid var(--line);
+    }
+
+    .side-block { padding: 1rem 1rem 0.25rem; }
+    .side-block h2 {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--muted);
+      margin-bottom: 0.65rem;
+    }
+
+    .tree {
+      list-style: none;
+      padding: 0 0.65rem 1.5rem;
+    }
+    .tree details { margin: 0.15rem 0; }
+    .tree summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.55rem 0.65rem;
+      border-radius: 12px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--navy);
+      transition: .15s ease;
+    }
+    .tree summary::-webkit-details-marker { display: none; }
+    .tree summary:hover, .tree .leaf:hover { background: #F0F5FA; }
+    .tree .leaf.active, .tree summary.active {
+      background: rgba(0,114,188,.1);
+      color: var(--blue);
+    }
+    .tree .leaf {
+      display: block;
+      width: 100%;
+      text-align: left;
+      border: 0;
+      background: transparent;
+      padding: 0.45rem 0.65rem 0.45rem 1.85rem;
+      border-radius: 10px;
+      cursor: pointer;
+      font: inherit;
+      font-size: 0.84rem;
+      color: var(--text);
+    }
+    .dot {
+      width: 9px; height: 9px; border-radius: 50%; flex: 0 0 auto;
+    }
+    .dot.initiator { background: var(--initiator); }
+    .dot.estimator { background: var(--estimator); }
+    .dot.security { background: var(--security); }
+    .dot.committee { background: var(--committee); }
+    .dot.lifecycle { background: var(--lifecycle); }
+
+    .canvas-wrap {
+      position: relative;
+      min-width: 0;
+      min-height: 0;
+      overflow: hidden;
+      background:
+        linear-gradient(90deg, rgba(18,42,75,.035) 1px, transparent 1px),
+        linear-gradient(rgba(18,42,75,.035) 1px, transparent 1px);
+      background-size: 28px 28px;
+      background-color: rgba(247,249,252,.65);
+      cursor: grab;
+    }
+    .canvas-wrap.dragging { cursor: grabbing; }
+
+    .canvas-world {
+      position: absolute;
+      left: 0; top: 0;
+      transform-origin: 0 0;
+      will-change: transform;
+    }
+
+    .map-svg { display: block; overflow: visible; }
+
+    .node {
+      cursor: pointer;
+      transition: filter .15s ease;
+    }
+    .node:hover { filter: brightness(1.03); }
+    .node.dim { opacity: .28; }
+    .node.selected .node-card {
+      stroke: var(--blue);
+      stroke-width: 2.5;
+      filter: drop-shadow(0 8px 18px rgba(0,114,188,.22));
+    }
+
+    .hint-bar {
+      position: absolute;
+      left: 1rem;
+      bottom: 1rem;
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      z-index: 5;
+    }
+    .hint {
+      background: rgba(255,255,255,.92);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 0.4rem 0.75rem;
+      font-size: 0.75rem;
+      color: var(--muted);
+      box-shadow: var(--shadow);
+    }
+
+    .zoom-controls {
+      position: absolute;
+      right: 1rem;
+      top: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      z-index: 5;
+    }
+    .zoom-controls button {
+      width: 38px; height: 38px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.95);
+      cursor: pointer;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--navy);
+      box-shadow: var(--shadow);
+    }
+
+    .detail-empty, .detail-content { padding: 1.15rem 1.2rem 1.8rem; }
+    .detail-empty {
+      color: var(--muted);
+      display: grid;
+      place-items: center;
+      text-align: center;
+      min-height: 100%;
+      gap: 0.75rem;
+    }
+    .detail-empty strong { color: var(--navy); font-size: 1.05rem; }
+
+    .hero {
+      position: relative;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      margin-bottom: 1rem;
+      aspect-ratio: 16 / 9;
+      background: #dfe7f0;
+    }
+    .hero img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .hero-badge {
+      position: absolute;
+      left: 0.75rem;
+      bottom: 0.75rem;
+      background: rgba(18,42,75,.88);
+      color: #fff;
+      padding: 0.35rem 0.7rem;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 700;
+    }
+
+    .detail h2 {
+      font-size: 1.35rem;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      color: var(--navy);
+      margin-bottom: 0.35rem;
+    }
+    .detail .lead {
+      color: var(--muted);
+      font-size: 0.92rem;
+      margin-bottom: 1rem;
+    }
+
+    .meta-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.55rem;
+      margin-bottom: 1rem;
+    }
+    .meta {
+      background: var(--bg-2);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 0.7rem 0.8rem;
+    }
+    .meta span {
+      display: block;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      color: var(--muted);
+      margin-bottom: 0.2rem;
+    }
+    .meta strong { font-size: 0.88rem; color: var(--navy); }
+
+    .section-title {
+      margin: 1.1rem 0 0.55rem;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .steps { list-style: none; display: grid; gap: 0.45rem; }
+    .steps li {
+      display: grid;
+      grid-template-columns: 28px 1fr;
+      gap: 0.65rem;
+      align-items: start;
+      padding: 0.7rem 0.75rem;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+    }
+    .steps .n {
+      width: 28px; height: 28px;
+      border-radius: 9px;
+      display: grid; place-items: center;
+      color: #fff;
+      font-size: 0.78rem;
+      font-weight: 800;
+      background: var(--navy);
+    }
+    .steps h4 { font-size: 0.9rem; margin-bottom: 0.15rem; color: var(--navy); }
+    .steps p { font-size: 0.82rem; color: var(--muted); }
+
+    .tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .tag {
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.3rem 0.6rem;
+      border-radius: 999px;
+      background: #EEF3FA;
+      color: var(--navy-2);
+      border: 1px solid #D7E3F2;
+    }
+
+    .io {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.55rem;
+    }
+    .io-box {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 0.75rem;
+      background: #fff;
+    }
+    .io-box h4 { font-size: 0.82rem; margin-bottom: 0.4rem; color: var(--navy); }
+    .io-box ul { margin-left: 1rem; color: var(--muted); font-size: 0.8rem; }
+    .io-box li + li { margin-top: 0.2rem; }
+
+    table.raci {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.78rem;
+      overflow: hidden;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+    }
+    table.raci th, table.raci td {
+      border-bottom: 1px solid var(--line);
+      padding: 0.45rem 0.5rem;
+      text-align: center;
+    }
+    table.raci th:first-child, table.raci td:first-child { text-align: left; }
+    table.raci th { background: var(--bg-2); color: var(--muted); font-weight: 700; }
+    table.raci tr:last-child td { border-bottom: 0; }
+    .r { color: var(--blue); font-weight: 800; }
+    .a { color: var(--committee); font-weight: 800; }
+    .c { color: var(--estimator); font-weight: 700; }
+    .i { color: var(--muted); }
+
+    .children {
+      display: grid;
+      gap: 0.45rem;
+    }
+    .child-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      text-align: left;
+      width: 100%;
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 12px;
+      padding: 0.7rem 0.8rem;
+      cursor: pointer;
+      font: inherit;
+      font-weight: 600;
+      color: var(--navy);
+      transition: .15s ease;
+    }
+    .child-link:hover { border-color: var(--blue); color: var(--blue); }
+    .child-link span { color: var(--muted); font-size: 0.78rem; font-weight: 500; }
+
+    .legend {
+      display: grid;
+      gap: 0.4rem;
+      padding: 0 1rem 1rem;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    .breadcrumb {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      margin-bottom: 0.85rem;
+      font-size: 0.78rem;
+    }
+    .breadcrumb button {
+      border: 0;
+      background: transparent;
+      color: var(--blue);
+      cursor: pointer;
+      font: inherit;
+      font-weight: 600;
+      padding: 0;
+    }
+    .breadcrumb em { color: var(--muted); font-style: normal; }
+
+    @media (max-width: 1180px) {
+      .main { grid-template-columns: 260px 1fr 360px; }
+    }
+    @media (max-width: 980px) {
+      body { overflow: auto; }
+      .app { height: auto; min-height: 100%; }
+      .main {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 58vh auto;
+      }
+      .side, .detail { border: 0; border-bottom: 1px solid var(--line); max-height: none; }
+      .brand-text p { display: none; }
+      .search input { width: 140px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div class="brand">
+        <img src="assets/enco-logo.svg" alt="ЭНКО" />
+        <div class="brand-text">
+          <h1>Карта процессов сотрудника</h1>
+          <p>Иерархия ролей · тендерный контур · Canvas HTML</p>
+        </div>
+      </div>
+      <div class="toolbar">
+        <button class="chip active" data-filter="all">Все</button>
+        <button class="chip" data-filter="lifecycle" data-role="lifecycle">Сквозной</button>
+        <button class="chip" data-filter="initiator" data-role="initiator">Инициатор</button>
+        <button class="chip" data-filter="estimator" data-role="estimator">Расчетчик</button>
+        <button class="chip" data-filter="security" data-role="security">СБ</button>
+        <button class="chip" data-filter="committee" data-role="committee">ТК</button>
+        <label class="search"><input id="search" type="search" placeholder="Поиск процесса…" /></label>
+        <button class="tool-btn" id="expandAll" type="button">Развернуть</button>
+        <button class="tool-btn" id="fitView" type="button">По центру</button>
+      </div>
+    </header>
+
+    <div class="main">
+      <aside class="side">
+        <div class="side-block"><h2>Иерархия</h2></div>
+        <ul class="tree" id="tree"></ul>
+        <div class="side-block"><h2>Легенда ролей</h2></div>
+        <div class="legend">
+          <div class="legend-item"><span class="dot lifecycle"></span> Сквозной процесс тендера</div>
+          <div class="legend-item"><span class="dot initiator"></span> Инициатор тендера</div>
+          <div class="legend-item"><span class="dot estimator"></span> Расчетчик</div>
+          <div class="legend-item"><span class="dot security"></span> Служба безопасности</div>
+          <div class="legend-item"><span class="dot committee"></span> Тендерный комитет</div>
+        </div>
+      </aside>
+
+      <section class="canvas-wrap" id="canvasWrap" aria-label="Canvas карта процессов">
+        <div class="canvas-world" id="canvasWorld">
+          <svg class="map-svg" id="mapSvg" width="1480" height="980"></svg>
+        </div>
+        <div class="zoom-controls">
+          <button type="button" id="zoomIn" title="Увеличить">+</button>
+          <button type="button" id="zoomOut" title="Уменьшить">−</button>
+          <button type="button" id="zoomReset" title="Сброс">⟲</button>
+        </div>
+        <div class="hint-bar">
+          <div class="hint">Клик по узлу — детали</div>
+          <div class="hint">Перетаскивание — панорама</div>
+          <div class="hint">Колёсико — масштаб</div>
+          <div class="hint">Двойной клик — фокус</div>
+        </div>
+      </section>
+
+      <aside class="detail" id="detail">
+        <div class="detail-empty">
+          <strong>Выберите процесс на карте</strong>
+          <p>Откроется описание, шаги, входы/выходы, системы и связи ролей.</p>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <script>
+    const COLORS = {
+      root: "#122A4B",
+      lifecycle: "#1B4987",
+      initiator: "#0072BC",
+      estimator: "#1F8A70",
+      security: "#5B6B8C",
+      committee: "#B35C1E"
+    };
+
+    const DATA = {
+      id: "root",
+      title: "Сотрудник ЭНКО",
+      short: "Тендерный контур",
+      role: "root",
+      image: "assets/process-lifecycle.jpg",
+      summary: "Единая иерархическая карта процессов сотрудника ГК «ЭНКО» в контуре закупок и тендеров. Карта объединяет сквозной жизненный цикл и четыре ключевые роли: Инициатор тендера, Расчетчик, Служба безопасности и Тендерный комитет.",
+      systems: ["tender.enco.ru", "1С:Документооборот", "1С:ERP / сметы", "ЭДО", "Корп. почта"],
+      sla: "Сквозной цикл: 5–20 раб. дней",
+      owner: "Отдел закупок и тендерных процедур",
+      tags: ["ГК ЭНКО", "Закупки", "СМР", "ПИР", "Поставки"],
+      steps: [
+        { t: "Потребность", d: "Инициатор фиксирует потребность по проекту (СМР, ПИР, поставка, контроль)." },
+        { t: "Подготовка", d: "Формируются ТЗ, объёмы, критерии и комплект для публикации." },
+        { t: "Проверка и расчёт", d: "Расчетчик считает эталон, СБ проверяет участников." },
+        { t: "Решение ТК", d: "Тендерный комитет выбирает победителя и фиксирует протокол." }
+      ],
+      inputs: ["Заявка проекта", "Бюджет / лимит", "Техдокументация"],
+      outputs: ["Протокол ТК", "Договор / заказ", "Архив тендера"],
+      children: [
+        {
+          id: "lifecycle",
+          title: "Сквозной процесс тендера",
+          short: "End-to-end",
+          role: "lifecycle",
+          image: "assets/process-lifecycle.jpg",
+          summary: "Сквозной маршрут от появления потребности до заключения договора. Показывает точки передачи между ролями и обязательные контрольные точки.",
+          systems: ["tender.enco.ru", "1С:ДО", "ЭДО"],
+          sla: "Типовой цикл 7–15 раб. дней",
+          owner: "Тендерный отдел",
+          tags: ["Lifecycle", "Контрольные точки", "Handoff"],
+          steps: [
+            { t: "Инициация", d: "Создание карточки тендера, привязка к проекту и категории." },
+            { t: "Публикация", d: "Размещение на tender.enco.ru, уведомление потенциальных участников." },
+            { t: "Сбор КП", d: "Приём коммерческих предложений до дедлайна." },
+            { t: "Оценка", d: "Параллельно: ценовой анализ (Расчетчик) и проверка СБ." },
+            { t: "Решение", d: "Заседание ТК, протокол, уведомление победителя, договор." }
+          ],
+          inputs: ["Заявка инициатора", "Лимит бюджета"],
+          outputs: ["Статус тендера", "Протокол", "Договор"],
+          children: [
+            {
+              id: "lc-1",
+              title: "1. Инициация потребности",
+              short: "Старт",
+              role: "lifecycle",
+              summary: "Фиксация потребности по объекту ЭНКО, категории работ/поставок и плановым срокам.",
+              systems: ["1С:ДО", "tender.enco.ru"],
+              sla: "1 раб. день",
+              owner: "Инициатор",
+              tags: ["Проект", "Категория", "Бюджет"],
+              steps: [
+                { t: "Описание потребности", d: "Объект, вид работ, желаемые сроки, обоснование." },
+                { t: "Лимит", d: "Согласование предварительного лимита с проектом/финансами." },
+                { t: "Карточка", d: "Создание карточки тендера и назначение ответственных." }
+              ],
+              inputs: ["Запрос ПТО/ПТОС", "График строительства"],
+              outputs: ["Карточка тендера"],
+              children: []
+            },
+            {
+              id: "lc-2",
+              title: "2. Подготовка и публикация",
+              short: "Публикация",
+              role: "lifecycle",
+              summary: "Комплектация конкурсной документации и публикация в АСТ ЭНКО.",
+              systems: ["tender.enco.ru"],
+              sla: "1–3 раб. дня",
+              owner: "Инициатор + тендерный отдел",
+              tags: ["ТЗ", "Сроки приёма", "АСТ"],
+              steps: [
+                { t: "Комплект", d: "ТЗ, ведомости, критерии, шаблон КП." },
+                { t: "Проверка", d: "Контроль полноты перед публикацией." },
+                { t: "Публикация", d: "Открытие приёма предложений на tender.enco.ru." }
+              ],
+              inputs: ["ТЗ", "Ведомость объёмов"],
+              outputs: ["Опубликованный тендер"],
+              children: []
+            },
+            {
+              id: "lc-3",
+              title: "3. Сбор и первичный отбор",
+              short: "Сбор КП",
+              role: "lifecycle",
+              summary: "Приём КП, проверка комплектности и допуск к оценке.",
+              systems: ["tender.enco.ru", "Почта"],
+              sla: "По сроку тендера",
+              owner: "Инициатор",
+              tags: ["КП", "Комплектность"],
+              steps: [
+                { t: "Приём", d: "Регистрация поступивших предложений." },
+                { t: "Комплектность", d: "Проверка обязательных документов." },
+                { t: "Передача", d: "Пакет на расчёт и в СБ." }
+              ],
+              inputs: ["КП участников"],
+              outputs: ["Реестр КП", "Заявки в СБ/расчёт"],
+              children: []
+            },
+            {
+              id: "lc-4",
+              title: "4. Экспертиза (цена + СБ)",
+              short: "Экспертиза",
+              role: "lifecycle",
+              summary: "Параллельная экспертиза: эталонная цена и проверка благонадёжности.",
+              systems: ["Сметные системы", "Контур СБ"],
+              sla: "2–5 раб. дней",
+              owner: "Расчетчик + СБ",
+              tags: ["Параллельно", "Риски", "Цена"],
+              steps: [
+                { t: "Расчёт", d: "Эталон и отклонение КП." },
+                { t: "Due diligence", d: "Проверка контрагентов СБ." },
+                { t: "Сводка", d: "Сводная матрица для ТК." }
+              ],
+              inputs: ["Реестр КП", "Эталон", "Анкеты"],
+              outputs: ["Заключение по цене", "Заключение СБ"],
+              children: []
+            },
+            {
+              id: "lc-5",
+              title: "5. Решение и договор",
+              short: "Финиш",
+              role: "lifecycle",
+              summary: "Заседание ТК, выбор победителя, протокол и запуск договорной работы.",
+              systems: ["1С:ДО", "ЭДО"],
+              sla: "1–3 раб. дня после заседания",
+              owner: "Тендерный комитет",
+              tags: ["Протокол", "Договор"],
+              steps: [
+                { t: "Заседание", d: "Рассмотрение сводки и голосование." },
+                { t: "Протокол", d: "Фиксация решения / переторжки / отмены." },
+                { t: "Договор", d: "Направление на согласование и подписание." }
+              ],
+              inputs: ["Сводка экспертизы"],
+              outputs: ["Протокол ТК", "Договор"],
+              children: []
+            }
+          ]
+        },
+        {
+          id: "initiator",
+          title: "Инициатор тендера",
+          short: "Инициатор",
+          role: "initiator",
+          image: "assets/role-initiator.jpg",
+          summary: "Владелец потребности: готовит предмет закупки, документацию, публикует тендер, ведёт коммуникацию с участниками и передаёт материалы на экспертизу и в ТК.",
+          systems: ["tender.enco.ru", "1С:ДО", "Почта"],
+          sla: "Подготовка 1–3 дня · сопровождение весь срок приёма",
+          owner: "ПТО / Закупки / Руководитель проекта",
+          tags: ["ТЗ", "Публикация", "Сопровождение"],
+          steps: [
+            { t: "Сформулировать потребность", d: "Объект, объёмы, сроки, критерии допуска." },
+            { t: "Собрать комплект", d: "ТЗ, чертежи/спецификации, шаблон КП." },
+            { t: "Запустить тендер", d: "Публикация и ответы на вопросы участников." },
+            { t: "Передать на оценку", d: "Реестр КП → Расчетчик и СБ, затем пакет в ТК." }
+          ],
+          inputs: ["План закупок", "Проектная документация"],
+          outputs: ["Опубликованный тендер", "Реестр КП", "Пакет в ТК"],
+          children: [
+            {
+              id: "ini-1",
+              title: "Формирование потребности",
+              short: "Потребность",
+              role: "initiator",
+              summary: "Определение предмета закупки, привязка к проекту ЭНКО и обоснование необходимости тендера.",
+              systems: ["1С:ДО"],
+              sla: "≤ 1 раб. дня",
+              owner: "Инициатор",
+              tags: ["Обоснование", "Категория"],
+              steps: [
+                { t: "Описать предмет", d: "СМР / ПИР / поставка / контроль / ОТ." },
+                { t: "Привязать к объекту", d: "ЖК, ГП, этап работ." },
+                { t: "Согласовать лимит", d: "Предварительный бюджетный коридор." }
+              ],
+              inputs: ["График СМР", "Заявка ПТО"],
+              outputs: ["Заявка на тендер"],
+              children: []
+            },
+            {
+              id: "ini-2",
+              title: "Подготовка конкурсной документации",
+              short: "Документация",
+              role: "initiator",
+              summary: "Подготовка ТЗ, ведомости объёмов, требований к участникам и критериев оценки.",
+              systems: ["Файловое хранилище", "1С:ДО"],
+              sla: "1–2 раб. дня",
+              owner: "Инициатор",
+              tags: ["ТЗ", "ВОР", "Критерии"],
+              steps: [
+                { t: "ТЗ", d: "Технические и качественные требования." },
+                { t: "Объёмы", d: "Ведомость / спецификация." },
+                { t: "Критерии", d: "Цена, сроки, опыт, допуски." }
+              ],
+              inputs: ["Проектная документация"],
+              outputs: ["Комплект КД"],
+              children: []
+            },
+            {
+              id: "ini-3",
+              title: "Публикация и разъяснения",
+              short: "Публикация",
+              role: "initiator",
+              summary: "Размещение тендера в АСТ, ответы на запросы участников, контроль сроков.",
+              systems: ["tender.enco.ru"],
+              sla: "В день готовности комплекта",
+              owner: "Инициатор / тендерный специалист",
+              tags: ["АСТ", "Q&A"],
+              steps: [
+                { t: "Опубликовать", d: "Карточка, сроки, вложения." },
+                { t: "Ответить", d: "Разъяснения без нарушения равных условий." },
+                { t: "Контроль дедлайна", d: "Фиксация окончания приёма." }
+              ],
+              inputs: ["Комплект КД"],
+              outputs: ["Публикация", "Протокол разъяснений"],
+              children: []
+            },
+            {
+              id: "ini-4",
+              title: "Приём предложений",
+              short: "Приём КП",
+              role: "initiator",
+              summary: "Регистрация КП, проверка комплектности и формирование реестра участников.",
+              systems: ["tender.enco.ru", "Почта"],
+              sla: "В день закрытия + 0.5 дня",
+              owner: "Инициатор",
+              tags: ["Реестр", "Комплектность"],
+              steps: [
+                { t: "Зарегистрировать", d: "Все поступившие КП." },
+                { t: "Проверить комплект", d: "Обязательные документы и формы." },
+                { t: "Сформировать реестр", d: "Таблица участников для экспертизы." }
+              ],
+              inputs: ["КП"],
+              outputs: ["Реестр КП"],
+              children: []
+            },
+            {
+              id: "ini-5",
+              title: "Передача в экспертизу и ТК",
+              short: "Handoff",
+              role: "initiator",
+              summary: "Передача комплектов Расчетчику и СБ, сбор заключений и подготовка пакета на ТК.",
+              systems: ["1С:ДО", "Почта"],
+              sla: "В день готовности реестра",
+              owner: "Инициатор",
+              tags: ["Передача", "Пакет ТК"],
+              steps: [
+                { t: "Отправить на расчёт", d: "Реестр + КД + КП." },
+                { t: "Отправить в СБ", d: "Реквизиты и документы участников." },
+                { t: "Собрать пакет ТК", d: "Сводка + заключения." }
+              ],
+              inputs: ["Реестр КП", "Заключения"],
+              outputs: ["Пакет заседания ТК"],
+              children: []
+            }
+          ]
+        },
+        {
+          id: "estimator",
+          title: "Расчетчик",
+          short: "Расчетчик",
+          role: "estimator",
+          image: "assets/role-estimator.jpg",
+          summary: "Эксперт по цене: проверяет объёмы, формирует эталонную стоимость, сравнивает КП с рынком и готовит ценовое заключение для ТК.",
+          systems: ["Сметные ПО", "Excel/BI", "1С"],
+          sla: "2–4 раб. дня на тендер",
+          owner: "Сметный / расчётный блок",
+          tags: ["Эталон", "Сравнение КП", "Отклонения"],
+          steps: [
+            { t: "Проверить объёмы", d: "Сопоставимость ВОР и КП." },
+            { t: "Посчитать эталон", d: "Рыночная/сметная база + коэффициенты." },
+            { t: "Сравнить КП", d: "Отклонения, выбросы, риск демпинга." },
+            { t: "Выдать заключение", d: "Рекомендация по цене для ТК." }
+          ],
+          inputs: ["КД", "Реестр КП", "Рыночные котировки"],
+          outputs: ["Эталон", "Сравнительная таблица", "Заключение"],
+          children: [
+            {
+              id: "est-1",
+              title: "Приём комплекта на расчёт",
+              short: "Приём",
+              role: "estimator",
+              summary: "Проверка достаточности исходных данных для расчёта эталона и сравнения.",
+              systems: ["1С:ДО"],
+              sla: "≤ 4 часов",
+              owner: "Расчетчик",
+              tags: ["Входной контроль"],
+              steps: [
+                { t: "Проверить состав", d: "ТЗ, объёмы, КП, единицы измерения." },
+                { t: "Запросить уточнения", d: "При пробелах — запрос инициатору." },
+                { t: "Принять в работу", d: "Назначить срок расчёта." }
+              ],
+              inputs: ["Пакет от инициатора"],
+              outputs: ["Задача на расчёт"],
+              children: []
+            },
+            {
+              id: "est-2",
+              title: "Анализ объёмов и сопоставимости",
+              short: "Объёмы",
+              role: "estimator",
+              summary: "Приведение предложений к единой базе сравнения.",
+              systems: ["Excel", "Сметы"],
+              sla: "0.5–1 день",
+              owner: "Расчетчик",
+              tags: ["Нормализация"],
+              steps: [
+                { t: "Сверить ВОР", d: "Позиции, объёмы, единицы." },
+                { t: "Нормализовать", d: "Привести КП к сопоставимому виду." },
+                { t: "Отметить риски", d: "Неполные/несопоставимые позиции." }
+              ],
+              inputs: ["ВОР", "КП"],
+              outputs: ["Нормализованная матрица"],
+              children: []
+            },
+            {
+              id: "est-3",
+              title: "Расчёт эталонной цены",
+              short: "Эталон",
+              role: "estimator",
+              summary: "Формирование эталонной (расчётной) стоимости предмета закупки.",
+              systems: ["Сметные ПО", "Прайс-база"],
+              sla: "1–2 дня",
+              owner: "Расчетчик",
+              tags: ["Смета", "Рынок"],
+              steps: [
+                { t: "Собрать базу", d: "Сметные расценки, аналоги, КП прошлых тендеров." },
+                { t: "Рассчитать", d: "Эталон по позициям и итог." },
+                { t: "Зафиксировать допущения", d: "Коэффициенты, логистика, сезонность." }
+              ],
+              inputs: ["Нормализованная матрица", "База цен"],
+              outputs: ["Эталонная цена"],
+              children: []
+            },
+            {
+              id: "est-4",
+              title: "Сравнительный анализ КП",
+              short: "Сравнение",
+              role: "estimator",
+              summary: "Оценка отклонений КП от эталона и выявление аномалий.",
+              systems: ["Excel/BI"],
+              sla: "0.5–1 день",
+              owner: "Расчетчик",
+              tags: ["Демпинг", "Выбросы"],
+              steps: [
+                { t: "Посчитать отклонения", d: "% к эталону и к медиане." },
+                { t: "Проверить выбросы", d: "Слишком низкие/высокие позиции." },
+                { t: "Ранжировать", d: "Ценовой рейтинг участников." }
+              ],
+              inputs: ["Эталон", "КП"],
+              outputs: ["Сравнительная таблица"],
+              children: []
+            },
+            {
+              id: "est-5",
+              title: "Ценовое заключение",
+              short: "Заключение",
+              role: "estimator",
+              summary: "Итоговое заключение с рекомендацией для Тендерного комитета.",
+              systems: ["1С:ДО"],
+              sla: "В день завершения анализа",
+              owner: "Расчетчик",
+              tags: ["Рекомендация"],
+              steps: [
+                { t: "Сформулировать вывод", d: "Допустимый коридор цены." },
+                { t: "Рекомендовать", d: "Кого рассматривать по цене." },
+                { t: "Передать в пакет ТК", d: "Заключение + таблицы." }
+              ],
+              inputs: ["Сравнительная таблица"],
+              outputs: ["Заключение Расчетчика"],
+              children: []
+            }
+          ]
+        },
+        {
+          id: "security",
+          title: "Служба безопасности",
+          short: "СБ",
+          role: "security",
+          image: "assets/role-security.jpg",
+          summary: "Контур комплаенса и due diligence: проверяет участников тендера на благонадёжность, аффилированность, долги, судебные риски и наличие допусков.",
+          systems: ["Контуры СБ", "СПАРК/Контур", "ЕГРЮЛ", "1С:ДО"],
+          sla: "1–3 раб. дня на участника / пакет",
+          owner: "Служба безопасности",
+          tags: ["Due diligence", "Риски", "Допуск"],
+          steps: [
+            { t: "Принять заявку", d: "Реквизиты и документы участников." },
+            { t: "Проверить контрагента", d: "Юрлицо, учредители, финансы, суды." },
+            { t: "Проверить допуски", d: "СРО, лицензии, полномочия." },
+            { t: "Выдать заключение", d: "Допуск / условно / отказ." }
+          ],
+          inputs: ["Анкеты участников", "Учредительные документы"],
+          outputs: ["Заключение СБ", "Список рисков"],
+          children: [
+            {
+              id: "sec-1",
+              title: "Запрос на проверку",
+              short: "Заявка",
+              role: "security",
+              summary: "Регистрация заявки от инициатора на проверку участников тендера.",
+              systems: ["1С:ДО"],
+              sla: "≤ 2 часов",
+              owner: "СБ",
+              tags: ["Вход"],
+              steps: [
+                { t: "Получить список", d: "Участники + ИНН/ОГРН." },
+                { t: "Проверить комплект", d: "Карточка контрагента, доверенности." },
+                { t: "Поставить в очередь", d: "Приоритет по сроку ТК." }
+              ],
+              inputs: ["Реестр участников"],
+              outputs: ["Задача проверки"],
+              children: []
+            },
+            {
+              id: "sec-2",
+              title: "Due diligence контрагента",
+              short: "Проверка",
+              role: "security",
+              summary: "Проверка регистрации, учредителей, финансового состояния, исполнительных производств и судов.",
+              systems: ["СПАРК/Контур", "ФССП", "Картотека арбитража"],
+              sla: "1–2 дня",
+              owner: "СБ",
+              tags: ["ЕГРЮЛ", "Суды", "Долги"],
+              steps: [
+                { t: "Идентификация", d: "Актуальность ЕГРЮЛ/ЕГРИП." },
+                { t: "Бенефициары", d: "Учредители и связи." },
+                { t: "Риск-профиль", d: "Долги, банкротство, суды, массовость." }
+              ],
+              inputs: ["Реквизиты", "Выписки"],
+              outputs: ["Риск-профиль"],
+              children: []
+            },
+            {
+              id: "sec-3",
+              title: "Проверка аффилированности",
+              short: "Аффилированность",
+              role: "security",
+              summary: "Выявление связей между участниками и сотрудниками/подрядчиками ЭНКО.",
+              systems: ["Контур СБ"],
+              sla: "В рамках due diligence",
+              owner: "СБ",
+              tags: ["Конфликт интересов"],
+              steps: [
+                { t: "Сверить связи", d: "Общие учредители, адреса, телефоны." },
+                { t: "Проверить пересечения", d: "С действующими подрядчиками ЭНКО." },
+                { t: "Зафиксировать конфликт", d: "При наличии — в заключение." }
+              ],
+              inputs: ["Список участников", "База контрагентов"],
+              outputs: ["Отметка об аффилированности"],
+              children: []
+            },
+            {
+              id: "sec-4",
+              title: "Проверка допусков и полномочий",
+              short: "Допуски",
+              role: "security",
+              summary: "Контроль СРО, лицензий, полномочий подписантов и соответствия категории работ.",
+              systems: ["Реестры СРО", "Лицензии"],
+              sla: "0.5–1 день",
+              owner: "СБ",
+              tags: ["СРО", "Лицензии"],
+              steps: [
+                { t: "СРО/лицензии", d: "Наличие и срок действия." },
+                { t: "Полномочия", d: "Право подписи КП/договора." },
+                { t: "Соответствие", d: "Допуск к виду работ тендера." }
+              ],
+              inputs: ["Документы допусков"],
+              outputs: ["Отметка о допусках"],
+              children: []
+            },
+            {
+              id: "sec-5",
+              title: "Заключение СБ",
+              short: "Заключение",
+              role: "security",
+              summary: "Итоговое решение о допуске участника к рассмотрению ТК.",
+              systems: ["1С:ДО"],
+              sla: "В день завершения проверки",
+              owner: "СБ",
+              tags: ["Допуск", "Отказ", "Условно"],
+              steps: [
+                { t: "Свести риски", d: "Единый вывод по участнику." },
+                { t: "Вынести вердикт", d: "Допущен / условно / не допущен." },
+                { t: "Передать инициатору/ТК", d: "Заключение в пакет." }
+              ],
+              inputs: ["Риск-профиль", "Допуски"],
+              outputs: ["Заключение СБ"],
+              children: []
+            }
+          ]
+        },
+        {
+          id: "committee",
+          title: "Тендерный комитет",
+          short: "ТК",
+          role: "committee",
+          image: "assets/role-committee.jpg",
+          summary: "Коллегиальный орган принятия решения: рассматривает материалы инициатора, расчетчика и СБ, выбирает победителя либо назначает переторжку/отмену.",
+          systems: ["1С:ДО", "ЭДО", "Протоколы"],
+          sla: "Заседание по регламенту · протокол в день заседания",
+          owner: "Тендерный комитет",
+          tags: ["Решение", "Протокол", "Победитель"],
+          steps: [
+            { t: "Подготовить заседание", d: "Повестка и комплект материалов." },
+            { t: "Рассмотреть", d: "Цена, риски СБ, соответствие ТЗ." },
+            { t: "Проголосовать", d: "Выбор / переторжка / отмена." },
+            { t: "Зафиксировать", d: "Протокол и поручения." }
+          ],
+          inputs: ["Пакет инициатора", "Заключение расчетчика", "Заключение СБ"],
+          outputs: ["Протокол ТК", "Поручения", "Старт договора"],
+          children: [
+            {
+              id: "tk-1",
+              title: "Подготовка заседания",
+              short: "Повестка",
+              role: "committee",
+              summary: "Формирование повестки, проверка кворума и комплектности материалов.",
+              systems: ["1С:ДО", "Календарь"],
+              sla: "За 1 день до заседания",
+              owner: "Секретарь ТК",
+              tags: ["Кворум", "Материалы"],
+              steps: [
+                { t: "Собрать пакет", d: "Все заключения и таблицы." },
+                { t: "Проверить кворум", d: "Состав и присутствие." },
+                { t: "Разослать", d: "Материалы членам ТК." }
+              ],
+              inputs: ["Пакет экспертизы"],
+              outputs: ["Повестка"],
+              children: []
+            },
+            {
+              id: "tk-2",
+              title: "Рассмотрение материалов",
+              short: "Рассмотрение",
+              role: "committee",
+              summary: "Обсуждение соответствия ТЗ, цены, сроков и рисков безопасности.",
+              systems: ["Презентация/таблицы"],
+              sla: "В рамках заседания",
+              owner: "Члены ТК",
+              tags: ["Критерии", "Риски"],
+              steps: [
+                { t: "Доклад инициатора", d: "Предмет и состав участников." },
+                { t: "Доклад расчетчика", d: "Эталон и отклонения." },
+                { t: "Доклад СБ", d: "Допуски и риск-флаги." }
+              ],
+              inputs: ["Заключения"],
+              outputs: ["Позиции к голосованию"],
+              children: []
+            },
+            {
+              id: "tk-3",
+              title: "Оценка и голосование",
+              short: "Голосование",
+              role: "committee",
+              summary: "Голосование по победителю либо решение о переторжке/повторном тендере.",
+              systems: ["Протокол"],
+              sla: "В рамках заседания",
+              owner: "ТК",
+              tags: ["Кворум", "Решение"],
+              steps: [
+                { t: "Сверить критерии", d: "Цена / качество / сроки / СБ." },
+                { t: "Проголосовать", d: "Фиксация голосов." },
+                { t: "Выбрать сценарий", d: "Победитель / переторжка / отмена." }
+              ],
+              inputs: ["Позиции"],
+              outputs: ["Решение ТК"],
+              children: []
+            },
+            {
+              id: "tk-4",
+              title: "Протокол решения",
+              short: "Протокол",
+              role: "committee",
+              summary: "Оформление протокола, уведомление сторон и передача в договорной контур.",
+              systems: ["1С:ДО", "ЭДО", "Почта"],
+              sla: "В день заседания",
+              owner: "Секретарь ТК",
+              tags: ["Протокол", "Уведомления"],
+              steps: [
+                { t: "Оформить протокол", d: "Решение, обоснование, поручения." },
+                { t: "Уведомить", d: "Победитель / участники / инициатор." },
+                { t: "Передать дальше", d: "На подготовку договора." }
+              ],
+              inputs: ["Решение ТК"],
+              outputs: ["Протокол", "Поручения"],
+              children: []
+            },
+            {
+              id: "tk-5",
+              title: "Контроль исполнения",
+              short: "Контроль",
+              role: "committee",
+              summary: "Контроль исполнения поручений: договор, сроки, повторные процедуры.",
+              systems: ["1С:ДО"],
+              sla: "До закрытия поручений",
+              owner: "ТК / инициатор",
+              tags: ["Follow-up"],
+              steps: [
+                { t: "Отследить договор", d: "Статус согласования/подписания." },
+                { t: "Контроль переторжки", d: "Если назначена — новый цикл." },
+                { t: "Закрыть тендер", d: "Архивирование комплекта." }
+              ],
+              inputs: ["Протокол"],
+              outputs: ["Закрытый тендер / новый цикл"],
+              children: []
+            }
+          ]
+        }
+      ]
+    };
+
+    const byId = new Map();
+    function indexTree(node, parent = null) {
+      node.parentId = parent ? parent.id : null;
+      byId.set(node.id, node);
+      (node.children || []).forEach(ch => indexTree(ch, node));
+    }
+    indexTree(DATA);
+
+    function ancestors(id) {
+      const chain = [];
+      let n = byId.get(id);
+      while (n) { chain.unshift(n); n = n.parentId ? byId.get(n.parentId) : null; }
+      return chain;
+    }
+
+    let selectedId = "root";
+    let filterRole = "all";
+    let searchQuery = "";
+    let transform = { x: 40, y: 30, k: 0.92 };
+
+    const treeEl = document.getElementById("tree");
+    const detailEl = document.getElementById("detail");
+    const svg = document.getElementById("mapSvg");
+    const world = document.getElementById("canvasWorld");
+    const wrap = document.getElementById("canvasWrap");
+
+    function matchesFilter(node) {
+      if (filterRole !== "all" && node.role !== filterRole && node.role !== "root") {
+        const has = (node.children || []).some(ch => matchesFilter(ch) || ch.role === filterRole);
+        if (!has && node.role !== filterRole) return false;
+      }
+      if (!searchQuery) return true;
+      const q = searchQuery.toLowerCase();
+      const blob = [node.title, node.short, node.summary, ...(node.tags || [])].join(" ").toLowerCase();
+      if (blob.includes(q)) return true;
+      return (node.children || []).some(matchesFilter);
+    }
+
+    function renderTree() {
+      const roots = DATA.children.filter(matchesFilter);
+      treeEl.innerHTML = `
+        <li>
+          <button class="leaf ${selectedId === "root" ? "active" : ""}" data-id="root">
+            <span class="dot lifecycle" style="display:inline-block;margin-right:.45rem;vertical-align:middle"></span>
+            Сотрудник ЭНКО
+          </button>
+        </li>
+        ${roots.map(roleNode => `
+          <li>
+            <details open>
+              <summary class="${selectedId === roleNode.id ? "active" : ""}" data-id="${roleNode.id}">
+                <span class="dot ${roleNode.role}"></span>
+                ${roleNode.title}
+              </summary>
+              <div>
+                ${(roleNode.children || []).filter(matchesFilter).map(leaf => `
+                  <button class="leaf ${selectedId === leaf.id ? "active" : ""}" data-id="${leaf.id}">${leaf.title}</button>
+                `).join("")}
+              </div>
+            </details>
+          </li>
+        `).join("")}
+      `;
+      treeEl.querySelectorAll("[data-id]").forEach(el => {
+        el.addEventListener("click", (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          selectNode(el.getAttribute("data-id"), true);
+        });
+      });
+    }
+
+    function wrapText(text, maxLen) {
+      const words = String(text).split(/\s+/);
+      const lines = [];
+      let line = "";
+      words.forEach(w => {
+        const next = line ? line + " " + w : w;
+        if (next.length > maxLen) { if (line) lines.push(line); line = w; }
+        else line = next;
+      });
+      if (line) lines.push(line);
+      return lines.slice(0, 3);
+    }
+
+    function layout() {
+      const roleNodes = DATA.children.filter(matchesFilter);
+      const positions = new Map();
+      const colW = 250;
+      const colGap = 36;
+      const nodeW = 220;
+      const roleH = 72;
+      const leafH = 58;
+      const leafGap = 14;
+      const topPad = 70;
+      const roleY = 210;
+      const leafStartY = 330;
+      const cols = Math.max(roleNodes.length, 1);
+      const totalW = cols * colW + (cols - 1) * colGap;
+      const startX = 80;
+      const rootW = 240;
+
+      positions.set("root", {
+        x: startX + totalW / 2 - rootW / 2,
+        y: topPad,
+        w: rootW,
+        h: 76
+      });
+
+      roleNodes.forEach((rn, i) => {
+        const colX = startX + i * (colW + colGap);
+        const roleX = colX + (colW - nodeW) / 2;
+        positions.set(rn.id, { x: roleX, y: roleY, w: nodeW, h: roleH, colX, colW });
+
+        const kids = (rn.children || []).filter(matchesFilter);
+        kids.forEach((k, ki) => {
+          positions.set(k.id, {
+            x: roleX,
+            y: leafStartY + ki * (leafH + leafGap),
+            w: nodeW,
+            h: leafH
+          });
+        });
+      });
+
+      return positions;
+    }
+
+    function applyTransform() {
+      world.style.transform = `translate(${transform.x}px, ${transform.y}px) scale(${transform.k})`;
+    }
+
+    function renderCanvas() {
+      const positions = layout();
+      const visible = (id) => {
+        const n = byId.get(id);
+        return n && matchesFilter(n);
+      };
+
+      let links = "";
+      const addLink = (a, b, color) => {
+        if (!visible(a) || !visible(b)) return;
+        const A = positions.get(a), B = positions.get(b);
+        if (!A || !B) return;
+        const x1 = A.x + A.w / 2, y1 = A.y + A.h;
+        const x2 = B.x + B.w / 2, y2 = B.y;
+        const mid = (y1 + y2) / 2;
+        links += `<path d="M${x1} ${y1} C${x1} ${mid}, ${x2} ${mid}, ${x2} ${y2}" fill="none" stroke="${color}" stroke-width="2" opacity=".45"/>`;
+      };
+
+      DATA.children.filter(matchesFilter).forEach(rn => {
+        addLink("root", rn.id, COLORS[rn.role] || COLORS.root);
+        (rn.children || []).filter(matchesFilter).forEach(ch => addLink(rn.id, ch.id, COLORS[rn.role]));
+      });
+
+      // Cross-role flow arrows (handoffs) between role headers
+      const flow = [
+        ["initiator", "estimator", COLORS.estimator],
+        ["initiator", "security", COLORS.security],
+        ["estimator", "committee", COLORS.committee],
+        ["security", "committee", COLORS.committee]
+      ];
+      let flows = "";
+      flow.forEach(([a, b, color]) => {
+        if (!visible(a) || !visible(b)) return;
+        const A = positions.get(a), B = positions.get(b);
+        if (!A || !B) return;
+        const x1 = A.x + A.w, y1 = A.y + A.h / 2;
+        const x2 = B.x, y2 = B.y + B.h / 2;
+        if (x2 <= x1) return;
+        flows += `<path d="M${x1} ${y1} C${(x1+x2)/2} ${y1}, ${(x1+x2)/2} ${y2}, ${x2} ${y2}" fill="none" stroke="${color}" stroke-width="2" stroke-dasharray="6 6" opacity=".55" marker-end="url(#arrow)"/>`;
+      });
+
+      // Column panels
+      let columns = "";
+      DATA.children.filter(matchesFilter).forEach(rn => {
+        const p = positions.get(rn.id);
+        if (!p || p.colX == null) return;
+        const kids = (rn.children || []).filter(matchesFilter);
+        const last = kids.length ? positions.get(kids[kids.length - 1].id) : p;
+        const top = 190;
+        const height = (last.y + last.h + 24) - top;
+        columns += `<rect x="${p.colX}" y="${top}" width="${p.colW}" height="${height}" rx="22" fill="rgba(255,255,255,.55)" stroke="${COLORS[rn.role]}" stroke-opacity=".18"/>`;
+      });
+
+      let nodes = "";
+      const drawNode = (node) => {
+        if (!visible(node.id) && node.id !== "root") return;
+        const p = positions.get(node.id);
+        if (!p) return;
+        const color = COLORS[node.role] || COLORS.root;
+        const selected = selectedId === node.id ? "selected" : "";
+        const dim = (filterRole !== "all" && node.role !== filterRole && node.id !== "root" && node.role !== "root") ? "dim" : "";
+        const isLeaf = node.parentId && !DATA.children.some(c => c.id === node.id);
+        const useLines = wrapText(node.title, isLeaf ? 22 : 18);
+        nodes += `
+          <g class="node ${selected} ${dim}" data-id="${node.id}">
+            <rect class="node-card" x="${p.x}" y="${p.y}" width="${p.w}" height="${p.h}" rx="16" ry="16"
+              fill="#fff" stroke="${color}" stroke-width="1.6" filter="url(#soft)"/>
+            <rect x="${p.x}" y="${p.y}" width="8" height="${p.h}" rx="4" fill="${color}"/>
+            ${useLines.map((ln, i) => `
+              <text x="${p.x + 18 + (p.w - 18) / 2}" y="${p.y + (p.h - (useLines.length - 1) * 15) / 2 + i * 15 + 4}"
+                text-anchor="middle" font-family="Manrope, sans-serif" font-size="${isLeaf ? 12 : 13}"
+                font-weight="700" fill="#122A4B">${escapeXml(ln)}</text>
+            `).join("")}
+          </g>`;
+      };
+
+      drawNode(DATA);
+      DATA.children.filter(matchesFilter).forEach(rn => {
+        drawNode(rn);
+        (rn.children || []).filter(matchesFilter).forEach(drawNode);
+      });
+
+      let maxX = 1200, maxY = 720;
+      positions.forEach(p => {
+        maxX = Math.max(maxX, (p.colX != null ? p.colX + p.colW : p.x + p.w) + 60);
+        maxY = Math.max(maxY, p.y + p.h + 40);
+      });
+      const legendY = maxY + 20;
+      const legend = `
+        <g>
+          <rect x="80" y="${legendY}" width="${Math.max(900, maxX - 140)}" height="70" rx="16" fill="rgba(255,255,255,.92)" stroke="#D5DEE8"/>
+          <text x="110" y="${legendY + 30}" font-family="Manrope" font-size="12" font-weight="700" fill="#758795">Handoff: Инициатор → Расчетчик / СБ → Тендерный комитет (пунктир)</text>
+          <text x="110" y="${legendY + 50}" font-family="Manrope" font-size="12" fill="#758795">Клик — детали · двойной клик — фокус · фильтры сверху сужают колонки</text>
+        </g>`;
+
+      const lanes = `
+        <text x="28" y="110" font-family="Manrope" font-size="11" font-weight="800" fill="#758795" transform="rotate(-90 28 110)">КОРЕНЬ</text>
+        <text x="28" y="250" font-family="Manrope" font-size="11" font-weight="800" fill="#758795" transform="rotate(-90 28 250)">РОЛИ</text>
+        <text x="28" y="480" font-family="Manrope" font-size="11" font-weight="800" fill="#758795" transform="rotate(-90 28 480)">ПРОЦЕССЫ</text>
+      `;
+
+      svg.innerHTML = `
+        <defs>
+          <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0 0 L10 5 L0 10 z" fill="#758795"/>
+          </marker>
+          <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+            <feDropShadow dx="0" dy="6" stdDeviation="6" flood-color="rgba(18,42,75,.10)"/>
+          </filter>
+        </defs>
+        ${lanes}
+        ${columns}
+        ${links}
+        ${flows}
+        ${nodes}
+        ${legend}
+      `;
+
+      svg.setAttribute("width", String(Math.max(maxX, 1100)));
+      svg.setAttribute("height", String(legendY + 100));
+
+      svg.querySelectorAll(".node").forEach(g => {
+        g.addEventListener("click", (e) => {
+          e.stopPropagation();
+          selectNode(g.getAttribute("data-id"), false);
+        });
+        g.addEventListener("dblclick", (e) => {
+          e.stopPropagation();
+          selectNode(g.getAttribute("data-id"), true);
+        });
+      });
+    }
+
+    function escapeXml(s) {
+      return String(s).replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;" }[c]));
+    }
+
+    function roleLabel(role) {
+      return ({
+        root: "Корневой уровень",
+        lifecycle: "Сквозной процесс",
+        initiator: "Инициатор тендера",
+        estimator: "Расчетчик",
+        security: "Служба безопасности",
+        committee: "Тендерный комитет"
+      })[role] || role;
+    }
+
+    function renderDetail(id) {
+      const node = byId.get(id);
+      if (!node) return;
+      const chain = ancestors(id);
+      const color = COLORS[node.role] || COLORS.root;
+      detailEl.innerHTML = `
+        <div class="detail-content">
+          <div class="breadcrumb">
+            ${chain.map((n, i) => i < chain.length - 1
+              ? `<button type="button" data-id="${n.id}">${escapeHtml(n.short || n.title)}</button><em>/</em>`
+              : `<em>${escapeHtml(n.short || n.title)}</em>`
+            ).join("")}
+          </div>
+          ${node.image ? `<div class="hero"><img src="${node.image}" alt=""/><div class="hero-badge">${escapeHtml(roleLabel(node.role))}</div></div>` : ""}
+          <h2>${escapeHtml(node.title)}</h2>
+          <p class="lead">${escapeHtml(node.summary || "")}</p>
+          <div class="meta-grid">
+            <div class="meta"><span>Ответственный</span><strong>${escapeHtml(node.owner || "—")}</strong></div>
+            <div class="meta"><span>SLA / срок</span><strong>${escapeHtml(node.sla || "—")}</strong></div>
+            <div class="meta"><span>Роль</span><strong style="color:${color}">${escapeHtml(roleLabel(node.role))}</strong></div>
+            <div class="meta"><span>Системы</span><strong>${escapeHtml((node.systems || []).join(" · ") || "—")}</strong></div>
+          </div>
+          <div class="tags">${(node.tags || []).map(t => `<span class="tag">${escapeHtml(t)}</span>`).join("")}</div>
+
+          ${(node.steps && node.steps.length) ? `
+            <div class="section-title">Шаги процесса</div>
+            <ol class="steps">
+              ${node.steps.map((s, i) => `
+                <li>
+                  <div class="n" style="background:${color}">${i + 1}</div>
+                  <div>
+                    <h4>${escapeHtml(s.t)}</h4>
+                    <p>${escapeHtml(s.d)}</p>
+                  </div>
+                </li>
+              `).join("")}
+            </ol>` : ""}
+
+          <div class="section-title">Входы и выходы</div>
+          <div class="io">
+            <div class="io-box">
+              <h4>Входы</h4>
+              <ul>${(node.inputs || ["—"]).map(x => `<li>${escapeHtml(x)}</li>`).join("")}</ul>
+            </div>
+            <div class="io-box">
+              <h4>Выходы</h4>
+              <ul>${(node.outputs || ["—"]).map(x => `<li>${escapeHtml(x)}</li>`).join("")}</ul>
+            </div>
+          </div>
+
+          ${node.id === "root" || DATA.children.some(c => c.id === node.id) ? `
+            <div class="section-title">RACI (упрощённо)</div>
+            <table class="raci">
+              <thead>
+                <tr>
+                  <th>Этап</th><th>Иниц.</th><th>Расч.</th><th>СБ</th><th>ТК</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Подготовка и публикация</td><td class="r">R</td><td class="c">C</td><td class="i">I</td><td class="i">I</td></tr>
+                <tr><td>Ценовая экспертиза</td><td class="c">C</td><td class="r">R</td><td class="i">I</td><td class="i">I</td></tr>
+                <tr><td>Проверка участников</td><td class="c">C</td><td class="i">I</td><td class="r">R</td><td class="i">I</td></tr>
+                <tr><td>Выбор победителя</td><td class="c">C</td><td class="c">C</td><td class="c">C</td><td class="a">A/R</td></tr>
+              </tbody>
+            </table>
+            <p style="margin-top:.5rem;font-size:.75rem;color:var(--muted)">R — исполняет, A — утверждает, C — консультирует, I — информируется</p>
+          ` : ""}
+
+          ${(node.children && node.children.length) ? `
+            <div class="section-title">Дочерние процессы</div>
+            <div class="children">
+              ${node.children.map(ch => `
+                <button class="child-link" data-id="${ch.id}">
+                  ${escapeHtml(ch.title)}
+                  <span>${escapeHtml(ch.short || "")} →</span>
+                </button>
+              `).join("")}
+            </div>
+          ` : ""}
+
+          ${node.parentId ? `
+            <div class="section-title">Навигация</div>
+            <div class="children">
+              <button class="child-link" data-id="${node.parentId}">← К родительскому процессу<span></span></button>
+            </div>
+          ` : ""}
+        </div>
+      `;
+
+      detailEl.querySelectorAll("[data-id]").forEach(btn => {
+        btn.addEventListener("click", () => selectNode(btn.getAttribute("data-id"), true));
+      });
+    }
+
+    function escapeHtml(s) {
+      return String(s).replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;" }[c]));
+    }
+
+    function selectNode(id, focus) {
+      selectedId = id;
+      renderTree();
+      renderCanvas();
+      renderDetail(id);
+      if (focus) focusNode(id);
+    }
+
+    function focusNode(id) {
+      const positions = layout();
+      const p = positions.get(id);
+      if (!p) return;
+      const rect = wrap.getBoundingClientRect();
+      const k = transform.k;
+      transform.x = rect.width / 2 - (p.x + p.w / 2) * k;
+      transform.y = rect.height / 2 - (p.y + p.h / 2) * k;
+      applyTransform();
+    }
+
+    function fitAll() {
+      transform = { x: 30, y: 20, k: Math.min(1, wrap.clientWidth / 1500) };
+      applyTransform();
+    }
+
+    // Pan / zoom
+    let dragging = false, last = { x: 0, y: 0 };
+    wrap.addEventListener("pointerdown", (e) => {
+      if (e.target.closest(".node") || e.target.closest("button")) return;
+      dragging = true;
+      wrap.classList.add("dragging");
+      last = { x: e.clientX, y: e.clientY };
+      wrap.setPointerCapture(e.pointerId);
+    });
+    wrap.addEventListener("pointermove", (e) => {
+      if (!dragging) return;
+      transform.x += e.clientX - last.x;
+      transform.y += e.clientY - last.y;
+      last = { x: e.clientX, y: e.clientY };
+      applyTransform();
+    });
+    wrap.addEventListener("pointerup", () => { dragging = false; wrap.classList.remove("dragging"); });
+    wrap.addEventListener("wheel", (e) => {
+      e.preventDefault();
+      const rect = wrap.getBoundingClientRect();
+      const mx = e.clientX - rect.left;
+      const my = e.clientY - rect.top;
+      const prev = transform.k;
+      const next = Math.min(1.8, Math.max(0.45, prev * (e.deltaY > 0 ? 0.9 : 1.1)));
+      transform.x = mx - (mx - transform.x) * (next / prev);
+      transform.y = my - (my - transform.y) * (next / prev);
+      transform.k = next;
+      applyTransform();
+    }, { passive: false });
+
+    document.getElementById("zoomIn").onclick = () => { transform.k = Math.min(1.8, transform.k * 1.12); applyTransform(); };
+    document.getElementById("zoomOut").onclick = () => { transform.k = Math.max(0.45, transform.k / 1.12); applyTransform(); };
+    document.getElementById("zoomReset").onclick = fitAll;
+    document.getElementById("fitView").onclick = fitAll;
+    document.getElementById("expandAll").onclick = () => {
+      treeEl.querySelectorAll("details").forEach(d => d.open = true);
+      filterRole = "all";
+      document.querySelectorAll(".chip").forEach(c => c.classList.toggle("active", c.dataset.filter === "all"));
+      searchQuery = "";
+      document.getElementById("search").value = "";
+      renderTree(); renderCanvas();
+    };
+
+    document.querySelectorAll(".chip").forEach(chip => {
+      chip.addEventListener("click", () => {
+        filterRole = chip.dataset.filter;
+        document.querySelectorAll(".chip").forEach(c => c.classList.toggle("active", c === chip));
+        renderTree(); renderCanvas();
+        if (filterRole !== "all") {
+          const target = filterRole === "lifecycle" ? "lifecycle" : filterRole;
+          selectNode(target, true);
+        }
+      });
+    });
+
+    document.getElementById("search").addEventListener("input", (e) => {
+      searchQuery = e.target.value.trim();
+      renderTree(); renderCanvas();
+    });
+
+    renderTree();
+    renderCanvas();
+    renderDetail("root");
+    applyTransform();
+    fitAll();
+    window.addEventListener("resize", () => applyTransform());
+  </script>
+</body>
+</html>
