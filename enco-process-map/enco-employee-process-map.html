@@ -84,10 +84,10 @@
     .search input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(0,114,188,.12); }
     .main {
       display: grid;
-      grid-template-columns: var(--side-w, 270px) 6px minmax(160px, 1fr) 6px var(--right-w, 560px);
+      grid-template-columns: var(--side-w, 270px) 6px minmax(96px, 1fr) 6px var(--right-w, 640px);
       min-height: 0;
       --side-w: 270px;
-      --right-w: 560px;
+      --right-w: 640px;
     }
     .col-resizer {
       position: relative;
@@ -197,7 +197,7 @@
     }
     .side-expand-tab:hover { color: var(--blue); border-color: var(--blue); }
     .main.side-collapsed {
-      grid-template-columns: 44px 0 minmax(160px, 1fr) 6px var(--right-w, 560px);
+      grid-template-columns: 44px 0 minmax(120px, 1fr) 6px var(--right-w, 560px);
     }
     .main.side-collapsed .col-resizer[data-resize="side"] {
       pointer-events: none;
@@ -210,6 +210,68 @@
     .main.side-collapsed .side-head,
     .main.side-collapsed .side-body { display: none; }
     .main.side-collapsed .side-expand-tab { display: block; }
+
+    .map-expand-tab {
+      display: none;
+      position: absolute;
+      top: 0.75rem;
+      left: 0;
+      right: 0;
+      z-index: 6;
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      margin: 0 auto;
+      width: 34px;
+      padding: 0.85rem 0.15rem;
+      border: 1px solid var(--line);
+      border-left: 0;
+      border-radius: 0 10px 10px 0;
+      background: #fff;
+      color: var(--navy);
+      font: inherit;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: .06em;
+      cursor: pointer;
+      box-shadow: var(--shadow);
+    }
+    .map-expand-tab:hover { color: var(--blue); border-color: var(--blue); }
+    .map-collapse-btn {
+      position: absolute;
+      left: 0.75rem;
+      top: 1rem;
+      z-index: 6;
+      width: 34px;
+      height: 34px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.95);
+      border-radius: 10px;
+      cursor: pointer;
+      font: inherit;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--navy);
+      box-shadow: var(--shadow);
+      line-height: 1;
+    }
+    .map-collapse-btn:hover { border-color: var(--blue); color: var(--blue); }
+    .main.map-collapsed {
+      grid-template-columns: var(--side-w, 270px) 6px 44px 0 minmax(0, 1fr);
+    }
+    .main.map-collapsed.side-collapsed {
+      grid-template-columns: 44px 0 44px 0 minmax(0, 1fr);
+    }
+    .main.map-collapsed .col-resizer[data-resize="right"] {
+      pointer-events: none;
+      visibility: hidden;
+    }
+    .main.map-collapsed .canvas-wrap {
+      overflow: hidden;
+      background: rgba(247,249,252,.96);
+    }
+    .main.map-collapsed .canvas-wrap > :not(.map-expand-tab) { display: none !important; }
+    .main.map-collapsed .map-expand-tab { display: block; }
+    .main.map-collapsed .map-collapse-btn { display: none; }
     .tree .tree-children { padding-left: 0.35rem; }
     .tree details details { margin-left: 0.25rem; }
     .tree summary .chev {
@@ -483,12 +545,16 @@
     }
     .breadcrumb em { color: var(--muted); font-style: normal; }
     @media (max-width: 1400px) {
-      .main { --side-w: 250px; --right-w: 480px; }
-      .main.side-collapsed { grid-template-columns: 44px 0 minmax(160px, 1fr) 6px var(--right-w, 480px); }
+      .main { --side-w: 250px; --right-w: 520px; }
+      .main.side-collapsed { grid-template-columns: 44px 0 minmax(96px, 1fr) 6px var(--right-w, 520px); }
+      .main.map-collapsed { grid-template-columns: var(--side-w, 250px) 6px 44px 0 minmax(0, 1fr); }
+      .main.map-collapsed.side-collapsed { grid-template-columns: 44px 0 44px 0 minmax(0, 1fr); }
     }
     @media (max-width: 1180px) {
-      .main { --side-w: 230px; --right-w: 420px; }
-      .main.side-collapsed { grid-template-columns: 44px 0 minmax(160px, 1fr) 6px var(--right-w, 420px); }
+      .main { --side-w: 230px; --right-w: 460px; }
+      .main.side-collapsed { grid-template-columns: 44px 0 minmax(96px, 1fr) 6px var(--right-w, 460px); }
+      .main.map-collapsed { grid-template-columns: var(--side-w, 230px) 6px 44px 0 minmax(0, 1fr); }
+      .main.map-collapsed.side-collapsed { grid-template-columns: 44px 0 44px 0 minmax(0, 1fr); }
       .right-pane.with-scan { grid-template-columns: 1fr; }
       .right-pane.with-scan > .col-resizer { display: none; }
       .right-pane.with-scan .scan-viewer {
@@ -507,7 +573,8 @@
       .main.side-collapsed { grid-template-columns: 1fr; grid-template-rows: auto 0 auto 0 auto; }
       .main > .col-resizer { display: none; }
       .main.side-collapsed .side { min-height: 44px; max-height: 44px; }
-      .main.side-collapsed .side-expand-tab {
+      .main.side-collapsed .side-expand-tab,
+      .main.map-collapsed .map-expand-tab {
         writing-mode: horizontal-tb;
         transform: none;
         width: auto;
@@ -517,6 +584,8 @@
         border-radius: 10px;
         border: 1px solid var(--line);
       }
+      .main.map-collapsed .canvas-wrap { min-height: 44px; max-height: 44px; }
+      .map-collapse-btn { display: none; }
       .side, .right-pane { border: 0; border-bottom: 1px solid var(--line); }
       .right-pane.with-scan { grid-template-columns: 1fr; }
       .right-pane.with-scan > .col-resizer { display: none; }
@@ -649,7 +718,7 @@
     .step-blocks .scan-open-btn { grid-template-columns: 56px 1fr auto; }
     .step-blocks .scan-open-btn img { width: 56px; height: 40px; }
     .detail-content {
-      max-width: 760px;
+      max-width: none;
     }
     .detail .lead { line-height: 1.5; }
     .section-title { margin-top: 1.25rem; }
@@ -704,6 +773,8 @@
       <div class="col-resizer" data-resize="side" title="Изменить ширину"></div>
 
       <section class="canvas-wrap" id="canvasWrap" aria-label="Карта процессов">
+        <button type="button" class="map-expand-tab" id="mapExpand" title="Показать карту процессов">Карта процессов</button>
+        <button type="button" class="map-collapse-btn" id="mapCollapse" title="Свернуть карту влево">‹</button>
         <canvas id="mapCanvas" width="1200" height="800"></canvas>
         <div class="zoom-controls">
           <button type="button" id="zoomIn" title="Увеличить">+</button>
@@ -1995,6 +2066,8 @@ const DATA = {
     let searchQuery = "";
     let treeOpen = new Set(["root", "stages", "roles", "initiator", "estimator", "security", "committee"]);
     let sideCollapsed = false;
+    let mapCollapsed = false;
+    let rightWidthBeforeMapCollapse = null;
     let transform = { x: 40, y: 30, k: 0.85 };
     let hitRects = []; // {id,x,y,w,h} in world coords
     let worldSize = { w: 1600, h: 900 };
@@ -2801,13 +2874,53 @@ const DATA = {
     });
 
     const mainLayout = document.getElementById("mainLayout");
+
+    function currentSideTrack() {
+      return sideCollapsed ? 44 : (parseFloat(getComputedStyle(mainLayout).getPropertyValue("--side-w")) || 270);
+    }
+
+    function maxRightWidth() {
+      const mainW = mainLayout.getBoundingClientRect().width;
+      const sideTrack = currentSideTrack();
+      const mapTrack = mapCollapsed ? 44 : 96; // min map column when visible
+      const gutters = mapCollapsed ? 6 : 12;
+      // Up to all free space (enough for >= 2/3 viewport on typical desktops).
+      return Math.max(320, Math.floor(mainW - sideTrack - mapTrack - gutters));
+    }
+
     function setSideCollapsed(collapsed) {
       sideCollapsed = collapsed;
       mainLayout.classList.toggle("side-collapsed", collapsed);
+      if (!mapCollapsed) {
+        const cur = parseFloat(getComputedStyle(mainLayout).getPropertyValue("--right-w")) || 640;
+        mainLayout.style.setProperty("--right-w", Math.min(cur, maxRightWidth()) + "px");
+      }
       resizeCanvas();
     }
+
+    function setMapCollapsed(collapsed) {
+      if (collapsed && !mapCollapsed) {
+        rightWidthBeforeMapCollapse = parseFloat(getComputedStyle(mainLayout).getPropertyValue("--right-w")) || 640;
+      }
+      mapCollapsed = collapsed;
+      mainLayout.classList.toggle("map-collapsed", collapsed);
+      if (collapsed) {
+        // Right pane takes the freed space (flex 1fr via CSS).
+        mainLayout.style.setProperty("--right-w", maxRightWidth() + "px");
+      } else if (rightWidthBeforeMapCollapse != null) {
+        const restored = Math.min(Math.max(320, rightWidthBeforeMapCollapse), maxRightWidth());
+        mainLayout.style.setProperty("--right-w", restored + "px");
+      }
+      resizeCanvas();
+      if (!collapsed) {
+        requestAnimationFrame(() => { try { fitAll(); } catch (_) {} });
+      }
+    }
+
     document.getElementById("sideCollapse").addEventListener("click", () => setSideCollapsed(true));
     document.getElementById("sideExpand").addEventListener("click", () => setSideCollapsed(false));
+    document.getElementById("mapCollapse").addEventListener("click", () => setMapCollapsed(true));
+    document.getElementById("mapExpand").addEventListener("click", () => setMapCollapsed(false));
     document.getElementById("search").addEventListener("input", (e) => {
       searchQuery = e.target.value.trim();
       renderTree(); draw();
@@ -2815,7 +2928,6 @@ const DATA = {
 
     // --- column resize ---
     function applyColWidths() {
-      // ensure CSS vars are pixel strings when set by drag
       resizeCanvas();
     }
 
@@ -2827,24 +2939,29 @@ const DATA = {
       let startRight = 0;
       let startDetail = 0;
       let startScan = 0;
-      let startMainW = 0;
 
       const onMove = (e) => {
         if (!mode) return;
-        const x = e.clientX;
-        const dx = x - startX;
+        const dx = e.clientX - startX;
         if (mode === "side") {
           if (sideCollapsed) return;
           const next = Math.min(480, Math.max(180, startSide + dx));
           mainLayout.style.setProperty("--side-w", next + "px");
+          // Keep right within new max after side change
+          const curRight = parseFloat(getComputedStyle(mainLayout).getPropertyValue("--right-w")) || startRight;
+          mainLayout.style.setProperty("--right-w", Math.min(curRight, maxRightWidth()) + "px");
         } else if (mode === "right") {
-          const next = Math.min(900, Math.max(320, startRight - dx));
+          if (mapCollapsed) return;
+          const maxR = maxRightWidth();
+          const minR = Math.min(360, Math.floor(window.innerWidth * 0.28));
+          const next = Math.min(maxR, Math.max(minR, startRight - dx));
           mainLayout.style.setProperty("--right-w", next + "px");
         } else if (mode === "scan") {
           const total = startDetail + startScan;
-          let detail = Math.min(total - 240, Math.max(220, startDetail + dx));
+          const minPane = Math.min(220, Math.floor(total * 0.2));
+          let detail = Math.min(total - minPane, Math.max(minPane, startDetail + dx));
           let scan = total - detail;
-          if (scan < 240) { scan = 240; detail = total - scan; }
+          if (scan < minPane) { scan = minPane; detail = total - scan; }
           rightPane.style.setProperty("--detail-w", detail + "px");
           rightPane.style.setProperty("--scan-w", scan + "px");
         }
@@ -2865,10 +2982,11 @@ const DATA = {
         if (e.button !== 0) return;
         e.preventDefault();
         mode = el.getAttribute("data-resize");
+        if (mode === "right" && mapCollapsed) return;
+        if (mode === "side" && sideCollapsed) return;
         startX = e.clientX;
-        startMainW = mainLayout.getBoundingClientRect().width;
         startSide = parseFloat(getComputedStyle(mainLayout).getPropertyValue("--side-w")) || 270;
-        startRight = parseFloat(getComputedStyle(mainLayout).getPropertyValue("--right-w")) || 560;
+        startRight = parseFloat(getComputedStyle(mainLayout).getPropertyValue("--right-w")) || 640;
         if (mode === "scan") {
           const detailEl = document.getElementById("detail");
           const scanEl = document.getElementById("scanViewer");
@@ -2884,17 +3002,31 @@ const DATA = {
 
     document.querySelectorAll(".col-resizer").forEach(bindColResizer);
 
-    window.addEventListener("resize", resizeCanvas);
+    window.addEventListener("resize", () => {
+      if (!mapCollapsed) {
+        const cur = parseFloat(getComputedStyle(mainLayout).getPropertyValue("--right-w")) || 640;
+        mainLayout.style.setProperty("--right-w", Math.min(cur, maxRightWidth()) + "px");
+      }
+      resizeCanvas();
+    });
 
     (async function init() {
       const vw = window.innerWidth;
       if (vw >= 1400) {
         mainLayout.style.setProperty("--side-w", "270px");
-        mainLayout.style.setProperty("--right-w", Math.round(Math.min(720, vw * 0.38)) + "px");
+        mainLayout.style.setProperty("--right-w", Math.round(Math.max(vw * 0.42, Math.min(vw * 0.5, 900))) + "px");
       } else if (vw >= 1180) {
         mainLayout.style.setProperty("--side-w", "240px");
-        mainLayout.style.setProperty("--right-w", "440px");
+        mainLayout.style.setProperty("--right-w", Math.round(vw * 0.42) + "px");
+      } else {
+        mainLayout.style.setProperty("--right-w", Math.round(Math.min(maxRightWidth(), vw * 0.5)) + "px");
       }
+      // Clamp to allowed max (>= 2/3 capability via drag)
+      const clamped = Math.min(
+        parseFloat(getComputedStyle(mainLayout).getPropertyValue("--right-w")) || 640,
+        maxRightWidth()
+      );
+      mainLayout.style.setProperty("--right-w", clamped + "px");
       renderTree();
       renderDetail("root");
       await preloadImages();
