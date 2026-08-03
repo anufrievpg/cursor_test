@@ -84,9 +84,35 @@
     .search input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(0,114,188,.12); }
     .main {
       display: grid;
-      grid-template-columns: 270px minmax(0, 1fr) minmax(560px, 42vw);
+      grid-template-columns: var(--side-w, 270px) 6px minmax(160px, 1fr) 6px var(--right-w, 560px);
       min-height: 0;
+      --side-w: 270px;
+      --right-w: 560px;
     }
+    .col-resizer {
+      position: relative;
+      z-index: 8;
+      cursor: col-resize;
+      background: transparent;
+      touch-action: none;
+    }
+    .col-resizer::before {
+      content: "";
+      position: absolute;
+      top: 0; bottom: 0; left: 1px; right: 1px;
+      background: var(--line);
+      opacity: .7;
+      transition: background .15s, opacity .15s;
+    }
+    .col-resizer:hover::before,
+    .col-resizer.is-dragging::before {
+      background: var(--blue);
+      opacity: 1;
+      left: 0; right: 0;
+    }
+    .main.is-resizing,
+    .main.is-resizing * { cursor: col-resize !important; user-select: none !important; }
+    .main.is-resizing .side { transition: none; }
     .side {
       position: relative;
       background: rgba(255,255,255,.92);
@@ -171,7 +197,11 @@
     }
     .side-expand-tab:hover { color: var(--blue); border-color: var(--blue); }
     .main.side-collapsed {
-      grid-template-columns: 44px minmax(0, 1fr) minmax(560px, 42vw);
+      grid-template-columns: 44px 0 minmax(160px, 1fr) 6px var(--right-w, 560px);
+    }
+    .main.side-collapsed .col-resizer[data-resize="side"] {
+      pointer-events: none;
+      visibility: hidden;
     }
     .main.side-collapsed .side {
       overflow: hidden;
@@ -180,30 +210,44 @@
     .main.side-collapsed .side-head,
     .main.side-collapsed .side-body { display: none; }
     .main.side-collapsed .side-expand-tab { display: block; }
-    .tree .group-label {
-      display: block;
-      padding: 0.55rem 0.35rem 0.2rem;
-      font-size: 0.68rem;
+    .tree .tree-children { padding-left: 0.35rem; }
+    .tree details details { margin-left: 0.25rem; }
+    .tree summary .chev {
+      flex: 0 0 auto;
+      width: 0.85rem;
+      color: var(--muted);
+      font-size: 0.7rem;
+      line-height: 1;
+      transition: transform .15s ease;
+    }
+    .tree summary .chev::before { content: "▸"; display: inline-block; }
+    .tree details[open] > summary > .chev { transform: rotate(90deg); }
+    .tree summary.group-sum {
+      font-size: 0.72rem;
       font-weight: 800;
-      letter-spacing: .06em;
+      letter-spacing: .05em;
       text-transform: uppercase;
       color: var(--muted);
+      padding-top: 0.65rem;
+      padding-bottom: 0.35rem;
     }
-    .tree details.level-closed > div { display: none; }
-    .tree details.level-closed > summary::after { content: " ▸"; opacity: .55; }
 
     .right-pane {
       display: grid;
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
       min-width: 0;
       min-height: 0;
-      border-left: 1px solid var(--line);
+      border-left: 0;
       background: rgba(255,255,255,.96);
       overflow: hidden;
+      --detail-w: 1fr;
+      --scan-w: 1fr;
     }
     .right-pane.with-scan {
-      grid-template-columns: minmax(320px, 1fr) minmax(420px, 1.15fr);
+      grid-template-columns: var(--detail-w, minmax(280px, 1fr)) 6px var(--scan-w, minmax(360px, 1.1fr));
     }
+    .right-pane > .col-resizer { display: none; }
+    .right-pane.with-scan > .col-resizer { display: block; }
     .detail {
       overflow: auto;
       min-height: 0;
@@ -439,13 +483,14 @@
     }
     .breadcrumb em { color: var(--muted); font-style: normal; }
     @media (max-width: 1400px) {
-      .main { grid-template-columns: 250px minmax(0,1fr) minmax(480px, 46vw); }
-      .main.side-collapsed { grid-template-columns: 44px minmax(0,1fr) minmax(480px, 46vw); }
+      .main { --side-w: 250px; --right-w: 480px; }
+      .main.side-collapsed { grid-template-columns: 44px 0 minmax(160px, 1fr) 6px var(--right-w, 480px); }
     }
     @media (max-width: 1180px) {
-      .main { grid-template-columns: 230px minmax(0,1fr) minmax(420px, 48vw); }
-      .main.side-collapsed { grid-template-columns: 44px minmax(0,1fr) minmax(420px, 48vw); }
+      .main { --side-w: 230px; --right-w: 420px; }
+      .main.side-collapsed { grid-template-columns: 44px 0 minmax(160px, 1fr) 6px var(--right-w, 420px); }
       .right-pane.with-scan { grid-template-columns: 1fr; }
+      .right-pane.with-scan > .col-resizer { display: none; }
       .right-pane.with-scan .scan-viewer {
         border-left: 0;
         border-top: 1px solid var(--line);
@@ -455,8 +500,12 @@
     @media (max-width: 980px) {
       body { overflow: auto; }
       .app { height: auto; min-height: 100%; }
-      .main { grid-template-columns: 1fr; grid-template-rows: auto 52vh auto; }
-      .main.side-collapsed { grid-template-columns: 1fr; }
+      .main {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 0 auto 0 auto;
+      }
+      .main.side-collapsed { grid-template-columns: 1fr; grid-template-rows: auto 0 auto 0 auto; }
+      .main > .col-resizer { display: none; }
       .main.side-collapsed .side { min-height: 44px; max-height: 44px; }
       .main.side-collapsed .side-expand-tab {
         writing-mode: horizontal-tb;
@@ -470,6 +519,7 @@
       }
       .side, .right-pane { border: 0; border-bottom: 1px solid var(--line); }
       .right-pane.with-scan { grid-template-columns: 1fr; }
+      .right-pane.with-scan > .col-resizer { display: none; }
       .brand-text p { display: none; }
       .search input { width: 140px; }
     }
@@ -635,9 +685,6 @@
         <div class="side-head">
           <h2>Иерархия</h2>
           <div class="side-actions">
-            <button type="button" class="side-btn" data-tree-level="1" title="Только корень и уровень 1">Ур.1</button>
-            <button type="button" class="side-btn" data-tree-level="2" title="Этапы и роли без шагов">Ур.2</button>
-            <button type="button" class="side-btn active" data-tree-level="3" title="Все уровни">Ур.3</button>
             <button type="button" class="side-btn side-collapse-btn" id="sideCollapse" title="Свернуть секцию влево">‹</button>
           </div>
         </div>
@@ -654,6 +701,8 @@
         </div>
       </aside>
 
+      <div class="col-resizer" data-resize="side" title="Изменить ширину"></div>
+
       <section class="canvas-wrap" id="canvasWrap" aria-label="Карта процессов">
         <canvas id="mapCanvas" width="1200" height="800"></canvas>
         <div class="zoom-controls">
@@ -669,6 +718,8 @@
         </div>
       </section>
 
+      <div class="col-resizer" data-resize="right" title="Изменить ширину"></div>
+
       <div class="right-pane" id="rightPane">
         <aside class="detail" id="detail">
           <div class="detail-empty">
@@ -676,6 +727,7 @@
             <p>Справа откроется инструкция с тематическими блоками. Сканы открываются в соседней вкладке по клику.</p>
           </div>
         </aside>
+        <div class="col-resizer" data-resize="scan" title="Изменить ширину скана"></div>
         <aside class="scan-viewer" id="scanViewer" aria-label="Просмотр скана инструкции">
           <div class="scan-viewer-head">
             <div>
@@ -1941,7 +1993,7 @@ const DATA = {
     let hoverId = null;
     let filterRole = "all";
     let searchQuery = "";
-    let treeLevel = 3; // 1=корень, 2=этапы+роли, 3=процессы ролей
+    let treeOpen = new Set(["root", "stages", "roles", "initiator", "estimator", "security", "committee"]);
     let sideCollapsed = false;
     let transform = { x: 40, y: 30, k: 0.85 };
     let hitRects = []; // {id,x,y,w,h} in world coords
@@ -1992,57 +2044,86 @@ const DATA = {
       await Promise.all([...urls].map(loadImage));
     }
 
+    function isTreeOpen(key) { return treeOpen.has(key); }
+
+    function toggleTreeKey(key) {
+      if (treeOpen.has(key)) treeOpen.delete(key);
+      else treeOpen.add(key);
+    }
+
     function renderTree() {
       const stages = stageNodes();
       const roles = roleNodes();
-      const openL2 = treeLevel >= 2;
-      const openL3 = treeLevel >= 3;
-      const stagesHtml = stages.length ? `
-        <li><span class="group-label">Этапы сквозного процесса</span></li>
-        ${treeLevel >= 2 ? stages.map(st => `
-          <li>
-            <button class="leaf ${selectedId === st.id ? "active" : ""}" data-id="${st.id}">
-              <span class="dot lifecycle" style="margin-right:.45rem;vertical-align:middle"></span>
-              ${st.title}
-            </button>
-          </li>`).join("") : ""}
-      ` : "";
-      const rolesHtml = roles.length ? `
-        <li><span class="group-label">Роли и процессы</span></li>
-        ${treeLevel >= 2 ? roles.map(roleNode => `
-          <li>
-            <details ${openL3 ? "open" : ""} class="${openL3 ? "" : "level-closed"}">
-              <summary class="${selectedId === roleNode.id ? "active" : ""}" data-id="${roleNode.id}">
-                <span class="dot ${roleNode.role}"></span>
-                ${roleNode.title}
-              </summary>
-              <div>
-                ${openL3 ? (roleNode.children || []).filter(matchesFilter).map(leaf => `
-                  <button class="leaf ${selectedId === leaf.id ? "active" : ""}" data-id="${leaf.id}">${leaf.title}</button>
-                `).join("") : ""}
-              </div>
-            </details>
-          </li>
-        `).join("") : ""}
-      ` : "";
+      const stagesInner = stages.map(st => `
+        <button class="leaf ${selectedId === st.id ? "active" : ""}" data-id="${st.id}">
+          <span class="dot lifecycle" style="margin-right:.45rem;vertical-align:middle"></span>
+          ${st.title}
+        </button>`).join("");
+      const rolesInner = roles.map(roleNode => `
+        <details data-tree-key="${roleNode.id}" ${isTreeOpen(roleNode.id) ? "open" : ""}>
+          <summary class="${selectedId === roleNode.id ? "active" : ""}" data-id="${roleNode.id}">
+            <span class="chev" aria-hidden="true"></span>
+            <span class="dot ${roleNode.role}"></span>
+            ${roleNode.title}
+          </summary>
+          <div>
+            ${(roleNode.children || []).filter(matchesFilter).map(leaf => `
+              <button class="leaf ${selectedId === leaf.id ? "active" : ""}" data-id="${leaf.id}">${leaf.title}</button>
+            `).join("")}
+          </div>
+        </details>`).join("");
+
       treeEl.innerHTML = `
         <li>
-          <button class="leaf ${selectedId === "root" ? "active" : ""}" data-id="root">
-            <span class="dot lifecycle" style="margin-right:.45rem;vertical-align:middle"></span>
-            Сквозной процесс тендера
-          </button>
+          <details data-tree-key="root" ${isTreeOpen("root") ? "open" : ""}>
+            <summary class="${selectedId === "root" ? "active" : ""}" data-id="root">
+              <span class="chev" aria-hidden="true"></span>
+              <span class="dot lifecycle"></span>
+              Сквозной процесс тендера
+            </summary>
+            <div class="tree-children">
+              ${stages.length ? `
+                <details data-tree-key="stages" ${isTreeOpen("stages") ? "open" : ""}>
+                  <summary class="group-sum">
+                    <span class="chev" aria-hidden="true"></span>
+                    Этапы сквозного процесса
+                  </summary>
+                  <div>${stagesInner}</div>
+                </details>` : ""}
+              ${roles.length ? `
+                <details data-tree-key="roles" ${isTreeOpen("roles") ? "open" : ""}>
+                  <summary class="group-sum">
+                    <span class="chev" aria-hidden="true"></span>
+                    Роли и процессы
+                  </summary>
+                  <div>${rolesInner}</div>
+                </details>` : ""}
+            </div>
+          </details>
         </li>
-        ${treeLevel >= 2 ? stagesHtml + rolesHtml : ""}
       `;
-      treeEl.querySelectorAll("[data-id]").forEach(el => {
+
+      treeEl.querySelectorAll("summary").forEach(sum => {
+        sum.addEventListener("click", (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          const details = sum.closest("details");
+          const key = details && details.getAttribute("data-tree-key");
+          if (key) toggleTreeKey(key);
+          const id = sum.getAttribute("data-id");
+          if (id) {
+            selectNode(id, true);
+          } else {
+            renderTree();
+          }
+        });
+      });
+      treeEl.querySelectorAll("button.leaf[data-id]").forEach(el => {
         el.addEventListener("click", (e) => {
           e.preventDefault();
           e.stopPropagation();
           selectNode(el.getAttribute("data-id"), true);
         });
-      });
-      document.querySelectorAll("[data-tree-level]").forEach(btn => {
-        btn.classList.toggle("active", Number(btn.getAttribute("data-tree-level")) === treeLevel);
       });
     }
 
@@ -2695,7 +2776,7 @@ const DATA = {
     document.getElementById("zoomReset").onclick = fitAll;
     document.getElementById("fitView").onclick = fitAll;
     document.getElementById("expandAll").onclick = () => {
-      treeLevel = 3;
+      treeOpen = new Set(["root", "stages", "roles", "initiator", "estimator", "security", "committee"]);
       filterRole = "all";
       document.querySelectorAll(".chip").forEach(c => c.classList.toggle("active", c.dataset.filter === "all"));
       searchQuery = "";
@@ -2706,6 +2787,11 @@ const DATA = {
       chip.addEventListener("click", () => {
         filterRole = chip.dataset.filter;
         document.querySelectorAll(".chip").forEach(c => c.classList.toggle("active", c === chip));
+        if (filterRole === "lifecycle") {
+          treeOpen.add("root"); treeOpen.add("stages");
+        } else if (ROLE_IDS.has(filterRole)) {
+          treeOpen.add("root"); treeOpen.add("roles"); treeOpen.add(filterRole);
+        }
         renderTree(); draw();
         if (filterRole !== "all") {
           const target = filterRole === "lifecycle" ? "root" : filterRole;
@@ -2722,20 +2808,93 @@ const DATA = {
     }
     document.getElementById("sideCollapse").addEventListener("click", () => setSideCollapsed(true));
     document.getElementById("sideExpand").addEventListener("click", () => setSideCollapsed(false));
-    document.querySelectorAll("[data-tree-level]").forEach(btn => {
-      btn.addEventListener("click", () => {
-        treeLevel = Number(btn.getAttribute("data-tree-level")) || 3;
-        renderTree();
-      });
-    });
     document.getElementById("search").addEventListener("input", (e) => {
       searchQuery = e.target.value.trim();
       renderTree(); draw();
     });
 
+    // --- column resize ---
+    function applyColWidths() {
+      // ensure CSS vars are pixel strings when set by drag
+      resizeCanvas();
+    }
+
+    function bindColResizer(el) {
+      if (!el) return;
+      let mode = null;
+      let startX = 0;
+      let startSide = 0;
+      let startRight = 0;
+      let startDetail = 0;
+      let startScan = 0;
+      let startMainW = 0;
+
+      const onMove = (e) => {
+        if (!mode) return;
+        const x = e.clientX;
+        const dx = x - startX;
+        if (mode === "side") {
+          if (sideCollapsed) return;
+          const next = Math.min(480, Math.max(180, startSide + dx));
+          mainLayout.style.setProperty("--side-w", next + "px");
+        } else if (mode === "right") {
+          const next = Math.min(900, Math.max(320, startRight - dx));
+          mainLayout.style.setProperty("--right-w", next + "px");
+        } else if (mode === "scan") {
+          const total = startDetail + startScan;
+          let detail = Math.min(total - 240, Math.max(220, startDetail + dx));
+          let scan = total - detail;
+          if (scan < 240) { scan = 240; detail = total - scan; }
+          rightPane.style.setProperty("--detail-w", detail + "px");
+          rightPane.style.setProperty("--scan-w", scan + "px");
+        }
+        applyColWidths();
+      };
+
+      const onUp = () => {
+        if (!mode) return;
+        mode = null;
+        mainLayout.classList.remove("is-resizing");
+        el.classList.remove("is-dragging");
+        window.removeEventListener("pointermove", onMove);
+        window.removeEventListener("pointerup", onUp);
+        applyColWidths();
+      };
+
+      el.addEventListener("pointerdown", (e) => {
+        if (e.button !== 0) return;
+        e.preventDefault();
+        mode = el.getAttribute("data-resize");
+        startX = e.clientX;
+        startMainW = mainLayout.getBoundingClientRect().width;
+        startSide = parseFloat(getComputedStyle(mainLayout).getPropertyValue("--side-w")) || 270;
+        startRight = parseFloat(getComputedStyle(mainLayout).getPropertyValue("--right-w")) || 560;
+        if (mode === "scan") {
+          const detailEl = document.getElementById("detail");
+          const scanEl = document.getElementById("scanViewer");
+          startDetail = detailEl.getBoundingClientRect().width;
+          startScan = scanEl.getBoundingClientRect().width;
+        }
+        mainLayout.classList.add("is-resizing");
+        el.classList.add("is-dragging");
+        window.addEventListener("pointermove", onMove);
+        window.addEventListener("pointerup", onUp);
+      });
+    }
+
+    document.querySelectorAll(".col-resizer").forEach(bindColResizer);
+
     window.addEventListener("resize", resizeCanvas);
 
     (async function init() {
+      const vw = window.innerWidth;
+      if (vw >= 1400) {
+        mainLayout.style.setProperty("--side-w", "270px");
+        mainLayout.style.setProperty("--right-w", Math.round(Math.min(720, vw * 0.38)) + "px");
+      } else if (vw >= 1180) {
+        mainLayout.style.setProperty("--side-w", "240px");
+        mainLayout.style.setProperty("--right-w", "440px");
+      }
       renderTree();
       renderDetail("root");
       await preloadImages();
