@@ -387,8 +387,11 @@
     }
     .pdf-doc {
       display: grid;
-      gap: 1rem;
-      padding: 0.1rem 0 1rem;
+      gap: 0.85rem;
+      padding: 0.1rem 0 0.5rem;
+      height: 100%;
+      min-height: 0;
+      grid-template-rows: auto minmax(0, 1fr) auto;
     }
     .pdf-doc-banner {
       padding: 0.85rem 1rem;
@@ -409,44 +412,30 @@
       color: var(--muted);
       line-height: 1.45;
     }
-    .pdf-page {
-      margin: 0;
+    .pdf-doc-banner a {
+      color: var(--blue);
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .pdf-doc-banner a:hover { text-decoration: underline; }
+    .pdf-frame-wrap {
+      min-height: 0;
       border-radius: 12px;
       border: 1px solid var(--line);
-      background: #fff;
-      box-shadow: var(--shadow);
-      overflow: hidden;
-      scroll-margin-top: 0.75rem;
-    }
-    .pdf-page.is-active {
-      border-color: var(--blue);
-      box-shadow: 0 0 0 2px rgba(0,114,188,.18), var(--shadow);
-    }
-    .pdf-page figcaption {
-      padding: 0.55rem 0.85rem;
-      font-size: 0.75rem;
-      font-weight: 700;
-      color: var(--navy);
-      border-bottom: 1px solid var(--line);
-      background: #F7F9FC;
-    }
-    .pdf-page-canvas-wrap {
-      position: relative;
       background: #EDF1F5;
-      min-height: 120px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
     }
-    .pdf-page canvas {
+    .pdf-frame {
       display: block;
       width: 100%;
-      height: auto;
-      background: #fff;
+      height: min(78vh, 920px);
+      min-height: 520px;
+      border: 0;
+      background: #525659;
     }
-    .pdf-page-placeholder {
-      display: grid;
-      place-items: center;
-      min-height: 240px;
-      color: var(--muted);
-      font-size: 0.82rem;
+    object.pdf-frame > .pdf-frame {
+      height: min(78vh, 920px);
     }
     .pdf-error {
       padding: 1rem;
@@ -910,7 +899,6 @@
     </div>
   </div>
 
-  <script src="vendor/pdfjs/pdf.min.js"></script>
   <script>
 const DATA = {
       id: "root",
@@ -2918,81 +2906,16 @@ const DATA = {
       return `Релиз ${INSTRUCTION_META.release} · дата ${INSTRUCTION_META.date}`;
     }
 
-    let pdfDocPromise = null;
-    let pdfRenderToken = 0;
-
-    function resolveInstructionPdfUrl() {
+    function resolveInstructionPdfUrl(pageNum) {
+      let base;
       try {
-        return new URL(INSTRUCTION_META.pdfUrl, window.location.href).href;
+        base = new URL(INSTRUCTION_META.pdfUrl, window.location.href).href;
       } catch (_) {
-        return INSTRUCTION_META.pdfUrl;
+        base = INSTRUCTION_META.pdfUrl;
       }
-    }
-
-    function getPdfDocument() {
-      if (!window.pdfjsLib) {
-        return Promise.reject(new Error("PDF.js не загружен"));
-      }
-      if (!pdfDocPromise) {
-        pdfjsLib.GlobalWorkerOptions.workerSrc = new URL("vendor/pdfjs/pdf.worker.min.js", window.location.href).href;
-        pdfDocPromise = pdfjsLib.getDocument({
-          url: resolveInstructionPdfUrl(),
-          withCredentials: false
-        }).promise.catch(err => {
-          pdfDocPromise = null;
-          throw err;
-        });
-      }
-      return pdfDocPromise;
-    }
-
-    async function renderPdfPageInto(container, pageNum, token) {
-      const doc = await getPdfDocument();
-      if (token !== pdfRenderToken) return;
-      const page = await doc.getPage(pageNum);
-      if (token !== pdfRenderToken) return;
-      const base = page.getViewport({ scale: 1 });
-      const targetWidth = Math.max(280, container.clientWidth || 640);
-      const scale = targetWidth / base.width;
-      const viewport = page.getViewport({ scale: Math.min(2.2, Math.max(1, scale)) });
-      const canvas = document.createElement("canvas");
-      const ctx = canvas.getContext("2d");
-      canvas.width = Math.floor(viewport.width);
-      canvas.height = Math.floor(viewport.height);
-      canvas.style.width = "100%";
-      canvas.style.height = "auto";
-      await page.render({ canvasContext: ctx, viewport }).promise;
-      if (token !== pdfRenderToken) return;
-      container.innerHTML = "";
-      container.appendChild(canvas);
-    }
-
-    function observePdfPages(root, token) {
-      const nodes = [...root.querySelectorAll(".pdf-page-canvas-wrap[data-page]")];
-      if (!("IntersectionObserver" in window)) {
-        nodes.forEach(node => {
-          const pageNum = Number(node.getAttribute("data-page"));
-          renderPdfPageInto(node, pageNum, token).catch(() => {
-            node.innerHTML = `<div class="pdf-page-placeholder">Не удалось отрисовать стр. ${pageNum}</div>`;
-          });
-        });
-        return null;
-      }
-      const io = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (!entry.isIntersecting) return;
-          const node = entry.target;
-          if (node.getAttribute("data-rendered") === "1") return;
-          node.setAttribute("data-rendered", "1");
-          const pageNum = Number(node.getAttribute("data-page"));
-          renderPdfPageInto(node, pageNum, token).catch(() => {
-            node.innerHTML = `<div class="pdf-page-placeholder">Не удалось отрисовать стр. ${pageNum}</div>`;
-          });
-          io.unobserve(node);
-        });
-      }, { root: scanViewer, rootMargin: "400px 0px", threshold: 0.01 });
-      nodes.forEach(n => io.observe(n));
-      return io;
+      const page = Number(pageNum) || 1;
+      // Hash params understood by Chromium / Firefox / Safari PDF viewers
+      return `${base}#page=${page}&view=FitH`;
     }
 
     function renderScanSection(scanKey, { scroll = true } = {}) {
@@ -3004,7 +2927,8 @@ const DATA = {
       const pageStart = section.pageStart;
       const pageEnd = section.pageEnd;
       const focusPage = Math.min(Math.max(section.focusPage || pageStart, pageStart), pageEnd);
-      const pageCount = pageEnd - pageStart + 1;
+      const pdfSrc = resolveInstructionPdfUrl(focusPage);
+      const pdfFile = INSTRUCTION_META.pdfUrl;
 
       scanViewerTitle.textContent = section.title;
       scanViewerCaption.textContent = `Тема: ${topic} · стр. ${focusPage}`;
@@ -3013,56 +2937,27 @@ const DATA = {
         metaEl.textContent = `${INSTRUCTION_META.docTitle} · ${instructionMetaLine()}`;
       }
 
-      const pagesHtml = Array.from({ length: pageCount }, (_, i) => {
-        const pageNum = pageStart + i;
-        const active = pageNum === focusPage ? " is-active" : "";
-        return `
-          <figure class="pdf-page${active}" id="pdf-page-${pageNum}" data-page="${pageNum}">
-            <figcaption>Стр. ${pageNum} из PDF · раздел «${escapeHtml(section.title)}»</figcaption>
-            <div class="pdf-page-canvas-wrap" data-page="${pageNum}">
-              <div class="pdf-page-placeholder">Загрузка стр. ${pageNum}…</div>
-            </div>
-          </figure>`;
-      }).join("");
-
-      const token = ++pdfRenderToken;
       scanViewerBody.innerHTML = `
         <article class="pdf-doc">
           <div class="pdf-doc-banner">
             <strong>${escapeHtml(section.title)}</strong>
             <span>${escapeHtml(INSTRUCTION_META.docTitle)}</span>
-            <span>${escapeHtml(instructionMetaLine())} · стр. ${pageStart}–${pageEnd} (как в PDF)</span>
+            <span>${escapeHtml(instructionMetaLine())} · раздел стр. ${pageStart}–${pageEnd} · открыта стр. ${focusPage}</span>
+            <span style="margin-top:.35rem"><a href="${escapeHtml(pdfSrc)}" target="_blank" rel="noopener">Открыть PDF в новой вкладке</a>
+              · файл <code>${escapeHtml(pdfFile)}</code></span>
           </div>
-          <div id="pdfPagesMount">${pagesHtml}</div>
-          <p class="scan-viewer-note">Страницы показаны в вёрстке PDF-файла инструкции, без извлечения текста. ${escapeHtml(instructionMetaLine())}.</p>
+          <div class="pdf-frame-wrap">
+            <object class="pdf-frame" id="instructionPdfFrame" type="application/pdf" data="${escapeHtml(pdfSrc)}" title="${escapeHtml(section.title)}">
+              <iframe class="pdf-frame" title="${escapeHtml(section.title)}" src="${escapeHtml(pdfSrc)}"></iframe>
+            </object>
+          </div>
+          <p class="scan-viewer-note">Раздел показан непосредственно из файла инструкции в вёрстке PDF (без извлечения текста). ${escapeHtml(instructionMetaLine())}.</p>
         </article>`;
 
       document.querySelectorAll(".scan-open-btn").forEach(btn => {
         const k = btn.getAttribute("data-scan");
         const sec = getScanSection(k);
         btn.classList.toggle("active", !!(k === scanKey || (sec && sec.id === section.id)));
-      });
-
-      getPdfDocument().then(() => {
-        if (token !== pdfRenderToken) return;
-        observePdfPages(scanViewerBody, token);
-        if (scroll) {
-          requestAnimationFrame(() => {
-            const el = document.getElementById("pdf-page-" + focusPage);
-            if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-          });
-        }
-      }).catch(err => {
-        if (token !== pdfRenderToken) return;
-        const pdfHref = escapeHtml(INSTRUCTION_META.pdfUrl);
-        scanViewerBody.innerHTML = `
-          <div class="pdf-error">
-            <strong>Не удалось открыть PDF инструкции.</strong><br/>
-            Откройте карту через локальный сервер рядом с папкой <code>docs/</code>
-            или откройте файл напрямую:
-            <a href="${pdfHref}#page=${focusPage}" target="_blank" rel="noopener">${pdfHref}</a>
-            <br/><span style="opacity:.85">${escapeHtml(String(err && err.message || err))}</span>
-          </div>`;
       });
     }
 
@@ -3072,33 +2967,20 @@ const DATA = {
       const sameSectionOpen = rightPane.classList.contains("with-scan") && activeScanSectionId === section.id;
       rightPane.classList.add("with-scan");
       ensureScanPaneWidth();
-      if (sameSectionOpen) {
-        activeScanKey = scanKey;
-        const focusPage = section.focusPage;
-        scanViewerCaption.textContent = `Тема: ${SCAN_CAPTIONS[scanKey] || section.title} · стр. ${focusPage}`;
-        scanViewerBody.querySelectorAll(".pdf-page").forEach(fig => {
-          fig.classList.toggle("is-active", Number(fig.getAttribute("data-page")) === focusPage);
-        });
-        document.querySelectorAll(".scan-open-btn").forEach(btn => {
-          btn.classList.toggle("active", btn.getAttribute("data-scan") === scanKey);
-        });
-        const el = document.getElementById("pdf-page-" + focusPage);
-        if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-        return;
-      }
+      // Always re-render so the PDF viewer jumps to the topic page via #page=
       renderScanSection(scanKey, { scroll: true });
     }
 
     function closeScan() {
-      pdfRenderToken += 1;
       activeScanKey = null;
       activeScanSectionId = null;
       rightPane.classList.remove("with-scan");
+      // unload iframe
       scanViewerBody.innerHTML = `
         <p class="scan-viewer-empty">Выберите тему слева — справа откроется раздел инструкции в вёрстке PDF</p>
         <p class="scan-viewer-note">Источник: ${escapeHtml(INSTRUCTION_META.docTitle)} · ${escapeHtml(instructionMetaLine())}</p>`;
       scanViewerTitle.textContent = "Раздел инструкции";
-      scanViewerCaption.textContent = "Выберите тему слева — откроется PDF-раздел";
+      scanViewerCaption.textContent = "Выберите тему слева — откроется раздел PDF";
       const metaEl = document.getElementById("scanViewerMeta");
       if (metaEl) metaEl.textContent = `АСТ-Альфа · ${instructionMetaLine()}`;
       document.querySelectorAll(".scan-open-btn.active").forEach(btn => btn.classList.remove("active"));
