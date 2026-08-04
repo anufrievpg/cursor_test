@@ -443,6 +443,9 @@
       header { flex-wrap: wrap; }
       .toolbar { margin-left: 0; width: 100%; }
       .brand-wordmark { display: none; }
+      table { min-width: 720px; font-size: .74rem; }
+      th, td { padding: .55rem .45rem; }
+      .org-canvas { min-width: 860px; transform: scale(.92); transform-origin: top left; }
     }
   </style>
 </head>
@@ -1169,7 +1172,9 @@
     function activatePanel(id) {
       document.querySelectorAll(".panel").forEach(p => p.classList.toggle("active", p.id === "panel-" + id));
       document.querySelectorAll(".nav-btn").forEach(b => b.classList.toggle("active", b.dataset.panel === id));
-      document.querySelectorAll(".chip[data-jump]").forEach(c => c.classList.toggle("active", c.dataset.jump === id || (id === "overview" && c.dataset.jump === "overview") || (["org","goals","raci"].includes(id) && c.dataset.jump === id)));
+      const chipMap = { overview: "overview", org: "org", goals: "goals", raci: "raci" };
+      const chipId = chipMap[id] || null;
+      document.querySelectorAll(".chip[data-jump]").forEach(c => c.classList.toggle("active", chipId !== null && c.dataset.jump === chipId));
       document.querySelector(".stage").scrollTop = 0;
       if (id === "org") showPerson("nigmatullina");
     }
@@ -1188,7 +1193,8 @@
     });
 
     document.getElementById("exportBtn").addEventListener("click", () => {
-      const blob = new Blob([document.documentElement.outerHTML], { type: "text/html;charset=utf-8" });
+      const html = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+      const blob = new Blob([html], { type: "text/html;charset=utf-8" });
       const a = document.createElement("a");
       a.href = URL.createObjectURL(blob);
       a.download = "enco-obiti-department.html";
@@ -1196,7 +1202,7 @@
       URL.revokeObjectURL(a.href);
       const t = document.getElementById("toast");
       t.classList.add("show");
-      setTimeout(() => t.classList.remove("show"), 2200);
+      setTimeout(() => t.classList.remove("show"), 3200);
     });
 
     showPerson("nigmatullina");
