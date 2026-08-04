@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>cursor_test · портал</title>
+  <style>
+    :root {
+      --bg0: #0f1419;
+      --bg1: #1a2332;
+      --ink: #e8eef6;
+      --muted: #9aabbf;
+      --line: rgba(232, 238, 246, 0.12);
+      --accent: #3d9cf0;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100dvh;
+      font-family: "Segoe UI", "Helvetica Neue", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(900px 500px at 10% -10%, #1e3a5f 0%, transparent 55%),
+        radial-gradient(700px 400px at 100% 0%, #243447 0%, transparent 50%),
+        linear-gradient(160deg, var(--bg0), var(--bg1));
+    }
+    main {
+      max-width: 42rem;
+      margin: 0 auto;
+      padding: 4rem 1.25rem 5rem;
+    }
+    h1 {
+      margin: 0 0 0.5rem;
+      font-size: clamp(1.75rem, 4vw, 2.4rem);
+      font-weight: 650;
+      letter-spacing: -0.02em;
+    }
+    p {
+      margin: 0 0 2rem;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+    ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      border-top: 1px solid var(--line);
+    }
+    li {
+      border-bottom: 1px solid var(--line);
+    }
+    a {
+      display: block;
+      padding: 0.95rem 0.15rem;
+      color: var(--ink);
+      text-decoration: none;
+    }
+    a:hover { color: var(--accent); }
+    code {
+      font-size: 0.92em;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>cursor_test</h1>
+    <p>
+      Публичные HTML-страницы этого репозитория.
+      Чтобы добавить файл — положите его в папку <code>docs/</code> и смержите в <code>main</code>.
+    </p>
+    <ul>
+      <li><a href="./">Этот индекс · <code>docs/index.html</code></a></li>
+    </ul>
+  </main>
+</body>
+</html>
