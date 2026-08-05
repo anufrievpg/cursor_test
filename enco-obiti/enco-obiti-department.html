@@ -427,6 +427,44 @@
     .footer-note {
       margin-top: 1.5rem; color: var(--muted); font-size: .78rem; text-align: center;
     }
+    .calc-disclaimer {
+      margin-top: 1.1rem;
+      padding: .85rem 1rem;
+      border-top: 1px dashed var(--line);
+      color: var(--muted);
+      font-size: .72rem;
+      line-height: 1.45;
+      text-align: left;
+    }
+    .invest-card .money {
+      display: inline-flex; align-items: center;
+      margin-top: .65rem; padding: .25rem .6rem;
+      border-radius: 999px; background: rgba(207,195,147,.22);
+      color: var(--navy); font-size: .78rem; font-weight: 800;
+    }
+    .invest-card ul { margin-top: .55rem; }
+    .effect-hero {
+      display: grid; grid-template-columns: 1.2fr 1fr; gap: 1rem; margin-bottom: 1.15rem;
+    }
+    .effect-total {
+      background:
+        linear-gradient(135deg, rgba(18,42,75,.96) 0%, rgba(27,73,135,.92) 55%, rgba(0,114,188,.85) 100%);
+      color: #fff; border-radius: 22px; padding: 1.5rem 1.4rem;
+      box-shadow: var(--shadow-lg);
+    }
+    .effect-total .label { font-size: .75rem; letter-spacing: .08em; text-transform: uppercase; opacity: .75; font-weight: 700; }
+    .effect-total .sum { font-size: clamp(2rem, 4vw, 2.8rem); font-weight: 800; letter-spacing: -.03em; margin: .35rem 0; }
+    .effect-total .sum em { font-style: normal; color: var(--gold); }
+    .effect-total p { color: rgba(255,255,255,.78); font-size: .9rem; line-height: 1.45; max-width: 28rem; }
+    .assumptions { display: grid; gap: .55rem; }
+    .assumptions li { font-size: .86rem; color: #405061; line-height: 1.45; }
+    .calc-block .formula {
+      margin-top: .55rem; padding: .65rem .75rem; border-radius: 12px;
+      background: #F3F6FA; color: var(--navy); font-size: .8rem; font-weight: 600; line-height: 1.4;
+    }
+    .calc-block .result {
+      margin-top: .55rem; font-size: .9rem; font-weight: 800; color: var(--navy);
+    }
 
     .toast {
       position: fixed; right: 1.2rem; bottom: 1.2rem; z-index: 50;
@@ -448,7 +486,7 @@
       .side h2 { display: none; }
       .nav-btn { width: auto; white-space: normal; min-width: 150px; }
       .nav-sub { display: none; }
-      .grid-3, .grid-2, .grid-4, .grid-5, .audience, .person-detail .cols { grid-template-columns: 1fr; }
+      .grid-3, .grid-2, .grid-4, .grid-5, .audience, .person-detail .cols, .effect-hero { grid-template-columns: 1fr; }
       .goal-row { grid-template-columns: 1fr; }
       header { flex-wrap: wrap; }
       .toolbar { margin-left: 0; width: 100%; }
@@ -475,7 +513,8 @@
       <div class="toolbar">
         <button class="chip active" data-jump="overview">Обзор</button>
         <button class="chip" data-jump="org">Команда</button>
-        <button class="chip" data-jump="goals">Цели</button>
+        <button class="chip" data-jump="invest">Инвестцели</button>
+        <button class="chip" data-jump="finance">Эффект</button>
         <button class="chip" data-jump="raci">RACI</button>
         <button class="tool-btn primary" id="exportBtn" title="Скачать файл">⬇ Скачать</button>
       </div>
@@ -516,8 +555,16 @@
           <span class="nav-num">08</span>
           <span><div class="nav-label">Цели 2026–2027</div><div class="nav-sub">План и ответственные</div></span>
         </button>
-        <button class="nav-btn" data-panel="raci">
+        <button class="nav-btn" data-panel="invest">
           <span class="nav-num">09</span>
+          <span><div class="nav-label">Инвестпредложение</div><div class="nav-sub">8 целей для бизнеса</div></span>
+        </button>
+        <button class="nav-btn" data-panel="finance">
+          <span class="nav-num">10</span>
+          <span><div class="nav-label">Финансовый эффект</div><div class="nav-sub">Расчёт ~55 млн ₽/год</div></span>
+        </button>
+        <button class="nav-btn" data-panel="raci">
+          <span class="nav-num">11</span>
           <span><div class="nav-label">Матрица RACI</div><div class="nav-sub">11 сквозных процессов</div></span>
         </button>
       </aside>
@@ -993,9 +1040,272 @@
               <span>Мониторинг, алерты, автопроверки</span>
             </div>
           </div>
+          <div class="section-head" style="margin-top:1.25rem">
+            <div>
+              <h2>Смотрите также</h2>
+              <p>Инвестиционная формулировка целей и расчёт финансового эффекта.</p>
+            </div>
+          </div>
+          <div class="grid-2">
+            <article class="tile">
+              <div class="label">Для бизнеса</div>
+              <h3>Инвестпредложение</h3>
+              <p>8 целей в формате коммерческой выгоды: проблема → цель → деньги.</p>
+              <div class="hero-cta" style="margin-top:.85rem">
+                <button class="tool-btn primary" data-panel="invest">Открыть цели →</button>
+              </div>
+            </article>
+            <article class="tile">
+              <div class="label">Обоснование цифр</div>
+              <h3>Финансовый эффект</h3>
+              <p>Методика и формулы по каждому пункту резюме: итого ~55 млн ₽/год.</p>
+              <div class="hero-cta" style="margin-top:.85rem">
+                <button class="tool-btn primary" data-panel="finance">Смотреть расчёт →</button>
+              </div>
+            </article>
+          </div>
         </section>
 
-        <!-- 09 RACI -->
+        <!-- 09 INVEST -->
+        <section class="panel" id="panel-invest">
+          <div class="section-head">
+            <div>
+              <h2>Стратегические цели как инвестпредложение</h2>
+              <p>Каждая цель отвечает на вопрос: сколько денег это принесёт или сэкономит компании.</p>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <article class="tile invest-card">
+              <div class="label">Цель 1</div>
+              <h3>MDM: единый источник правды</h3>
+              <p><strong>Проблема:</strong> справочники живут в разных системах — ошибки закупок, двойной учёт, штрафы.</p>
+              <p style="margin-top:.4rem"><strong>Цель:</strong> единые стандарты мастер-данных, синхронизация через ESB в 1С, CRM, ДО и BI.</p>
+              <ul>
+                <li>−30–40% операционных ошибок</li>
+                <li>+20% скорость согласования и сделок</li>
+                <li>−15 ч/нед. на сверку у бухгалтерии</li>
+              </ul>
+              <div class="money">~5 млн ₽/год</div>
+            </article>
+            <article class="tile invest-card">
+              <div class="label">Цель 2</div>
+              <h3>Качество данных (Data Quality)</h3>
+              <p><strong>Проблема:</strong> решения на данных с пропусками и ошибками → неверные прогнозы и перерасход.</p>
+              <p style="margin-top:.4rem"><strong>Цель:</strong> мониторинг 10+ KPI качества с алертами и дашбордами для владельцев процессов.</p>
+              <ul>
+                <li>Достоверность отчётности до 99,5%</li>
+                <li>−50% времени на ручную выверку</li>
+                <li>+15–20% точность прогнозов</li>
+              </ul>
+              <div class="money">~3 млн ₽/год</div>
+            </article>
+            <article class="tile invest-card">
+              <div class="label">Цель 3</div>
+              <h3>Оптимизация процессов As-Is → To-Be</h3>
+              <p><strong>Проблема:</strong> длинные согласования и устаревшие маршруты ДО тормозят проекты.</p>
+              <p style="margin-top:.4rem"><strong>Цель:</strong> пересборка ключевых процессов (BPMN) и новые маршруты в ДО / Jira (−30% шагов).</p>
+              <ul>
+                <li>Договоры: 5 → 3 дня</li>
+                <li>−60% ручного ввода из Excel в 1С</li>
+                <li>Меньше простоев и штрафов за сроки</li>
+              </ul>
+              <div class="money">~8 млн ₽/год</div>
+            </article>
+            <article class="tile invest-card">
+              <div class="label">Цель 4</div>
+              <h3>BI и AI-аналитика</h3>
+              <p><strong>Проблема:</strong> до 40% времени руководителей уходит на сбор Excel; решения — постфактум.</p>
+              <p style="margin-top:.4rem"><strong>Цель:</strong> витрина ClickHouse + дашборды Power BI/Superset + AI-прогнозы и нормализация.</p>
+              <ul>
+                <li>Отчётность: 5 дней → 1 час</li>
+                <li>+25% точность прогноза выручки</li>
+                <li>−10–15% нецелевых расходов</li>
+              </ul>
+              <div class="money">~12 млн ₽/год</div>
+            </article>
+            <article class="tile invest-card">
+              <div class="label">Цель 5</div>
+              <h3>Интеграционная шина ESB + Kafka</h3>
+              <p><strong>Проблема:</strong> обмен через Excel между 1С, CRM, ДО и порталом — задержки и ошибки.</p>
+              <p style="margin-top:.4rem"><strong>Цель:</strong> Datareon + Kafka: автоматический обмен в реальном времени.</p>
+              <ul>
+                <li>−200+ чел.-часов ручного переноса в месяц</li>
+                <li>+30% скорость платежей и закрытия периодов</li>
+                <li>Масштабирование без переписывания интеграций</li>
+              </ul>
+              <div class="money">~4 млн ₽/год</div>
+            </article>
+            <article class="tile invest-card">
+              <div class="label">Цель 6</div>
+              <h3>Модернизация 1С и CRM</h3>
+              <p><strong>Проблема:</strong> устаревшие 1С и разрозненные CRM рвут клиентский путь и учёт.</p>
+              <p style="margin-top:.4rem"><strong>Цель:</strong> переход на 1С:Бухгалтерию 8 и гибрид 1С + MacroCRM с полной историей.</p>
+              <ul>
+                <li>+5–8% выручки за счёт конверсии</li>
+                <li>−40% времени на счета и акты</li>
+                <li>Закрытие года быстрее на 2 недели</li>
+              </ul>
+              <div class="money">~15 млн ₽/год</div>
+            </article>
+            <article class="tile invest-card">
+              <div class="label">Цель 7</div>
+              <h3>Клиентская экосистема</h3>
+              <p><strong>Проблема:</strong> нет онлайн-сервиса статуса → ниже лояльность, выше нагрузка на колл-центр.</p>
+              <p style="margin-top:.4rem"><strong>Цель:</strong> портал + учётные системы, ЛК и чат-боты по договорам, платежам, ремонтам.</p>
+              <ul>
+                <li>−30% нагрузка на колл-центр</li>
+                <li>+10–15 пунктов NPS</li>
+                <li>Быстрее гарантийные вопросы</li>
+              </ul>
+              <div class="money">~6 млн ₽/год</div>
+            </article>
+            <article class="tile invest-card">
+              <div class="label">Цель 8</div>
+              <h3>Инфобезопасность и ролевая модель</h3>
+              <p><strong>Проблема:</strong> неразграниченный доступ и риски ФЗ-152 — штрафы и репутация.</p>
+              <p style="margin-top:.4rem"><strong>Цель:</strong> RBAC на уровне записей и усиление шифрования финансовых данных.</p>
+              <ul>
+                <li>Штрафы → к нулю за счёт compliance</li>
+                <li>Контроль доступа к критическим данным</li>
+                <li>Доверие инвесторов и банков</li>
+              </ul>
+              <div class="money">~2 млн ₽/год</div>
+            </article>
+          </div>
+
+          <div class="section-head" style="margin-top:1.4rem">
+            <div>
+              <h2>Итог для топ-менеджмента</h2>
+              <p>ОБИТИ — инвестиционный центр, а не затратный ИТ-отдел.</p>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>№</th><th>Цель</th><th>Ожидаемый эффект</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>1</td><td>Единые мастер-данные (MDM)</td><td><strong>~5 млн ₽/год</strong></td></tr>
+                <tr><td>2</td><td>Качество данных</td><td><strong>~3 млн ₽/год</strong></td></tr>
+                <tr><td>3</td><td>Оптимизация процессов</td><td><strong>~8 млн ₽/год</strong></td></tr>
+                <tr><td>4</td><td>BI + AI аналитика</td><td><strong>~12 млн ₽/год</strong></td></tr>
+                <tr><td>5</td><td>Интеграционная шина</td><td><strong>~4 млн ₽/год</strong></td></tr>
+                <tr><td>6</td><td>Модернизация 1С и CRM</td><td><strong>~15 млн ₽/год</strong></td></tr>
+                <tr><td>7</td><td>Клиентская экосистема</td><td><strong>~6 млн ₽/год</strong></td></tr>
+                <tr><td>8</td><td>Инфобезопасность</td><td><strong>~2 млн ₽/год</strong></td></tr>
+                <tr><td colspan="2"><strong>Итого экономический эффект</strong></td><td><strong>более 50 млн ₽/год</strong></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="footer-note">Без учёта роста выручки за счёт повышения эффективности. Детальный расчёт — в разделе «Финансовый эффект».</p>
+        </section>
+
+        <!-- 10 FINANCE -->
+        <section class="panel" id="panel-finance">
+          <div class="section-head">
+            <div>
+              <h2>Расчёт ожидаемого финансового успеха</h2>
+              <p>Методика и формулы по каждому пункту итогового резюме целей — консервативные оценки на операционных KPI.</p>
+            </div>
+          </div>
+
+          <div class="effect-hero">
+            <div class="effect-total">
+              <div class="label">Ожидаемый эффект ОБИТИ</div>
+              <div class="sum"><em>~55</em> млн ₽/год</div>
+              <p>Сумма восьми направлений. Цифры с логикой расчёта — не «с потолка», а от зарплат, транзакций и оборота.</p>
+            </div>
+            <article class="tile">
+              <div class="label">Вводные допущения</div>
+              <h3>База для модели</h3>
+              <ul class="assumptions">
+                <li>Стоимость часа сотрудника ≈ <strong>1 500 ₽</strong> (~250 000 ₽/мес. при 168 ч)</li>
+                <li>В операционных процессах занято <strong>150+</strong> человек</li>
+                <li>Годовой оборот для %-ных улучшений ≈ <strong>1 млрд ₽</strong></li>
+              </ul>
+            </article>
+          </div>
+
+          <div class="grid-2">
+            <article class="tile calc-block">
+              <div class="label">1 · MDM · ~5 млн ₽</div>
+              <h3>Ошибки + сверка</h3>
+              <p>20 ошибочных транзакций/мес. × 12 × 7 000 ₽ = <strong>1,68 млн</strong>. Плюс экономия времени на сверку номенклатуры (~3,3 млн консервативно).</p>
+              <div class="formula">1,68 млн (ошибки) + 3,3 млн (сверка) ≈ 5 млн ₽</div>
+            </article>
+            <article class="tile calc-block">
+              <div class="label">2 · Data Quality · ~3 млн ₽</div>
+              <h3>Выверка отчётов</h3>
+              <p>10 специалистов; выверка 16 ч/нед → после контроля ~6,4 ч (−60%). Полный эффект ~5,5 млн; в резюме — консервативные <strong>3 млн</strong>.</p>
+              <div class="formula">10 × 9,6 ч/нед × 1 100 ₽ × 52 ≈ 5,5 млн → берём 3 млн</div>
+            </article>
+            <article class="tile calc-block">
+              <div class="label">3 · Процессы · ~8 млн ₽</div>
+              <h3>Согласования 5→3 дня</h3>
+              <p>550 документов/мес. × 0,7 ч экономии × 1 500 ₽ × 12 ≈ <strong>6,9 млн</strong> + ~1 млн за счёт отказа от дублей Excel.</p>
+              <div class="formula">550 × 0,7 × 1 500 × 12 + ~1 млн ≈ 8 млн ₽</div>
+            </article>
+            <article class="tile calc-block">
+              <div class="label">4 · BI + AI · ~12 млн ₽</div>
+              <h3>Нецелевые + время топов</h3>
+              <p>Нецелевые ~5% оборота = 50 млн; −20% через дашборды/AI = <strong>10 млн</strong>. Плюс часть экономии времени топ-менеджеров (~2 млн).</p>
+              <div class="formula">50 млн × 20% + 2 млн ≈ 12 млн ₽</div>
+            </article>
+            <article class="tile calc-block">
+              <div class="label">5 · ESB · ~4 млн ₽</div>
+              <h3>Ручной перенос данных</h3>
+              <p>5 специалистов × 3 ч/день × 220 дней × 1 500 ₽ = 4,95 млн; сокращение на 80%.</p>
+              <div class="formula">5 × 3 × 220 × 1 500 × 80% ≈ 4 млн ₽</div>
+            </article>
+            <article class="tile calc-block">
+              <div class="label">6 · 1С + CRM · ~15 млн ₽</div>
+              <h3>Прирост выручки</h3>
+              <p>Рост конверсии за счёт полной истории клиента даже на <strong>1,5%</strong> к обороту 1 млрд ₽.</p>
+              <div class="formula">1 000 млн × 1,5% = 15 млн ₽ прироста оборота</div>
+            </article>
+            <article class="tile calc-block">
+              <div class="label">7 · Экосистема · ~6 млн ₽</div>
+              <h3>Колл-центр + NPS</h3>
+              <p>10 операторов × 80 000 ₽ × 30% × 12 ≈ <strong>2,88 млн</strong>. Плюс повторные продажи от NPS (~3,2 млн консервативно).</p>
+              <div class="formula">2,88 млн + 3,2 млн ≈ 6 млн ₽</div>
+            </article>
+            <article class="tile calc-block">
+              <div class="label">8 · ИБ · ~2 млн ₽</div>
+              <h3>Предотвращённые убытки</h3>
+              <p>Ожидаемый штраф × вероятность (0,45 млн) + мошенничество/НСД (1,2 млн) + скидка на страховку D&amp;O (0,35 млн).</p>
+              <div class="formula">0,45 + 1,2 + 0,35 ≈ 2 млн ₽</div>
+            </article>
+          </div>
+
+          <div class="section-head" style="margin-top:1.4rem">
+            <div>
+              <h2>Сводная верификация</h2>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>№</th><th>Цель</th><th>Логика расчёта</th><th>Итог</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>1</td><td>MDM</td><td>Ошибки платежей 1,68 + сверка 3,3</td><td><strong>5 млн</strong></td></tr>
+                <tr><td>2</td><td>Data Quality</td><td>−60% ручной выверки у 10 аналитиков</td><td><strong>3 млн</strong></td></tr>
+                <tr><td>3</td><td>Оптимизация</td><td>550 док. × 0,7 ч × 1 500 ₽ × 12 + прочее</td><td><strong>8 млн</strong></td></tr>
+                <tr><td>4</td><td>BI + AI</td><td>20% нецелевых (10) + время топов (2)</td><td><strong>12 млн</strong></td></tr>
+                <tr><td>5</td><td>Интеграция</td><td>5 × 3 ч × 220 × 1 500 × 80%</td><td><strong>4 млн</strong></td></tr>
+                <tr><td>6</td><td>1С + CRM</td><td>1,5% к обороту 1 млрд ₽</td><td><strong>15 млн</strong></td></tr>
+                <tr><td>7</td><td>ЛК + чат</td><td>Колл-центр 2,88 + продажи 3,2</td><td><strong>6 млн</strong></td></tr>
+                <tr><td>8</td><td>Инфобез</td><td>Штрафы + мошенничество + страховка</td><td><strong>2 млн</strong></td></tr>
+                <tr><td colspan="3"><strong>Итого</strong></td><td><strong>55 млн ₽/год</strong></td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p class="calc-disclaimer">Расчеты основаны на консервативных допущениях и данных текущего операционного периода. Детальные формулы — в приложении к бизнес-плану.</p>
+        </section>
+
+        <!-- 11 RACI -->
         <section class="panel" id="panel-raci">
           <div class="section-head">
             <div>
@@ -1185,7 +1495,7 @@
     function activatePanel(id) {
       document.querySelectorAll(".panel").forEach(p => p.classList.toggle("active", p.id === "panel-" + id));
       document.querySelectorAll(".nav-btn").forEach(b => b.classList.toggle("active", b.dataset.panel === id));
-      const chipMap = { overview: "overview", org: "org", goals: "goals", raci: "raci" };
+      const chipMap = { overview: "overview", org: "org", goals: "invest", invest: "invest", finance: "finance", raci: "raci" };
       const chipId = chipMap[id] || null;
       document.querySelectorAll(".chip[data-jump]").forEach(c => c.classList.toggle("active", chipId !== null && c.dataset.jump === chipId));
       document.querySelector(".stage").scrollTop = 0;
