@@ -280,8 +280,8 @@
     }
     .org-canvas {
       position: relative;
-      min-width: 920px;
-      min-height: 720px;
+      min-width: 960px;
+      min-height: 760px;
       padding: 1rem;
     }
     .org-node {
@@ -545,7 +545,7 @@
         </button>
         <button class="nav-btn" data-panel="org">
           <span class="nav-num">06</span>
-          <span><div class="nav-label">Оргструктура</div><div class="nav-sub">10 человек · 4 блока</div></span>
+          <span><div class="nav-label">Оргструктура</div><div class="nav-sub">10 человек · 3 блока</div></span>
         </button>
         <button class="nav-btn" data-panel="value">
           <span class="nav-num">07</span>
@@ -609,9 +609,9 @@
           </div>
 
           <div class="grid-4" style="margin-top:1.15rem">
-            <article class="tile"><div class="label">Состав</div><h3>10 человек</h3><p>4 блока компетенций + руководитель</p></article>
+            <article class="tile"><div class="label">Состав</div><h3>10 человек</h3><p>3 блока компетенций + руководитель</p></article>
             <article class="tile"><div class="label">Вакансии</div><h3>1 позиция</h3><p>Data Engineer — в найме</p></article>
-            <article class="tile"><div class="label">Процессы</div><h3>11 RACI</h3><p>Сквозные цели из презентации</p></article>
+            <article class="tile"><div class="label">Процессы</div><h3>12 RACI</h3><p>Сквозные цели + AI в процессах</p></article>
             <article class="tile"><div class="label">Инструменты</div><h3>Jira · Confluence</h3><p>Битрикс24 для бизнеса</p></article>
           </div>
         </section>
@@ -798,7 +798,7 @@
             <article class="tile">
               <div class="label">Инновации + интеграция</div>
               <h3>Разработка и внедрение</h3>
-              <p>Проектируем, управляем требованиями, тестируем и встраиваем решения. Product Owner + Solution Architect; код может писать аутсорс.</p>
+              <p>Проектируем, управляем требованиями, тестируем и встраиваем решения. Старший бизнес-аналитик + главный инженер-архитектор; код может писать аутсорс.</p>
             </article>
             <article class="tile">
               <div class="label">Бизнес + интеграция</div>
@@ -826,9 +826,8 @@
               <p>Кликните по карточке сотрудника, чтобы открыть профиль компетенций.</p>
             </div>
             <div style="display:flex;gap:.4rem;flex-wrap:wrap">
-              <span class="pill process">Процессы</span>
-              <span class="pill product">Продукты</span>
-              <span class="pill eng">Инженерия</span>
+              <span class="pill process">Процессы + AI</span>
+              <span class="pill eng">Продукты и инженерия</span>
               <span class="pill data">Данные</span>
             </div>
           </div>
@@ -842,11 +841,10 @@
                   </marker>
                 </defs>
                 <path d="M480 95 V140" stroke="#A8B7C7" stroke-width="2" fill="none"/>
-                <path d="M120 140 H840" stroke="#A8B7C7" stroke-width="2" fill="none"/>
-                <path d="M120 140 V175" stroke="#A8B7C7" stroke-width="2" fill="none"/>
-                <path d="M360 140 V175" stroke="#A8B7C7" stroke-width="2" fill="none"/>
-                <path d="M600 140 V175" stroke="#A8B7C7" stroke-width="2" fill="none"/>
-                <path d="M840 140 V175" stroke="#A8B7C7" stroke-width="2" fill="none"/>
+                <path d="M160 140 H800" stroke="#A8B7C7" stroke-width="2" fill="none"/>
+                <path d="M160 140 V175" stroke="#A8B7C7" stroke-width="2" fill="none"/>
+                <path d="M480 140 V175" stroke="#A8B7C7" stroke-width="2" fill="none"/>
+                <path d="M800 140 V175" stroke="#A8B7C7" stroke-width="2" fill="none"/>
               </svg>
 
               <div class="org-node lead active" data-person="nigmatullina" style="animation-delay:.05s">
@@ -855,60 +853,58 @@
                 <div class="grade">Переход</div>
               </div>
 
-              <div class="block-label" style="left:55px;top:160px;color:var(--process)">Блок процессов</div>
-              <div class="block-label" style="left:295px;top:160px;color:var(--product)">Блок продуктов</div>
-              <div class="block-label" style="left:535px;top:160px;color:var(--eng)">Блок инженерии</div>
-              <div class="block-label" style="left:755px;top:160px;color:var(--data)">Блок / отдел данных</div>
+              <div class="block-label" style="left:20px;top:160px;color:var(--process);max-width:220px;line-height:1.25">Процессная аналитика и AI-трансформация</div>
+              <div class="block-label" style="left:370px;top:160px;color:var(--eng)">Продукты и инженерия</div>
+              <div class="block-label" style="left:720px;top:160px;color:var(--data)">Блок / отдел данных</div>
 
-              <div class="org-node process" data-person="anufriev" style="left:20px;top:185px;animation-delay:.1s">
-                <div class="role">Рук. процессной аналитики</div>
+              <div class="org-node process" data-person="anufriev" style="left:20px;top:195px;animation-delay:.1s">
+                <div class="role">Рук. процессов и AI</div>
                 <div class="name">Ануфриев Павел</div>
                 <div class="grade">Senior/Lead · переход</div>
               </div>
-              <div class="org-node process" data-person="kraeva" style="left:20px;top:300px;animation-delay:.15s">
+              <div class="org-node process" data-person="sergeeva" style="left:20px;top:310px;animation-delay:.14s">
+                <div class="role">Старший бизнес-аналитик</div>
+                <div class="name">Сергеева Ксения</div>
+                <div class="grade">Senior · переход</div>
+              </div>
+              <div class="org-node process" data-person="kraeva" style="left:20px;top:425px;animation-delay:.18s">
                 <div class="role">Консультант-аналитик</div>
                 <div class="name">Краева Александра</div>
                 <div class="grade">Junior/Middle · переход</div>
               </div>
 
-              <div class="org-node product" data-person="sergeeva" style="left:260px;top:185px;animation-delay:.18s">
-                <div class="role">Product Owner</div>
-                <div class="name">Сергеева Ксения</div>
-                <div class="grade">Senior · переход</div>
-              </div>
-
-              <div class="org-node eng" data-person="zarubina" style="left:500px;top:185px;animation-delay:.22s">
+              <div class="org-node eng" data-person="zarubina" style="left:370px;top:195px;animation-delay:.22s">
                 <div class="role">Главный инженер-архитектор</div>
                 <div class="name">Зарубина Ирина</div>
                 <div class="grade">Senior · переход</div>
               </div>
-              <div class="org-node eng" data-person="galyuk" style="left:500px;top:280px;animation-delay:.25s">
+              <div class="org-node eng" data-person="galyuk" style="left:370px;top:310px;animation-delay:.25s">
                 <div class="role">Инженер-разработчик</div>
                 <div class="name">Галюк Семён</div>
                 <div class="grade">Middle · переход</div>
               </div>
-              <div class="org-node eng" data-person="matveev" style="left:500px;top:375px;animation-delay:.28s">
+              <div class="org-node eng" data-person="matveev" style="left:370px;top:425px;animation-delay:.28s">
                 <div class="role">Инженер-разработчик</div>
                 <div class="name">Матвеев Александр</div>
                 <div class="grade">Junior · рост до Middle</div>
               </div>
 
-              <div class="org-node data" data-person="golovkova" style="left:740px;top:185px;animation-delay:.3s">
+              <div class="org-node data" data-person="golovkova" style="left:720px;top:195px;animation-delay:.3s">
                 <div class="role">Руководитель блока данных</div>
                 <div class="name">Головкова Эльза</div>
                 <div class="grade">Senior · переход</div>
               </div>
-              <div class="org-node data vacancy" data-person="dataeng" style="left:740px;top:280px;animation-delay:.34s">
+              <div class="org-node data vacancy" data-person="dataeng" style="left:720px;top:310px;animation-delay:.34s">
                 <div class="role">Data Engineer</div>
                 <div class="name">Вакансия</div>
                 <div class="grade">Middle/Senior · найм</div>
               </div>
-              <div class="org-node data" data-person="kasha" style="left:740px;top:375px;animation-delay:.38s">
+              <div class="org-node data" data-person="kasha" style="left:720px;top:425px;animation-delay:.38s">
                 <div class="role">Бизнес-аналитик</div>
                 <div class="name">Каша Мария</div>
                 <div class="grade">Middle · переход</div>
               </div>
-              <div class="org-node data" data-person="moreva" style="left:740px;top:470px;animation-delay:.42s">
+              <div class="org-node data" data-person="moreva" style="left:720px;top:540px;animation-delay:.42s">
                 <div class="role">Системный аналитик</div>
                 <div class="name">Морева Анастасия</div>
                 <div class="grade">Middle/Senior · переход</div>
@@ -996,53 +992,58 @@
           <div class="tile" style="padding:.4rem 1rem">
             <div class="goal-row">
               <strong>Методология MDM</strong>
-              <span><span class="pill process">Процессы</span> Ануфриев П.</span>
+              <span><span class="pill process">Процессы + AI</span> Ануфриев П.</span>
               <span>Методология мастер-данных, описание процессов</span>
             </div>
             <div class="goal-row">
               <strong>Нормализация номенклатуры с ИИ</strong>
-              <span><span class="pill data">Данные</span> Головкова + Каша</span>
+              <span><span class="pill data">Данные</span> Головкова + Каша · <span class="pill process">AI</span> Ануфриев</span>
               <span>GigaChat / OpenAI для очистки справочников</span>
             </div>
             <div class="goal-row">
               <strong>Документооборот (маршруты, Диадок)</strong>
-              <span><span class="pill process">Процессы</span> <span class="pill eng">Инженерия</span></span>
+              <span><span class="pill process">Процессы + AI</span> <span class="pill eng">Инженерия</span></span>
               <span>To-Be маршруты, интеграции через ESB</span>
             </div>
             <div class="goal-row">
               <strong>Инстеп MacroCRM → 1С Бухгалтерия 8</strong>
-              <span><span class="pill product">Продукты</span> <span class="pill eng">Инженерия</span></span>
+              <span><span class="pill process">Процессы + AI</span> Сергеева · <span class="pill eng">Инженерия</span></span>
               <span>Требования, интеграции, тестирование</span>
             </div>
             <div class="goal-row">
               <strong>Учётная политика на 2027</strong>
-              <span><span class="pill process">Процессы</span> Ануфриев + Краева</span>
+              <span><span class="pill process">Процессы + AI</span> Ануфриев + Краева</span>
               <span>Согласование с финансами, формализация</span>
             </div>
             <div class="goal-row">
               <strong>BI-отчёты (в т.ч. AI)</strong>
-              <span><span class="pill data">Данные</span> Головкова + DE + Каша</span>
-              <span>Дашборды и прогнозные модели</span>
+              <span><span class="pill data">Данные</span> Головкова + DE · <span class="pill process">AI</span> Ануфриев</span>
+              <span>Дашборды, бизнес-логика AI, данные для моделей</span>
             </div>
             <div class="goal-row">
               <strong>Экосистема (ЛК, УК, сервисы)</strong>
-              <span><span class="pill product">Продукты</span> Сергеева К.</span>
-              <span>Продуктовый бэклог и приоритеты интеграций</span>
+              <span><span class="pill process">Процессы + AI</span> Сергеева + Краева · <span class="pill eng">Инженерия</span></span>
+              <span>Требования, инструкции, интеграции</span>
             </div>
             <div class="goal-row">
               <strong>Корпоративный портал</strong>
-              <span><span class="pill product">Продукты</span> Сергеева + Краева</span>
+              <span><span class="pill process">Процессы + AI</span> Сергеева + Краева</span>
               <span>Улучшения, чат-боты, инструкции и обучение</span>
             </div>
             <div class="goal-row">
               <strong>УСО (подрядчик полного цикла)</strong>
-              <span><span class="pill product">Продукты</span> <span class="pill eng">Инженерия</span></span>
+              <span><span class="pill eng">Продукты и инженерия</span> Зарубина + команда</span>
               <span>Интеграции 1С:ERP УСО с ландшафтом</span>
             </div>
             <div class="goal-row">
               <strong>Качество данных (Data Quality)</strong>
               <span><span class="pill data">Данные</span> Головкова + DE</span>
               <span>Мониторинг, алерты, автопроверки</span>
+            </div>
+            <div class="goal-row">
+              <strong>AI в бизнес-процессах</strong>
+              <span><span class="pill process">Процессы + AI</span> Ануфриев</span>
+              <span>Аудит применимости, промпты, обучение, оценка эффекта</span>
             </div>
           </div>
           <div class="section-head" style="margin-top:1.25rem">
@@ -1330,25 +1331,25 @@
                 <tr>
                   <th style="min-width:220px">Процесс</th>
                   <th>Рук-ль</th>
-                  <th>Процессы</th>
-                  <th>Продукты</th>
-                  <th>Инженерия</th>
+                  <th>Процессы + AI</th>
+                  <th>Продукты и инженерия</th>
                   <th>Данные</th>
                   <th>L1/L2</th>
                 </tr>
               </thead>
               <tbody>
-                <tr><td>П1 Методология MDM</td><td><span class="raci A">A</span></td><td><span class="raci R">R</span>/<span class="raci A">A</span></td><td><span class="raci C">C</span></td><td><span class="raci C">C</span></td><td><span class="raci C">C</span></td><td><span class="raci I">I</span></td></tr>
-                <tr><td>П2 Нормализация номенклатуры + ИИ</td><td><span class="raci A">A</span></td><td><span class="raci C">C</span></td><td><span class="raci C">C</span></td><td><span class="raci C">C</span></td><td><span class="raci R">R</span>/<span class="raci A">A</span></td><td><span class="raci I">I</span></td></tr>
-                <tr><td>П3 Маршруты ДО / Диадок</td><td><span class="raci A">A</span></td><td><span class="raci R">R</span>/<span class="raci A">A</span></td><td><span class="raci C">C</span></td><td><span class="raci R">R</span></td><td><span class="raci C">C</span></td><td><span class="raci I">I</span></td></tr>
-                <tr><td>П4 MacroCRM → 1С Бух 8</td><td><span class="raci A">A</span></td><td><span class="raci C">C</span></td><td><span class="raci R">R</span>/<span class="raci A">A</span></td><td><span class="raci R">R</span></td><td><span class="raci C">C</span></td><td><span class="raci I">I</span></td></tr>
-                <tr><td>П5 Учётная политика 2027</td><td><span class="raci A">A</span></td><td><span class="raci R">R</span>/<span class="raci A">A</span></td><td><span class="raci C">C</span></td><td><span class="raci C">C</span></td><td><span class="raci C">C</span></td><td><span class="raci I">I</span></td></tr>
-                <tr><td>П6 BI-отчёты + AI</td><td><span class="raci A">A</span></td><td><span class="raci C">C</span></td><td><span class="raci C">C</span></td><td><span class="raci C">C</span></td><td><span class="raci R">R</span>/<span class="raci A">A</span></td><td><span class="raci I">I</span></td></tr>
-                <tr><td>П7 Экосистема (ЛК, УК)</td><td><span class="raci A">A</span></td><td><span class="raci C">C</span></td><td><span class="raci R">R</span>/<span class="raci A">A</span></td><td><span class="raci R">R</span></td><td><span class="raci C">C</span></td><td><span class="raci I">I</span></td></tr>
-                <tr><td>П8 Корпоративный портал</td><td><span class="raci A">A</span></td><td><span class="raci C">C</span></td><td><span class="raci R">R</span>/<span class="raci A">A</span></td><td><span class="raci C">C</span></td><td><span class="raci C">C</span></td><td><span class="raci I">I</span></td></tr>
-                <tr><td>П9 УСО полный цикл</td><td><span class="raci A">A</span></td><td><span class="raci C">C</span></td><td><span class="raci R">R</span>/<span class="raci A">A</span></td><td><span class="raci R">R</span></td><td><span class="raci C">C</span></td><td><span class="raci I">I</span></td></tr>
-                <tr><td>П10 Data Quality</td><td><span class="raci A">A</span></td><td><span class="raci C">C</span></td><td><span class="raci C">C</span></td><td><span class="raci C">C</span></td><td><span class="raci R">R</span>/<span class="raci A">A</span></td><td><span class="raci I">I</span></td></tr>
-                <tr><td>П11 Инцидент L3</td><td><span class="raci A">A</span></td><td><span class="raci C">C</span></td><td><span class="raci C">C</span></td><td><span class="raci R">R</span></td><td><span class="raci R">R</span></td><td><span class="raci I">I</span></td></tr>
+                <tr><td>П1 Методология MDM</td><td><span class="raci A">A</span></td><td><span class="raci R">R</span>/<span class="raci A">A</span></td><td><span class="raci C">C</span></td><td><span class="raci C">C</span></td><td><span class="raci I">I</span></td></tr>
+                <tr><td>П2 Нормализация номенклатуры + ИИ</td><td><span class="raci A">A</span></td><td><span class="raci C">C</span></td><td><span class="raci C">C</span></td><td><span class="raci R">R</span>/<span class="raci A">A</span></td><td><span class="raci I">I</span></td></tr>
+                <tr><td>П3 Маршруты ДО / Диадок</td><td><span class="raci A">A</span></td><td><span class="raci R">R</span>/<span class="raci A">A</span></td><td><span class="raci R">R</span></td><td><span class="raci C">C</span></td><td><span class="raci I">I</span></td></tr>
+                <tr><td>П4 MacroCRM → 1С Бух 8</td><td><span class="raci A">A</span></td><td><span class="raci R">R</span></td><td><span class="raci R">R</span>/<span class="raci A">A</span></td><td><span class="raci C">C</span></td><td><span class="raci I">I</span></td></tr>
+                <tr><td>П5 Учётная политика 2027</td><td><span class="raci A">A</span></td><td><span class="raci R">R</span>/<span class="raci A">A</span></td><td><span class="raci C">C</span></td><td><span class="raci C">C</span></td><td><span class="raci I">I</span></td></tr>
+                <tr><td>П6 BI-отчёты + AI</td><td><span class="raci A">A</span></td><td><span class="raci C">C</span></td><td><span class="raci C">C</span></td><td><span class="raci R">R</span>/<span class="raci A">A</span></td><td><span class="raci I">I</span></td></tr>
+                <tr><td>П7 Экосистема (ЛК, УК)</td><td><span class="raci A">A</span></td><td><span class="raci R">R</span></td><td><span class="raci R">R</span>/<span class="raci A">A</span></td><td><span class="raci C">C</span></td><td><span class="raci I">I</span></td></tr>
+                <tr><td>П8 Корпоративный портал</td><td><span class="raci A">A</span></td><td><span class="raci R">R</span>/<span class="raci A">A</span></td><td><span class="raci C">C</span></td><td><span class="raci C">C</span></td><td><span class="raci I">I</span></td></tr>
+                <tr><td>П9 УСО полный цикл</td><td><span class="raci A">A</span></td><td><span class="raci C">C</span></td><td><span class="raci R">R</span>/<span class="raci A">A</span></td><td><span class="raci C">C</span></td><td><span class="raci I">I</span></td></tr>
+                <tr><td>П10 Data Quality</td><td><span class="raci A">A</span></td><td><span class="raci C">C</span></td><td><span class="raci C">C</span></td><td><span class="raci R">R</span>/<span class="raci A">A</span></td><td><span class="raci I">I</span></td></tr>
+                <tr><td>П11 Инцидент L3</td><td><span class="raci A">A</span></td><td><span class="raci C">C</span></td><td><span class="raci R">R</span></td><td><span class="raci R">R</span></td><td><span class="raci I">I</span></td></tr>
+                <tr><td>П12 AI в бизнес-процессах</td><td><span class="raci A">A</span></td><td><span class="raci R">R</span>/<span class="raci A">A</span></td><td><span class="raci C">C</span></td><td><span class="raci C">C</span></td><td><span class="raci I">I</span></td></tr>
               </tbody>
             </table>
           </div>
@@ -1361,23 +1362,23 @@
           <div class="grid-2">
             <article class="tile">
               <h3>Новый отчёт BI/AI</h3>
-              <p>Пользователь → Блок данных (Jira) → Головкова (приоритет) → Каша / DataEng → выдача.</p>
+              <p>Пользователь → Блок данных (Jira) → Головкова (приоритет) → Каша / DataEng → выдача. Бизнес-логика AI — Ануфриев.</p>
             </article>
             <article class="tile">
               <h3>Оптимизация процесса</h3>
-              <p>Процессы → Продукты → Инженерия → Данные. Цепочка MDM / ДО / УСО.</p>
+              <p>Процессы + AI → Продукты и инженерия → Данные. Цепочка MDM / ДО / УСО.</p>
             </article>
             <article class="tile">
               <h3>Сбой Datareon / Kafka</h3>
               <p>Мониторинг → диагностика → исправление (инженерия) → подтверждение тестом (Матвеев).</p>
             </article>
             <article class="tile">
-              <h3>Пилот AI-инструмента</h3>
-              <p>Продукты (требования) → Данные (Каша, Морева) → Инженерия (интеграция) → Головкова (модели).</p>
+              <h3>Пилот AI в процессах</h3>
+              <p>Ануфриев (бизнес-логика AI) → Головкова / Каша (данные) → Зарубина (AI-API) → обучение пользователей.</p>
             </article>
           </div>
 
-          <p class="footer-note">ЭНКО · ОБИТИ · на основе положения о департаменте и оргструктуры 10 чел.</p>
+          <p class="footer-note">ЭНКО · ОБИТИ · на основе положения о департаменте и оргструктуры 10 чел. · 3 блока</p>
         </section>
       </main>
     </div>
@@ -1398,30 +1399,30 @@
       },
       anufriev: {
         name: "Ануфриев Павел",
-        role: "Руководитель блока процессной аналитики",
+        role: "Руководитель блока процессной аналитики и AI-трансформации",
         meta: "Senior/Lead · переход из РП / экс-Нач. ООБП",
-        tasks: "Методология MDM, пересборка маршрутов ДО, учётная политика 2027, процессы для BI.",
-        hard: "1С:ERP УСО, 1С:ДО, БИТ.Финанс, BPMN, As-Is/To-Be, Jira, Confluence.",
-        soft: "Системное мышление, фасилитация, написание регламентов.",
-        zone: "Процессная карта девелопера, методология цифровизации, Flex, управление изменениями."
+        tasks: "Методология MDM, As-Is/To-Be, учётная политика; аудит процессов на применимость AI; управление промптами и бизнес-правилами; обучение пользователей AI; оценка эффекта AI-внедрений.",
+        hard: "1С:ERP УСО, 1С:ДО, БИТ.Финанс, BPMN, As-Is/To-Be, Jira, Confluence; GigaChat / OpenAI / DeepSeek; prompt engineering; методологии внедрения AI в БП.",
+        soft: "Стратегическое мышление, управление изменениями, фасилитация, обучение, коммуникации.",
+        zone: "Методология цифровизации, AI-трансформация процессов (бизнес-логика AI), описание и оптимизация БП, управление изменениями, обучение пользователей."
       },
       kasha: {
         name: "Каша Мария",
         role: "Бизнес-аналитик",
         meta: "Middle · переход",
-        tasks: "Сбор требований к данным и дашбордам, метрики и KPI, участие в формировании витрин, согласование бизнес-терминов.",
+        tasks: "Сбор требований к данным и дашбордам, метрики и KPI, участие в формировании витрин, согласование бизнес-терминов; связка с AI по качеству данных для моделей.",
         hard: "1С:ERP УСО, БИТ.Финанс, Power BI, Superset, ClickHouse, Jira, Confluence.",
         soft: "Мультизадачность, самоорганизация, коммуникабельность.",
-        zone: "Бизнес-требования к аналитике, метрики девелопера, приоритизация запросов на отчёты."
+        zone: "Бизнес-требования к аналитике, метрики девелопера, данные для AI совместно с Головковой."
       },
       sergeeva: {
         name: "Сергеева Ксения",
-        role: "Product Owner / Team Lead",
+        role: "Старший бизнес-аналитик",
         meta: "Senior · переход",
-        tasks: "MacroCRM, 1С Бухгалтерия 8, экосистема, портал, УСО.",
-        hard: "Бэклог в Jira; 1С:ERP УСО, БИТ.Финанс, MacroCRM, Битрикс24, Confluence.",
-        soft: "Product Management, приоритизация, работа с заказчиками.",
-        zone: "Продуктовый бэклог, контроль реализации, связь с бизнесом."
+        tasks: "Сбор и формализация требований (MacroCRM, 1С, экосистема, портал, УСО), CJM и процессы с клиентами, приоритизация потребностей бизнеса для инженерии.",
+        hard: "1С:ERP УСО, БИТ.Финанс, MacroCRM, Битрикс24, Jira, Confluence, As-Is/To-Be.",
+        soft: "Аналитика требований, приоритизация, работа с заказчиками, фасилитация.",
+        zone: "Бизнес-требования и процессная аналитика продуктов; связка процессов с блоком продуктов и инженерии."
       },
       matveev: {
         name: "Матвеев Александр",
@@ -1436,10 +1437,10 @@
         name: "Зарубина Ирина",
         role: "Главный инженер-архитектор",
         meta: "Senior · переход",
-        tasks: "Datareon ESB, маршруты ДО, Диадок, финрез через шину.",
-        hard: "Datareon ESB, Kafka, ClickHouse, PostgreSQL, MinIO, API, интеграции 1С.",
+        tasks: "Datareon ESB, маршруты ДО, Диадок, финрез через шину; техническая интеграция AI-API; продуктовая доставка вместе с инженерией.",
+        hard: "Datareon ESB, Kafka, ClickHouse, PostgreSQL, MinIO, API, интеграции 1С, AI-API.",
         soft: "Архитектурное мышление, техлидерство, стратегическое планирование.",
-        zone: "Архитектура интеграций, выбор решений, техдолг, стандарты API, менторинг Матвеева."
+        zone: "Архитектура интеграций и продуктов, техдолг, стандарты API, техническая интеграция AI, менторинг Матвеева."
       },
       galyuk: {
         name: "Галюк Семён",
@@ -1457,7 +1458,7 @@
         tasks: "MDM, нормализация с ИИ, Data Quality, BI-отчёты, приоритизация аналитики.",
         hard: "DWH ClickHouse/PostgreSQL, MinIO S3, Power BI, Superset, ETL, Data Governance.",
         soft: "Управление командой, стратегия, коммуникация с бизнесом по данным.",
-        zone: "Архитектура данных, качество, приоритеты аналитики, Data-культура."
+        zone: "Архитектура данных, качество, приоритеты аналитики, данные для AI, Data-культура."
       },
       dataeng: {
         name: "Data Engineer — вакансия",
