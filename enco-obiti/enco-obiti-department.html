@@ -281,7 +281,7 @@
     .org-canvas {
       position: relative;
       min-width: 920px;
-      min-height: 620px;
+      min-height: 720px;
       padding: 1rem;
     }
     .org-node {
@@ -835,7 +835,7 @@
 
           <div class="org-canvas-wrap">
             <div class="org-canvas" id="orgCanvas">
-              <svg class="org-svg" viewBox="0 0 960 640" preserveAspectRatio="xMidYMin meet">
+              <svg class="org-svg" viewBox="0 0 960 720" preserveAspectRatio="xMidYMin meet">
                 <defs>
                   <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
                     <path d="M 0 0 L 10 5 L 0 10 z" fill="#A8B7C7"/>
@@ -850,63 +850,68 @@
               </svg>
 
               <div class="org-node lead active" data-person="nigmatullina" style="animation-delay:.05s">
-                <div class="role">Руководитель департамента</div>
+                <div class="role">Руководитель</div>
                 <div class="name">Нигматуллина Эльвира</div>
-                <div class="grade">Директорский · переход (повышение)</div>
+                <div class="grade">Переход</div>
               </div>
 
               <div class="block-label" style="left:55px;top:160px;color:var(--process)">Блок процессов</div>
               <div class="block-label" style="left:295px;top:160px;color:var(--product)">Блок продуктов</div>
               <div class="block-label" style="left:535px;top:160px;color:var(--eng)">Блок инженерии</div>
-              <div class="block-label" style="left:775px;top:160px;color:var(--data)">Блок данных</div>
+              <div class="block-label" style="left:755px;top:160px;color:var(--data)">Блок / отдел данных</div>
 
               <div class="org-node process" data-person="anufriev" style="left:20px;top:185px;animation-delay:.1s">
                 <div class="role">Рук. процессной аналитики</div>
                 <div class="name">Ануфриев Павел</div>
                 <div class="grade">Senior/Lead · переход</div>
               </div>
-              <div class="org-node process" data-person="kasha" style="left:20px;top:300px;animation-delay:.15s">
-                <div class="role">Бизнес-аналитик + админ</div>
-                <div class="name">Каша Мария</div>
-                <div class="grade">Middle · переход</div>
+              <div class="org-node process" data-person="kraeva" style="left:20px;top:300px;animation-delay:.15s">
+                <div class="role">Консультант-аналитик</div>
+                <div class="name">Краева Александра</div>
+                <div class="grade">Junior/Middle · переход</div>
               </div>
 
               <div class="org-node product" data-person="sergeeva" style="left:260px;top:185px;animation-delay:.18s">
-                <div class="role">Product Owner / Team Lead</div>
+                <div class="role">Product Owner</div>
                 <div class="name">Сергеева Ксения</div>
                 <div class="grade">Senior · переход</div>
               </div>
-              <div class="org-node product" data-person="matveev" style="left:260px;top:300px;animation-delay:.22s">
-                <div class="role">Системный аналитик</div>
-                <div class="name">Матвеев Александр</div>
-                <div class="grade">Junior/Middle · рост</div>
-              </div>
 
-              <div class="org-node eng" data-person="zarubina" style="left:500px;top:185px;animation-delay:.25s">
-                <div class="role">Ведущий инженер-архитектор</div>
+              <div class="org-node eng" data-person="zarubina" style="left:500px;top:185px;animation-delay:.22s">
+                <div class="role">Главный инженер-архитектор</div>
                 <div class="name">Зарубина Ирина</div>
                 <div class="grade">Senior · переход</div>
               </div>
-              <div class="org-node eng" data-person="galyuk" style="left:500px;top:300px;animation-delay:.28s">
+              <div class="org-node eng" data-person="galyuk" style="left:500px;top:280px;animation-delay:.25s">
                 <div class="role">Инженер-разработчик</div>
                 <div class="name">Галюк Семён</div>
                 <div class="grade">Middle · переход</div>
               </div>
+              <div class="org-node eng" data-person="matveev" style="left:500px;top:375px;animation-delay:.28s">
+                <div class="role">Инженер-разработчик</div>
+                <div class="name">Матвеев Александр</div>
+                <div class="grade">Junior · рост до Middle</div>
+              </div>
 
               <div class="org-node data" data-person="golovkova" style="left:740px;top:185px;animation-delay:.3s">
-                <div class="role">Data Team Lead</div>
+                <div class="role">Руководитель блока данных</div>
                 <div class="name">Головкова Эльза</div>
                 <div class="grade">Senior · переход</div>
               </div>
-              <div class="org-node data vacancy" data-person="dataeng" style="left:740px;top:300px;animation-delay:.34s">
+              <div class="org-node data vacancy" data-person="dataeng" style="left:740px;top:280px;animation-delay:.34s">
                 <div class="role">Data Engineer</div>
                 <div class="name">Вакансия</div>
                 <div class="grade">Middle/Senior · найм</div>
               </div>
-              <div class="org-node data" data-person="kraeva" style="left:740px;top:415px;animation-delay:.38s">
-                <div class="role">BI / Data Scientist</div>
-                <div class="name">Краева Александра</div>
-                <div class="grade">Junior/Middle · дообучение</div>
+              <div class="org-node data" data-person="kasha" style="left:740px;top:375px;animation-delay:.38s">
+                <div class="role">Бизнес-аналитик</div>
+                <div class="name">Каша Мария</div>
+                <div class="grade">Middle · переход</div>
+              </div>
+              <div class="org-node data" data-person="moreva" style="left:740px;top:470px;animation-delay:.42s">
+                <div class="role">Системный аналитик</div>
+                <div class="name">Морева Анастасия</div>
+                <div class="grade">Middle/Senior · переход</div>
               </div>
             </div>
           </div>
@@ -996,7 +1001,7 @@
             </div>
             <div class="goal-row">
               <strong>Нормализация номенклатуры с ИИ</strong>
-              <span><span class="pill data">Данные</span> Головкова + Краева</span>
+              <span><span class="pill data">Данные</span> Головкова + Каша</span>
               <span>GigaChat / OpenAI для очистки справочников</span>
             </div>
             <div class="goal-row">
@@ -1011,12 +1016,12 @@
             </div>
             <div class="goal-row">
               <strong>Учётная политика на 2027</strong>
-              <span><span class="pill process">Процессы</span> Ануфриев + Каша</span>
+              <span><span class="pill process">Процессы</span> Ануфриев + Краева</span>
               <span>Согласование с финансами, формализация</span>
             </div>
             <div class="goal-row">
               <strong>BI-отчёты (в т.ч. AI)</strong>
-              <span><span class="pill data">Данные</span> Головкова + Краева</span>
+              <span><span class="pill data">Данные</span> Головкова + DE + Каша</span>
               <span>Дашборды и прогнозные модели</span>
             </div>
             <div class="goal-row">
@@ -1026,8 +1031,8 @@
             </div>
             <div class="goal-row">
               <strong>Корпоративный портал</strong>
-              <span><span class="pill product">Продукты</span> Сергеева + Матвеев</span>
-              <span>Улучшения, чат-боты, требования и тесты</span>
+              <span><span class="pill product">Продукты</span> Сергеева + Краева</span>
+              <span>Улучшения, чат-боты, инструкции и обучение</span>
             </div>
             <div class="goal-row">
               <strong>УСО (подрядчик полного цикла)</strong>
@@ -1356,7 +1361,7 @@
           <div class="grid-2">
             <article class="tile">
               <h3>Новый отчёт BI/AI</h3>
-              <p>Пользователь → Блок данных (Jira) → Головкова (приоритет) → Краева / DataEng → выдача.</p>
+              <p>Пользователь → Блок данных (Jira) → Головкова (приоритет) → Каша / DataEng → выдача.</p>
             </article>
             <article class="tile">
               <h3>Оптимизация процесса</h3>
@@ -1368,7 +1373,7 @@
             </article>
             <article class="tile">
               <h3>Пилот AI-инструмента</h3>
-              <p>Продукты (требования) → Данные → Инженерия (интеграция) → Краева (модели).</p>
+              <p>Продукты (требования) → Данные (Каша, Морева) → Инженерия (интеграция) → Головкова (модели).</p>
             </article>
           </div>
 
@@ -1384,8 +1389,8 @@
     const people = {
       nigmatullina: {
         name: "Нигматуллина Эльвира",
-        role: "Руководитель Департамента ОБИТИ",
-        meta: "Директорский грейд · повышение с роли Зам. директора по цифровизации",
+        role: "Руководитель ОБИТИ",
+        meta: "Переход",
         tasks: "Портфель проектов (MDM, ДО, BI, УСО, экосистема), качество данных, взаимодействие с топ-менеджментом.",
         hard: "1С:Бухгалтерия, БИТ.Финанс, Agile/Waterfall, Power BI, MDM, Data Quality.",
         soft: "Стратегическое мышление, управление изменениями, C-level коммуникации, бюджетирование.",
@@ -1402,12 +1407,12 @@
       },
       kasha: {
         name: "Каша Мария",
-        role: "Бизнес-аналитик + администратор проектов",
+        role: "Бизнес-аналитик",
         meta: "Middle · переход",
-        tasks: "Jira/Confluence для MDM, ДО, BI; сбор требований к дашбордам.",
-        hard: "1С:ERP УСО, БИТ.Финанс, 1С:ДО, Jira Data Center, Confluence, инструкции.",
+        tasks: "Сбор требований к данным и дашбордам, метрики и KPI, участие в формировании витрин, согласование бизнес-терминов.",
+        hard: "1С:ERP УСО, БИТ.Финанс, Power BI, Superset, ClickHouse, Jira, Confluence.",
         soft: "Мультизадачность, самоорганизация, коммуникабельность.",
-        zone: "Документирование, ведение Jira/Confluence, инструкции, организация встреч."
+        zone: "Бизнес-требования к аналитике, метрики девелопера, приоритизация запросов на отчёты."
       },
       sergeeva: {
         name: "Сергеева Ксения",
@@ -1420,21 +1425,21 @@
       },
       matveev: {
         name: "Матвеев Александр",
-        role: "Системный аналитик",
-        meta: "Junior/Middle · переход с ростом",
-        tasks: "ТЗ на интеграции MacroCRM ↔ 1С, обмены через Datareon.",
-        hard: "1С-стек, MacroCRM, API, написание ТЗ, тестирование.",
-        soft: "Аналитическое мышление, документирование, коммуникация.",
-        zone: "Детализация требований, ТЗ, тесты, документация API."
+        role: "Инженер-разработчик",
+        meta: "Junior · рост до Middle",
+        tasks: "Разработка интеграций под руководством архитектора, обучение 1С и ESB, постепенное освоение стека.",
+        hard: "Datareon ESB, 1С-стек, MacroCRM, API, SQL, базовое тестирование.",
+        soft: "Аналитическое мышление, обучаемость, командная работа.",
+        zone: "Интеграционные задачи по ТЗ, L3-поддержка, трек роста до Middle за 1–2 года."
       },
       zarubina: {
         name: "Зарубина Ирина",
-        role: "Ведущий инженер-архитектор",
+        role: "Главный инженер-архитектор",
         meta: "Senior · переход",
         tasks: "Datareon ESB, маршруты ДО, Диадок, финрез через шину.",
         hard: "Datareon ESB, Kafka, ClickHouse, PostgreSQL, MinIO, API, интеграции 1С.",
         soft: "Архитектурное мышление, техлидерство, стратегическое планирование.",
-        zone: "Архитектура интеграций, выбор решений, техдолг, стандарты API."
+        zone: "Архитектура интеграций, выбор решений, техдолг, стандарты API, менторинг Матвеева."
       },
       galyuk: {
         name: "Галюк Семён",
@@ -1447,9 +1452,9 @@
       },
       golovkova: {
         name: "Головкова Эльза",
-        role: "Data Team Lead",
+        role: "Руководитель блока данных",
         meta: "Senior · переход",
-        tasks: "MDM, нормализация с ИИ, Data Quality, BI-отчёты.",
+        tasks: "MDM, нормализация с ИИ, Data Quality, BI-отчёты, приоритизация аналитики.",
         hard: "DWH ClickHouse/PostgreSQL, MinIO S3, Power BI, Superset, ETL, Data Governance.",
         soft: "Управление командой, стратегия, коммуникация с бизнесом по данным.",
         zone: "Архитектура данных, качество, приоритеты аналитики, Data-культура."
@@ -1465,12 +1470,21 @@
       },
       kraeva: {
         name: "Краева Александра",
-        role: "BI-разработчик / Data Scientist",
-        meta: "Junior/Middle · переход с дообучением",
-        tasks: "BI-отчёты (в т.ч. AI), нормализация справочников с ИИ.",
-        hard: "Power BI (DAX), Superset, ClickHouse, GigaChat/OpenAI/DeepSeek/Cursor, Python.",
-        soft: "Визуализация, сторителлинг, понимание бизнес-метрик.",
-        zone: "Дашборды, прогнозная аналитика, AI для анализа данных."
+        role: "Консультант-аналитик",
+        meta: "Junior/Middle · переход",
+        tasks: "Описание процессов (CJM, MacroCRM), инструкции, обучение пользователей, участие в экосистемных проектах.",
+        hard: "BPMN, MacroCRM, 1С:ДО, Confluence, Jira, описание As-Is/To-Be.",
+        soft: "Коммуникабельность, фасилитация, написание регламентов, обучение.",
+        zone: "Процессы работы с клиентами, инструкции, обучение, поддержка портала и чат-ботов."
+      },
+      moreva: {
+        name: "Морева Анастасия",
+        role: "Системный аналитик",
+        meta: "Middle/Senior · переход",
+        tasks: "Анализ требований к интеграциям с точки зрения данных: источники, периодичность, API-контракты.",
+        hard: "Datareon, Kafka, ClickHouse, SQL, описание API, документирование потоков данных.",
+        soft: "Системное мышление, внимание к деталям, коммуникация с инженерией и бизнесом.",
+        zone: "Системная аналитика данных, API-контракты, документация интеграций с точки зрения данных."
       }
     };
 
