@@ -6,6 +6,13 @@
 
 [`enco-obiti-department.html`](./enco-obiti-department.html)
 
+### GitHub Pages
+
+После включения Pages в настройках репозитория:
+
+- https://anufrievpg.github.io/cursor_test/
+- https://anufrievpg.github.io/cursor_test/enco-obiti/enco-obiti-department.html
+
 Файл самодостаточный: логотип ЭНКО встроен как `data:` URI. Кнопка **⬇ Скачать** в шапке выгружает копию страницы.
 
 ### iPhone / iPad

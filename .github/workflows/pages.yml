@@ -1,0 +1,56 @@
+name: Deploy GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+      - cursor/obiti-department-canvas-00af
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Prepare site
+        run: |
+          mkdir -p _site
+          # Prefer department canvas as site home
+          if [ -f enco-obiti/enco-obiti-department.html ]; then
+            cp enco-obiti/enco-obiti-department.html _site/index.html
+            cp enco-obiti/enco-obiti-department.html _site/enco-obiti-department.html
+            mkdir -p _site/enco-obiti
+            cp enco-obiti/enco-obiti-department.html _site/enco-obiti/enco-obiti-department.html
+          elif [ -f index.html ]; then
+            cp index.html _site/index.html
+          else
+            echo "No HTML entrypoint found" >&2
+            exit 1
+          fi
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
