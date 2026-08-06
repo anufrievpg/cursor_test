@@ -436,6 +436,45 @@
       line-height: 1.45;
       text-align: left;
     }
+    .notice {
+      margin-bottom: 1rem; padding: .85rem 1rem;
+      border-radius: 14px; border: 1px solid rgba(179,92,30,.28);
+      background: rgba(179,92,30,.08); color: #6B3A12;
+      font-size: .86rem; line-height: 1.45;
+    }
+    .notice strong { color: var(--navy); }
+    .prio {
+      display: inline-flex; align-items: center;
+      padding: .12rem .45rem; border-radius: 6px;
+      font-size: .68rem; font-weight: 800; letter-spacing: .04em;
+    }
+    .prio.p0 { background: rgba(179,92,30,.16); color: var(--data); }
+    .prio.p1 { background: rgba(0,114,188,.14); color: var(--blue); }
+    .prio.p2 { background: rgba(91,107,140,.14); color: var(--eng); }
+    .prio.p3 { background: #EEF2F6; color: var(--muted); }
+    .init-row {
+      display: grid; grid-template-columns: 72px 1.4fr .9fr .85fr;
+      gap: .65rem; align-items: start;
+      padding: .75rem 0; border-bottom: 1px solid var(--line);
+      font-size: .84rem;
+    }
+    .init-row:last-child { border-bottom: none; }
+    .init-row .code { font-weight: 800; color: var(--navy); }
+    .init-row .sys { color: var(--muted); font-size: .78rem; margin-top: .15rem; }
+    .roadmap-q {
+      border-left: 3px solid var(--blue);
+      padding-left: .85rem; margin-bottom: 1.1rem;
+    }
+    .roadmap-q h4 {
+      margin: 0 0 .45rem; font-size: .92rem; color: var(--navy);
+    }
+    .zone-fn {
+      display: grid; grid-template-columns: 2rem 1fr; gap: .45rem .65rem;
+      font-size: .84rem; margin: .35rem 0;
+    }
+    .zone-fn .n {
+      font-weight: 800; color: var(--blue);
+    }
     .invest-card .money {
       display: inline-flex; align-items: center;
       margin-top: .65rem; padding: .25rem .6rem;
@@ -487,7 +526,7 @@
       .nav-btn { width: auto; white-space: normal; min-width: 150px; }
       .nav-sub { display: none; }
       .grid-3, .grid-2, .grid-4, .grid-5, .audience, .person-detail .cols, .effect-hero { grid-template-columns: 1fr; }
-      .goal-row { grid-template-columns: 1fr; }
+      .goal-row, .init-row { grid-template-columns: 1fr; }
       header { flex-wrap: wrap; }
       .toolbar { margin-left: 0; width: 100%; }
       .brand-wordmark { display: none; }
@@ -513,6 +552,8 @@
       <div class="toolbar">
         <button class="chip active" data-jump="overview">Обзор</button>
         <button class="chip" data-jump="org">Команда</button>
+        <button class="chip" data-jump="initiatives">Инициативы</button>
+        <button class="chip" data-jump="usc">УСЦ</button>
         <button class="chip" data-jump="invest">Инвестцели</button>
         <button class="chip" data-jump="finance">Эффект</button>
         <button class="chip" data-jump="raci">RACI</button>
@@ -553,19 +594,27 @@
         </button>
         <button class="nav-btn" data-panel="goals">
           <span class="nav-num">08</span>
-          <span><div class="nav-label">Цели 2026–2027</div><div class="nav-sub">План и ответственные</div></span>
+          <span><div class="nav-label">Цели</div><div class="nav-sub">Операционный горизонт</div></span>
+        </button>
+        <button class="nav-btn" data-panel="initiatives">
+          <span class="nav-num">09</span>
+          <span><div class="nav-label">Инициативы</div><div class="nav-sub">Выборка из портфеля ГК</div></span>
+        </button>
+        <button class="nav-btn" data-panel="usc">
+          <span class="nav-num">10</span>
+          <span><div class="nav-label">Строительный цикл</div><div class="nav-sub">Положение + дорожная карта 2027</div></span>
         </button>
         <button class="nav-btn" data-panel="invest">
-          <span class="nav-num">09</span>
+          <span class="nav-num">11</span>
           <span><div class="nav-label">Инвестпредложение</div><div class="nav-sub">8 целей для бизнеса</div></span>
         </button>
         <button class="nav-btn" data-panel="finance">
-          <span class="nav-num">10</span>
+          <span class="nav-num">12</span>
           <span><div class="nav-label">Финансовый эффект</div><div class="nav-sub">Расчёт ~55 млн ₽/год</div></span>
         </button>
         <button class="nav-btn" data-panel="raci">
-          <span class="nav-num">11</span>
-          <span><div class="nav-label">Матрица RACI</div><div class="nav-sub">11 сквозных процессов</div></span>
+          <span class="nav-num">13</span>
+          <span><div class="nav-label">Матрица RACI</div><div class="nav-sub">Процессы + инициативы</div></span>
         </button>
       </aside>
 
@@ -611,7 +660,7 @@
           <div class="grid-4" style="margin-top:1.15rem">
             <article class="tile"><div class="label">Состав</div><h3>10 человек</h3><p>3 блока компетенций + руководитель</p></article>
             <article class="tile"><div class="label">Вакансии</div><h3>1 позиция</h3><p>Data Engineer — в найме</p></article>
-            <article class="tile"><div class="label">Процессы</div><h3>12 RACI</h3><p>Сквозные цели + AI в процессах</p></article>
+            <article class="tile"><div class="label">Процессы</div><h3>16 RACI</h3><p>Цели + инициативы УСЦ / AI</p></article>
             <article class="tile"><div class="label">Инструменты</div><h3>Jira · Confluence</h3><p>Битрикс24 для бизнеса</p></article>
           </div>
         </section>
@@ -985,15 +1034,18 @@
         <section class="panel" id="panel-goals">
           <div class="section-head">
             <div>
-              <h2>Краткосрочные цели</h2>
-              <p>Привязка к целям презентации: блок, роль и план действий.</p>
+              <h2>Операционные цели ОБИТИ</h2>
+              <p>Текущий горизонт исполнения. Календарный план IT Strategy 2026 неактуален — фокус смещён на закрытие контура и подготовку 2027.</p>
             </div>
+          </div>
+          <div class="notice">
+            <strong>Горизонт планирования.</strong> 2026 год на исходе; приложенный портфель IT 2026 используем как реестр запросов ГК, а не как жёсткий календарь. Детальная дорожная карта по «Управлению строительным циклом» — на 2027.
           </div>
           <div class="tile" style="padding:.4rem 1rem">
             <div class="goal-row">
-              <strong>Методология MDM</strong>
-              <span><span class="pill process">Процессы + AI</span> Ануфриев П.</span>
-              <span>Методология мастер-данных, описание процессов</span>
+              <strong>Методология MDM / НСИ</strong>
+              <span><span class="pill process">Процессы + AI</span> Ануфриев + Сергеева</span>
+              <span>Мастер-данные, регламент согласования в 1С:ДО</span>
             </div>
             <div class="goal-row">
               <strong>Нормализация номенклатуры с ИИ</strong>
@@ -1006,9 +1058,9 @@
               <span>To-Be маршруты, интеграции через ESB</span>
             </div>
             <div class="goal-row">
-              <strong>Инстеп MacroCRM → 1С Бухгалтерия 8</strong>
+              <strong>Инстеп / MacroCRM → 1С</strong>
               <span><span class="pill process">Процессы + AI</span> Сергеева · <span class="pill eng">Инженерия</span></span>
-              <span>Требования, интеграции, тестирование</span>
+              <span>Требования, обмены договоров, тестирование</span>
             </div>
             <div class="goal-row">
               <strong>Учётная политика на 2027</strong>
@@ -1016,24 +1068,19 @@
               <span>Согласование с финансами, формализация</span>
             </div>
             <div class="goal-row">
-              <strong>BI-отчёты (в т.ч. AI)</strong>
+              <strong>DWH / BI + AI-отчёты</strong>
               <span><span class="pill data">Данные</span> Головкова + DE · <span class="pill process">AI</span> Ануфриев</span>
-              <span>Дашборды, бизнес-логика AI, данные для моделей</span>
+              <span>Витрины, дашборды, бизнес-логика AI</span>
             </div>
             <div class="goal-row">
-              <strong>Экосистема (ЛК, УК, сервисы)</strong>
+              <strong>Цифровая сделка / экосистема</strong>
               <span><span class="pill process">Процессы + AI</span> Сергеева + Краева · <span class="pill eng">Инженерия</span></span>
-              <span>Требования, инструкции, интеграции</span>
+              <span>One-Stop Shop, ЛК, инструкции, интеграции</span>
             </div>
             <div class="goal-row">
-              <strong>Корпоративный портал</strong>
-              <span><span class="pill process">Процессы + AI</span> Сергеева + Краева</span>
-              <span>Улучшения, чат-боты, инструкции и обучение</span>
-            </div>
-            <div class="goal-row">
-              <strong>УСО (подрядчик полного цикла)</strong>
+              <strong>Управление строительным циклом</strong>
               <span><span class="pill eng">Продукты и инженерия</span> Зарубина + команда</span>
-              <span>Интеграции 1С:ERP УСО с ландшафтом</span>
+              <span>КС-2/КС-3, списание материалов, М-15, сметы</span>
             </div>
             <div class="goal-row">
               <strong>Качество данных (Data Quality)</strong>
@@ -1049,30 +1096,373 @@
           <div class="section-head" style="margin-top:1.25rem">
             <div>
               <h2>Смотрите также</h2>
-              <p>Инвестиционная формулировка целей и расчёт финансового эффекта.</p>
+              <p>Выборка инициатив из портфеля ГК, положение по УСЦ и инвестформулировки.</p>
             </div>
           </div>
-          <div class="grid-2">
+          <div class="grid-3">
             <article class="tile">
-              <div class="label">Для бизнеса</div>
-              <h3>Инвестпредложение</h3>
-              <p>8 целей в формате коммерческой выгоды: проблема → цель → деньги.</p>
+              <div class="label">Портфель</div>
+              <h3>Инициативы</h3>
+              <p>Стратегические, тактические и операционные — только в зоне ОБИТИ.</p>
               <div class="hero-cta" style="margin-top:.85rem">
-                <button class="tool-btn primary" data-panel="invest">Открыть цели →</button>
+                <button class="tool-btn primary" data-panel="initiatives">Открыть инициативы →</button>
               </div>
             </article>
             <article class="tile">
-              <div class="label">Обоснование цифр</div>
-              <h3>Финансовый эффект</h3>
-              <p>Методика и формулы по каждому пункту резюме: итого ~55 млн ₽/год.</p>
+              <div class="label">Стройка</div>
+              <h3>УСЦ · 2027</h3>
+              <p>Зоны ответственности блоков и квартальная дорожная карта.</p>
               <div class="hero-cta" style="margin-top:.85rem">
-                <button class="tool-btn primary" data-panel="finance">Смотреть расчёт →</button>
+                <button class="tool-btn primary" data-panel="usc">Положение УСЦ →</button>
+              </div>
+            </article>
+            <article class="tile">
+              <div class="label">Для бизнеса</div>
+              <h3>Инвестпредложение</h3>
+              <p>8 целей в формате коммерческой выгоды.</p>
+              <div class="hero-cta" style="margin-top:.85rem">
+                <button class="tool-btn primary" data-panel="invest">Открыть цели →</button>
               </div>
             </article>
           </div>
         </section>
 
-        <!-- 09 INVEST -->
+        <!-- 09 INITIATIVES -->
+        <section class="panel" id="panel-initiatives">
+          <div class="section-head">
+            <div>
+              <h2>Инициативы ОБИТИ</h2>
+              <p>Выборка из IT-портфеля ГК по функциям департамента. Полный реестр — справочно; календарь 2026 не используется как план-график.</p>
+            </div>
+            <div style="display:flex;gap:.4rem;flex-wrap:wrap">
+              <span class="pill process">Процессы + AI</span>
+              <span class="pill eng">Продукты и инженерия</span>
+              <span class="pill data">Данные</span>
+            </div>
+          </div>
+          <div class="notice">
+            <strong>Принцип отбора.</strong> Включены инициативы, где ОБИТИ — владелец методологии, интеграций, данных или AI-трансформации. Инфобез, HR, маркетинг-каналы без data/process ownership — вне периметра.
+          </div>
+
+          <div class="section-head" style="margin-top:.4rem">
+            <div><h2>Стратегические (П)</h2><p>Фундамент трансформации.</p></div>
+          </div>
+          <div class="tile" style="padding:.55rem 1rem">
+            <div class="init-row">
+              <div class="code">П1</div>
+              <div><strong>MDM / централизация НСИ</strong><div class="sys">НСИ · 1С:ДО</div></div>
+              <div><span class="pill process">Процессы + AI</span></div>
+              <div>Единая версия правды, регламент согласования</div>
+            </div>
+            <div class="init-row">
+              <div class="code">П2</div>
+              <div><strong>Миграция БИТ.ФИНАНС → 1С:УХ</strong><div class="sys">1С:УХ</div></div>
+              <div><span class="pill eng">Инженерия</span></div>
+              <div>Единая платформа казначейства, МСФО, бюджетирования</div>
+            </div>
+            <div class="init-row">
+              <div class="code">П3</div>
+              <div><strong>Интеграция «Инстеп» в ERP-контур</strong><div class="sys">ERP</div></div>
+              <div><span class="pill eng">Инженерия</span></div>
+              <div>Прозрачность актива, ускорение закрытия периодов</div>
+            </div>
+            <div class="init-row">
+              <div class="code">П4</div>
+              <div><strong>Перестройка DWH и BI</strong><div class="sys">Data Platform</div></div>
+              <div><span class="pill data">Данные</span></div>
+              <div>Data-driven решения, дашборды в реальном времени</div>
+            </div>
+            <div class="init-row">
+              <div class="code">П5</div>
+              <div><strong>ИИ-контроль стройки (NLP чатов)</strong><div class="sys">Jira / AI</div></div>
+              <div><span class="pill process">Процессы + AI</span></div>
+              <div>Структура из Telegram/eXpress, аномалии план-факт</div>
+            </div>
+          </div>
+
+          <div class="section-head" style="margin-top:1.25rem">
+            <div><h2>Тактические (Т)</h2><p>Интеграции и сквозные процессы.</p></div>
+          </div>
+          <div class="tile" style="padding:.55rem 1rem">
+            <div class="init-row">
+              <div class="code">Т1</div>
+              <div><strong>One-Stop Shop «Цифровая сделка»</strong><div class="sys">MacroCRM</div></div>
+              <div><span class="pill eng">Инженерия</span></div>
+              <div>Ускорение цикла сделки ~20%</div>
+            </div>
+            <div class="init-row">
+              <div class="code">Т2</div>
+              <div><strong>Real-time CRM ↔ CDP (MindBox)</strong><div class="sys">MacroCRM</div></div>
+              <div><span class="pill eng">Инженерия</span></div>
+              <div>Персонализация оферов в моменте</div>
+            </div>
+            <div class="init-row">
+              <div class="code">Т3</div>
+              <div><strong>КС-2/КС-3 и списание материалов</strong><div class="sys">Управление строительным циклом</div></div>
+              <div><span class="pill eng">Инженерия</span> <span class="prio p0">P0</span></div>
+              <div>Бесшовная цепочка прихода → списания → бухучёт</div>
+            </div>
+            <div class="init-row">
+              <div class="code">Т4</div>
+              <div><strong>Сетевые графики ↔ финмодель / бюджет</strong><div class="sys">Jira + ERP</div></div>
+              <div><span class="pill process">Процессы + AI</span></div>
+              <div>EVM-анализ, единство данных</div>
+            </div>
+            <div class="init-row">
+              <div class="code">Т5</div>
+              <div><strong>Загрузка договоров MacroCRM → 1С</strong><div class="sys">1С + MacroCRM</div></div>
+              <div><span class="pill eng">Инженерия</span></div>
+              <div>С 2 дней до ~30 минут</div>
+            </div>
+            <div class="init-row">
+              <div class="code">Т6</div>
+              <div><strong>Корпоративный ИИ для документов</strong><div class="sys">AI</div></div>
+              <div><span class="pill process">Процессы + AI</span></div>
+              <div>Протоколы, решения; без расширения штата</div>
+            </div>
+            <div class="init-row">
+              <div class="code">Т7</div>
+              <div><strong>Сметные расчёты + выгрузка Excel</strong><div class="sys">Управление строительным циклом</div></div>
+              <div><span class="pill eng">Инженерия</span> <span class="prio p0">P0</span></div>
+              <div>Ускорение сверки, меньше ошибок</div>
+            </div>
+            <div class="init-row">
+              <div class="code">Т8</div>
+              <div><strong>Учёт материалов М-15 ↔ 1С Бухгалтерия</strong><div class="sys">Управление строительным циклом</div></div>
+              <div><span class="pill eng">Инженерия</span> <span class="prio p1">P1</span></div>
+              <div>Корректное списание в регламентированном учёте</div>
+            </div>
+          </div>
+
+          <div class="section-head" style="margin-top:1.25rem">
+            <div><h2>Операционные (О) и отчётность</h2><p>Быстрые победы блока данных и инженерии.</p></div>
+          </div>
+          <div class="tile" style="padding:.55rem 1rem">
+            <div class="init-row">
+              <div class="code">О1</div>
+              <div><strong>Автогенерация ДДУ с опциями</strong><div class="sys">MacroCRM</div></div>
+              <div><span class="pill eng">Инженерия</span></div>
+              <div>Подготовка сделки до ~5 мин</div>
+            </div>
+            <div class="init-row">
+              <div class="code">О2</div>
+              <div><strong>BI-дашборды коммерции КЦ+ОП+ССК</strong><div class="sys">BI</div></div>
+              <div><span class="pill data">Данные</span></div>
+              <div>Единые метрики между отделами</div>
+            </div>
+            <div class="init-row">
+              <div class="code">О3</div>
+              <div><strong>Управленческая отчётность / РСС / DEBT_ESCROW</strong><div class="sys">1С + MacroCRM</div></div>
+              <div><span class="pill data">Данные</span></div>
+              <div>Сбор отчётов до ~5 минут</div>
+            </div>
+            <div class="init-row">
+              <div class="code">О4</div>
+              <div><strong>БДДС по счетам 50/51/55</strong><div class="sys">1С Бит.Финанс</div></div>
+              <div><span class="pill process">Процессы + AI</span></div>
+              <div>Статьи / проекты + остатки</div>
+            </div>
+            <div class="init-row">
+              <div class="code">О5</div>
+              <div><strong>Дебиторка ЭНКО Сервис 1С ↔ CRM</strong><div class="sys">1С + MacroCRM</div></div>
+              <div><span class="pill eng">Инженерия</span></div>
+              <div>Контроль поступлений на р/с</div>
+            </div>
+            <div class="init-row">
+              <div class="code">О6</div>
+              <div><strong>Отчёт стоимости материалов и работ</strong><div class="sys">1С / УСЦ</div></div>
+              <div><span class="pill data">Данные</span></div>
+              <div>Динамика цен для бюджетов проектов</div>
+            </div>
+          </div>
+
+          <div class="section-head" style="margin-top:1.25rem">
+            <div><h2>Привязка к положению о блоках</h2></div>
+          </div>
+          <div class="grid-3">
+            <article class="tile">
+              <div class="label">Процессы + AI</div>
+              <h3>Ануфриев · Сергеева · Краева</h3>
+              <p>MDM, учётная политика, маршруты ДО, ИИ в процессах и стройке, методология смет и списаний, обучение.</p>
+            </article>
+            <article class="tile">
+              <div class="label">Продукты и инженерия</div>
+              <h3>Зарубина · Галюк · Матвеев</h3>
+              <p>УСЦ, MacroCRM, 1С:УХ, ESB/Kafka, обмены, КС-2/КС-3, М-15, сметы, L3.</p>
+            </article>
+            <article class="tile">
+              <div class="label">Данные</div>
+              <h3>Головкова · DE · Каша · Морева</h3>
+              <p>DWH/BI, витрины УСЦ, DQ, отчёты коммерции и стройки, данные для AI.</p>
+            </article>
+          </div>
+        </section>
+
+        <!-- 10 USC / CONSTRUCTION -->
+        <section class="panel" id="panel-usc">
+          <div class="section-head">
+            <div>
+              <h2>Управление строительным циклом</h2>
+              <p>Положение о зонах ответственности блоков и дорожная карта инициатив на 2027. Бывшее название системы — «1С УСО».</p>
+            </div>
+          </div>
+          <div class="notice">
+            <strong>План 2026 неактуален.</strong> Год на исходе — календарные сроки из IT Strategy 2026 не переносим 1:1. Ниже: положение о блоках по УСЦ и реалистичная квартальная карта на 2027.
+          </div>
+
+          <article class="tile" style="margin-bottom:1.15rem">
+            <div class="label">Определение</div>
+            <h3>Что автоматизирует УСЦ</h3>
+            <p>Ключевая система девелопера: сметное нормирование, учёт материалов, взаимодействие с подрядчиками, приёмка работ (КС-2/КС-3), списание материалов, исполнительная документация.</p>
+            <ul style="margin-top:.55rem">
+              <li><strong>Процессы + AI</strong> — методология процессов, автоматизируемых в УСЦ</li>
+              <li><strong>Продукты и инженерия</strong> — доработки и интеграции УСЦ с ландшафтом</li>
+              <li><strong>Данные</strong> — витрины УСЦ в DWH и BI-отчётность по стройке</li>
+            </ul>
+          </article>
+
+          <div class="section-head">
+            <div><h2>Зоны ответственности блоков</h2></div>
+          </div>
+          <div class="grid-3">
+            <article class="tile">
+              <div class="label">Процессы + AI</div>
+              <h3>Ануфриев · Сергеева · Краева</h3>
+              <div class="zone-fn"><span class="n">1</span><span>Методология сметного нормирования и справочников</span></div>
+              <div class="zone-fn"><span class="n">2</span><span>Приёмка СМР (КС-2/КС-3): As-Is / To-Be, регламенты</span></div>
+              <div class="zone-fn"><span class="n">3</span><span>Процесс списания: приход → перемещение → списание</span></div>
+              <div class="zone-fn"><span class="n">4</span><span>AI в строительном учёте: промпты, NLP чатов, аномалии</span></div>
+              <div class="zone-fn"><span class="n">5</span><span>Учётная политика строительства и закрытие периодов</span></div>
+              <div class="zone-fn"><span class="n">6</span><span>Регламент работы с подрядчиками в УСЦ</span></div>
+              <div class="zone-fn"><span class="n">7</span><span>Исполнительная документация (ЖОР, акты)</span></div>
+            </article>
+            <article class="tile">
+              <div class="label">Продукты и инженерия</div>
+              <h3>Зарубина · Галюк · Матвеев</h3>
+              <div class="zone-fn"><span class="n">1</span><span>УСЦ ↔ 1С Бухгалтерия (КС, сверки, списания)</span></div>
+              <div class="zone-fn"><span class="n">2</span><span>УСЦ ↔ MacroCRM (объекты, договоры, затраты)</span></div>
+              <div class="zone-fn"><span class="n">3</span><span>УСЦ ↔ Диадок (УПД, счета-фактуры, акты)</span></div>
+              <div class="zone-fn"><span class="n">4</span><span>УСЦ ↔ Jira / Project (вехи, EVM)</span></div>
+              <div class="zone-fn"><span class="n">5</span><span>УСЦ ↔ ESB (Datareon / Kafka)</span></div>
+              <div class="zone-fn"><span class="n">6</span><span>Сметные расчёты и выгрузка в Excel</span></div>
+              <div class="zone-fn"><span class="n">7</span><span>М-15, автоматизация КС-2/КС-3, L3, CI/CD</span></div>
+            </article>
+            <article class="tile">
+              <div class="label">Данные</div>
+              <h3>Головкова · DE · Каша · Морева</h3>
+              <div class="zone-fn"><span class="n">1</span><span>Витрины УСЦ в ClickHouse (затраты, остатки)</span></div>
+              <div class="zone-fn"><span class="n">2</span><span>BI: план-факт себестоимости, СМР, подрядчики</span></div>
+              <div class="zone-fn"><span class="n">3</span><span>Отчёт стоимости материалов и работ</span></div>
+              <div class="zone-fn"><span class="n">4</span><span>Data Quality справочников и списаний</span></div>
+              <div class="zone-fn"><span class="n">5</span><span>MDM номенклатуры материалов / работ</span></div>
+              <div class="zone-fn"><span class="n">6</span><span>Сводный проектный отчёт (эскроу, %, затраты)</span></div>
+              <div class="zone-fn"><span class="n">7</span><span>Прогнозная аналитика отклонений</span></div>
+            </article>
+          </div>
+
+          <div class="section-head" style="margin-top:1.4rem">
+            <div><h2>Приоритеты инициатив УСЦ</h2></div>
+          </div>
+          <div class="tile" style="padding:.55rem 1rem">
+            <div class="init-row">
+              <div><span class="prio p0">P0</span></div>
+              <div><strong>Бесшовное списание материалов</strong></div>
+              <div>Критический</div>
+              <div>Остановка выплат, хаос в ДО</div>
+            </div>
+            <div class="init-row">
+              <div><span class="prio p0">P0</span></div>
+              <div><strong>УСЦ ↔ 1С Бухгалтерия (КС-2/КС-3)</strong></div>
+              <div>Критический</div>
+              <div>Ручной ввод, задержки закрытия</div>
+            </div>
+            <div class="init-row">
+              <div><span class="prio p0">P0</span></div>
+              <div><strong>Методология смет и справочников</strong></div>
+              <div>Критический</div>
+              <div>«Грязные» данные, ошибки себестоимости</div>
+            </div>
+            <div class="init-row">
+              <div><span class="prio p1">P1</span></div>
+              <div><strong>Автоматизация КС-2/КС-3 · М-15 · Диадок</strong></div>
+              <div>Высокий</div>
+              <div>Выплаты, бухучёт, ЭДО</div>
+            </div>
+            <div class="init-row">
+              <div><span class="prio p2">P2</span></div>
+              <div><strong>BI стройки · сводный проектный отчёт</strong></div>
+              <div>Средний</div>
+              <div>Прозрачность для топ-менеджмента</div>
+            </div>
+            <div class="init-row">
+              <div><span class="prio p3">P3</span></div>
+              <div><strong>ИИ-нормализация · исполнительная документация</strong></div>
+              <div>Плановый</div>
+              <div>Масштаб и полный цифровой контур</div>
+            </div>
+          </div>
+
+          <div class="section-head" style="margin-top:1.4rem">
+            <div><h2>Дорожная карта 2027</h2><p>Квартальные вехи; внутри квартала допустима корректировка приоритетов.</p></div>
+          </div>
+          <div class="grid-2">
+            <article class="tile">
+              <div class="roadmap-q">
+                <h4>Q1 · Закрытие базового контура</h4>
+                <ul>
+                  <li>Методология смет (Ануфриев + Сергеева)</li>
+                  <li>Базовая интеграция УСЦ ↔ 1С (Зарубина + Галюк)</li>
+                  <li>Процесс КС-2/КС-3 As-Is/To-Be (Ануфриев + Краева)</li>
+                  <li>Пилот УСЦ ↔ ESB (Зарубина + Матвеев)</li>
+                  <li>Сметы → Excel (Галюк)</li>
+                </ul>
+              </div>
+              <div class="roadmap-q" style="border-left-color:var(--eng)">
+                <h4>Q2 · Автоматизация и контроль</h4>
+                <ul>
+                  <li>Автоматизация КС-2/КС-3 на объектах</li>
+                  <li>М-15 ↔ 1С Бухгалтерия</li>
+                  <li>УСЦ ↔ Диадок (ЭДО с подрядчиками)</li>
+                  <li>УСЦ ↔ Jira (вехи / EVM)</li>
+                  <li>Пилот ИИ-нормализации справочников</li>
+                </ul>
+              </div>
+            </article>
+            <article class="tile">
+              <div class="roadmap-q" style="border-left-color:var(--data)">
+                <h4>Q3 · Прозрачность и качество данных</h4>
+                <ul>
+                  <li>BI-дашборды по строительству</li>
+                  <li>Сводный проектный отчёт онлайн</li>
+                  <li>Отчёт стоимости материалов и работ</li>
+                  <li>DQ-алерты по УСЦ</li>
+                  <li>Расширение УСЦ ↔ MacroCRM</li>
+                </ul>
+              </div>
+              <div class="roadmap-q" style="border-left-color:var(--process)">
+                <h4>Q4 · Масштабирование и AI</h4>
+                <ul>
+                  <li>Исполнительная документация в УСЦ</li>
+                  <li>ИИ-нормализация на все справочники</li>
+                  <li>Пилот NLP-анализа чатов подрядчиков</li>
+                  <li>Предиктивная аналитика отклонений</li>
+                  <li>Подготовка данных УСЦ к 1С:УХ</li>
+                </ul>
+              </div>
+            </article>
+          </div>
+
+          <div class="section-head" style="margin-top:1.25rem">
+            <div><h2>Разделение ролей по AI в стройке</h2></div>
+          </div>
+          <div class="grid-3">
+            <article class="tile"><div class="label">Бизнес-логика AI</div><h3>Ануфриев</h3><p>Промпты, правила, применимость, обучение пользователей.</p></article>
+            <article class="tile"><div class="label">AI-API / интеграции</div><h3>Зарубина</h3><p>Техническая стыковка моделей и каналов данных.</p></article>
+            <article class="tile"><div class="label">Данные для AI</div><h3>Головкова · Каша</h3><p>Качество витрин и справочников для моделей.</p></article>
+          </div>
+        </section>
+
+        <!-- 11 INVEST -->
         <section class="panel" id="panel-invest">
           <div class="section-head">
             <div>
@@ -1346,10 +1736,14 @@
                 <tr><td>П6 BI-отчёты + AI</td><td><span class="raci A">A</span></td><td><span class="raci C">C</span></td><td><span class="raci C">C</span></td><td><span class="raci R">R</span>/<span class="raci A">A</span></td><td><span class="raci I">I</span></td></tr>
                 <tr><td>П7 Экосистема (ЛК, УК)</td><td><span class="raci A">A</span></td><td><span class="raci R">R</span></td><td><span class="raci R">R</span>/<span class="raci A">A</span></td><td><span class="raci C">C</span></td><td><span class="raci I">I</span></td></tr>
                 <tr><td>П8 Корпоративный портал</td><td><span class="raci A">A</span></td><td><span class="raci R">R</span>/<span class="raci A">A</span></td><td><span class="raci C">C</span></td><td><span class="raci C">C</span></td><td><span class="raci I">I</span></td></tr>
-                <tr><td>П9 УСО полный цикл</td><td><span class="raci A">A</span></td><td><span class="raci C">C</span></td><td><span class="raci R">R</span>/<span class="raci A">A</span></td><td><span class="raci C">C</span></td><td><span class="raci I">I</span></td></tr>
+                <tr><td>П9 Управление строительным циклом</td><td><span class="raci A">A</span></td><td><span class="raci C">C</span></td><td><span class="raci R">R</span>/<span class="raci A">A</span></td><td><span class="raci C">C</span></td><td><span class="raci I">I</span></td></tr>
                 <tr><td>П10 Data Quality</td><td><span class="raci A">A</span></td><td><span class="raci C">C</span></td><td><span class="raci C">C</span></td><td><span class="raci R">R</span>/<span class="raci A">A</span></td><td><span class="raci I">I</span></td></tr>
                 <tr><td>П11 Инцидент L3</td><td><span class="raci A">A</span></td><td><span class="raci C">C</span></td><td><span class="raci R">R</span></td><td><span class="raci R">R</span></td><td><span class="raci I">I</span></td></tr>
                 <tr><td>П12 AI в бизнес-процессах</td><td><span class="raci A">A</span></td><td><span class="raci R">R</span>/<span class="raci A">A</span></td><td><span class="raci C">C</span></td><td><span class="raci C">C</span></td><td><span class="raci I">I</span></td></tr>
+                <tr><td>Т3 КС-2/КС-3 и списание материалов</td><td><span class="raci A">A</span></td><td><span class="raci C">C</span></td><td><span class="raci R">R</span>/<span class="raci A">A</span></td><td><span class="raci C">C</span></td><td><span class="raci I">I</span></td></tr>
+                <tr><td>Т7 Сметные расчёты УСЦ → Excel</td><td><span class="raci A">A</span></td><td><span class="raci C">C</span></td><td><span class="raci R">R</span>/<span class="raci A">A</span></td><td><span class="raci C">C</span></td><td><span class="raci I">I</span></td></tr>
+                <tr><td>Т8 Учёт М-15 ↔ 1С Бухгалтерия</td><td><span class="raci A">A</span></td><td><span class="raci C">C</span></td><td><span class="raci R">R</span>/<span class="raci A">A</span></td><td><span class="raci C">C</span></td><td><span class="raci I">I</span></td></tr>
+                <tr><td>П5 ИИ-контроль стройки (NLP)</td><td><span class="raci A">A</span></td><td><span class="raci R">R</span>/<span class="raci A">A</span></td><td><span class="raci R">R</span></td><td><span class="raci C">C</span></td><td><span class="raci I">I</span></td></tr>
               </tbody>
             </table>
           </div>
@@ -1366,7 +1760,7 @@
             </article>
             <article class="tile">
               <h3>Оптимизация процесса</h3>
-              <p>Процессы + AI → Продукты и инженерия → Данные. Цепочка MDM / ДО / УСО.</p>
+              <p>Процессы + AI → Продукты и инженерия → Данные. Цепочка MDM / ДО / Управление строительным циклом.</p>
             </article>
             <article class="tile">
               <h3>Сбой Datareon / Kafka</h3>
@@ -1392,7 +1786,7 @@
         name: "Нигматуллина Эльвира",
         role: "Руководитель ОБИТИ",
         meta: "Переход",
-        tasks: "Портфель проектов (MDM, ДО, BI, УСО, экосистема), качество данных, взаимодействие с топ-менеджментом.",
+        tasks: "Портфель проектов (MDM, ДО, BI, Управление строительным циклом, экосистема), качество данных, взаимодействие с топ-менеджментом.",
         hard: "1С:Бухгалтерия, БИТ.Финанс, Agile/Waterfall, Power BI, MDM, Data Quality.",
         soft: "Стратегическое мышление, управление изменениями, C-level коммуникации, бюджетирование.",
         zone: "Стратегия и бюджет департамента, KPI, взаимодействие с финансовым директором."
@@ -1402,7 +1796,7 @@
         role: "Руководитель блока процессной аналитики и AI-трансформации",
         meta: "Senior/Lead · переход из РП / экс-Нач. ООБП",
         tasks: "Методология MDM, As-Is/To-Be, учётная политика; аудит процессов на применимость AI; управление промптами и бизнес-правилами; обучение пользователей AI; оценка эффекта AI-внедрений.",
-        hard: "1С:ERP УСО, 1С:ДО, БИТ.Финанс, BPMN, As-Is/To-Be, Jira, Confluence; GigaChat / OpenAI / DeepSeek; prompt engineering; методологии внедрения AI в БП.",
+        hard: "Управление строительным циклом, 1С:ДО, БИТ.Финанс, BPMN, As-Is/To-Be, Jira, Confluence; GigaChat / OpenAI / DeepSeek; prompt engineering; методологии внедрения AI в БП.",
         soft: "Стратегическое мышление, управление изменениями, фасилитация, обучение, коммуникации.",
         zone: "Методология цифровизации, AI-трансформация процессов (бизнес-логика AI), описание и оптимизация БП, управление изменениями, обучение пользователей."
       },
@@ -1411,7 +1805,7 @@
         role: "Бизнес-аналитик",
         meta: "Middle · переход",
         tasks: "Сбор требований к данным и дашбордам, метрики и KPI, участие в формировании витрин, согласование бизнес-терминов; связка с AI по качеству данных для моделей.",
-        hard: "1С:ERP УСО, БИТ.Финанс, Power BI, Superset, ClickHouse, Jira, Confluence.",
+        hard: "Управление строительным циклом, БИТ.Финанс, Power BI, Superset, ClickHouse, Jira, Confluence.",
         soft: "Мультизадачность, самоорганизация, коммуникабельность.",
         zone: "Бизнес-требования к аналитике, метрики девелопера, данные для AI совместно с Головковой."
       },
@@ -1419,8 +1813,8 @@
         name: "Сергеева Ксения",
         role: "Старший бизнес-аналитик",
         meta: "Senior · переход",
-        tasks: "Сбор и формализация требований (MacroCRM, 1С, экосистема, портал, УСО), CJM и процессы с клиентами, приоритизация потребностей бизнеса для инженерии.",
-        hard: "1С:ERP УСО, БИТ.Финанс, MacroCRM, Битрикс24, Jira, Confluence, As-Is/To-Be.",
+        tasks: "Сбор и формализация требований (MacroCRM, 1С, экосистема, портал, Управление строительным циклом), CJM и процессы с клиентами, приоритизация потребностей бизнеса для инженерии.",
+        hard: "Управление строительным циклом, БИТ.Финанс, MacroCRM, Битрикс24, Jira, Confluence, As-Is/To-Be.",
         soft: "Аналитика требований, приоритизация, работа с заказчиками, фасилитация.",
         zone: "Бизнес-требования и процессная аналитика продуктов; связка процессов с блоком продуктов и инженерии."
       },
@@ -1437,10 +1831,10 @@
         name: "Зарубина Ирина",
         role: "Главный инженер-архитектор",
         meta: "Senior · переход",
-        tasks: "Datareon ESB, маршруты ДО, Диадок, финрез через шину; техническая интеграция AI-API; продуктовая доставка вместе с инженерией.",
-        hard: "Datareon ESB, Kafka, ClickHouse, PostgreSQL, MinIO, API, интеграции 1С, AI-API.",
+        tasks: "Datareon ESB, маршруты ДО, Диадок; Управление строительным циклом (КС, М-15, сметы); техническая интеграция AI-API; продуктовая доставка.",
+        hard: "Datareon ESB, Kafka, ClickHouse, PostgreSQL, MinIO, API, Управление строительным циклом, интеграции 1С, AI-API.",
         soft: "Архитектурное мышление, техлидерство, стратегическое планирование.",
-        zone: "Архитектура интеграций и продуктов, техдолг, стандарты API, техническая интеграция AI, менторинг Матвеева."
+        zone: "Архитектура интеграций и продуктов, УСЦ, техдолг, стандарты API, техническая интеграция AI, менторинг Матвеева."
       },
       galyuk: {
         name: "Галюк Семён",
@@ -1510,7 +1904,7 @@
     function activatePanel(id) {
       document.querySelectorAll(".panel").forEach(p => p.classList.toggle("active", p.id === "panel-" + id));
       document.querySelectorAll(".nav-btn").forEach(b => b.classList.toggle("active", b.dataset.panel === id));
-      const chipMap = { overview: "overview", org: "org", goals: "invest", invest: "invest", finance: "finance", raci: "raci" };
+      const chipMap = { overview: "overview", org: "org", goals: "initiatives", initiatives: "initiatives", usc: "usc", invest: "invest", finance: "finance", raci: "raci" };
       const chipId = chipMap[id] || null;
       document.querySelectorAll(".chip[data-jump]").forEach(c => c.classList.toggle("active", chipId !== null && c.dataset.jump === chipId));
       document.querySelector(".stage").scrollTop = 0;
