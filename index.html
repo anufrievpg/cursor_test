@@ -514,6 +514,13 @@
     .toast.show { display: block; animation: fadeUp .25s ease; }
 
     .print-person-list { display: none; }
+    .print-people-title {
+      font-size: 1rem;
+      color: var(--navy);
+      margin: 1.25rem 0 0.75rem;
+      padding-top: 0.5rem;
+      border-top: 1px solid var(--line);
+    }
 
     @media print {
       @page { size: A4 landscape; margin: 10mm 12mm; }
@@ -553,6 +560,7 @@
         page-break-inside: avoid;
         break-inside: avoid-page;
       }
+      body.print-all .panel#panel-org,
       body.print-all .panel#panel-initiatives,
       body.print-all .panel#panel-usc,
       body.print-all .panel#panel-invest,
@@ -581,7 +589,10 @@
       .org-node { cursor: default; }
       .org-node:hover { transform: none !important; }
       #personDetail { display: none !important; }
-      .print-person-list { display: block !important; }
+      .print-person-list {
+        display: block !important;
+        visibility: visible !important;
+      }
       .print-person-list .person-detail {
         display: block !important;
         page-break-inside: avoid;
@@ -1040,7 +1051,7 @@
           </div>
 
           <div class="person-detail open" id="personDetail"></div>
-          <div class="print-person-list" id="printPersonList" hidden></div>
+          <div class="print-person-list" id="printPersonList"></div>
         </section>
 
         <!-- 07 VALUE -->
@@ -2007,7 +2018,9 @@
 
     function renderPrintPeople() {
       const list = document.getElementById("printPersonList");
-      list.innerHTML = Object.values(people).map(p => `
+      list.removeAttribute("hidden");
+      list.innerHTML = `<h3 class="print-people-title">Профили команды</h3>` +
+        Object.values(people).map(p => `
         <div class="person-detail open">
           <h3>${p.name}</h3>
           <div class="meta">${p.role} · ${p.meta}</div>
