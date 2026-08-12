@@ -521,6 +521,22 @@
       padding-top: 0.5rem;
       border-top: 1px solid var(--line);
     }
+    .person-print-card {
+      margin-top: 1rem;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 1.15rem 1.25rem;
+      box-shadow: var(--shadow);
+    }
+    .person-print-card h3 { color: var(--navy); font-size: 1.1rem; margin-bottom: .25rem; }
+    .person-print-card .meta { color: var(--muted); font-size: .82rem; margin-bottom: .85rem; }
+    .person-print-card .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .person-print-card h4 {
+      font-size: .72rem; letter-spacing: .07em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: .35rem;
+    }
+    .person-print-card p { font-size: .86rem; line-height: 1.5; color: #405061; }
 
     @media print {
       @page { size: A4 landscape; margin: 10mm 12mm; }
@@ -560,7 +576,11 @@
         page-break-inside: avoid;
         break-inside: avoid-page;
       }
-      body.print-all .panel#panel-org,
+      body.print-all .panel#panel-org {
+        page-break-inside: auto;
+        break-inside: auto;
+        overflow: visible !important;
+      }
       body.print-all .panel#panel-initiatives,
       body.print-all .panel#panel-usc,
       body.print-all .panel#panel-invest,
@@ -589,12 +609,17 @@
       .org-node { cursor: default; }
       .org-node:hover { transform: none !important; }
       #personDetail { display: none !important; }
-      .print-person-list {
+      .print-person-list,
+      body.print-all .print-person-list {
         display: block !important;
         visibility: visible !important;
+        height: auto !important;
+        overflow: visible !important;
       }
-      .print-person-list .person-detail {
+      .person-print-card,
+      .print-person-list .person-print-card {
         display: block !important;
+        visibility: visible !important;
         page-break-inside: avoid;
         break-inside: avoid-page;
         margin-bottom: 1rem;
@@ -2016,12 +2041,9 @@
       node.addEventListener("click", () => showPerson(node.dataset.person));
     });
 
-    function renderPrintPeople() {
-      const list = document.getElementById("printPersonList");
-      list.removeAttribute("hidden");
-      list.innerHTML = `<h3 class="print-people-title">Профили команды</h3>` +
-        Object.values(people).map(p => `
-        <div class="person-detail open">
+    function personCardHtml(p) {
+      return `
+        <article class="person-print-card">
           <h3>${p.name}</h3>
           <div class="meta">${p.role} · ${p.meta}</div>
           <div class="cols">
@@ -2030,8 +2052,17 @@
             <div><h4>Hard skills</h4><p>${p.hard}</p></div>
             <div><h4>Soft skills</h4><p>${p.soft}</p></div>
           </div>
-        </div>`).join("");
+        </article>`;
     }
+
+    function renderPrintPeople() {
+      const order = ["nigmatullina","anufriev","sergeeva","kraeva","vladelschikova","galyuk","matveev","golovkova","dataeng","kasha","moreva"];
+      const list = document.getElementById("printPersonList");
+      list.innerHTML = `<h3 class="print-people-title">Профили команды</h3>` +
+        order.map(id => personCardHtml(people[id])).join("");
+    }
+
+    renderPrintPeople();
 
     let printPrepared = false;
     let printRestore = null;
@@ -2090,8 +2121,6 @@
         stage.style.minHeight = printRestore.stageMinHeight;
         printRestore = null;
       }
-
-      document.getElementById("printPersonList").innerHTML = "";
     }
 
     function triggerPrint() {
