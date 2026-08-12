@@ -516,66 +516,76 @@
     .print-person-list { display: none; }
 
     @media print {
-      @page { size: A4 portrait; margin: 12mm 10mm; }
-      html, body {
+      @page { size: A4 landscape; margin: 10mm 12mm; }
+      html, body, .app, .main, .stage {
         height: auto !important;
         min-height: 0 !important;
+        max-height: none !important;
         overflow: visible !important;
         background: #fff !important;
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
       }
-      .app { display: block !important; height: auto !important; min-height: 0 !important; }
+      .app { display: block !important; }
       .side, .toolbar, .toast { display: none !important; }
       header {
         position: static !important;
-        background: #fff !important;
+        background: rgba(255,255,255,.86) !important;
         backdrop-filter: none !important;
-        border-bottom: 2px solid var(--navy) !important;
-        padding: 0 0 6mm !important;
-        margin-bottom: 6mm;
+        border-bottom: 1px solid var(--line) !important;
+        padding: 0.85rem 1.25rem !important;
+        margin-bottom: 1rem;
         page-break-after: avoid;
       }
       .main { display: block !important; grid-template-columns: 1fr !important; }
-      .stage { overflow: visible !important; padding: 0 !important; max-height: none !important; }
+      .stage {
+        overflow: visible !important;
+        padding: 1.25rem 1.5rem 2.5rem !important;
+        max-height: none !important;
+      }
       body.print-all .panel {
         display: block !important;
-        max-width: none !important;
-        page-break-before: always;
-        break-before: page;
+        visibility: visible !important;
+        max-width: 1180px !important;
+        margin: 0 auto 1.5rem !important;
+        page-break-inside: avoid;
+        break-inside: avoid-page;
       }
-      body.print-all .panel:first-child {
-        page-break-before: auto;
-        break-before: auto;
+      body.print-all .panel#panel-initiatives,
+      body.print-all .panel#panel-usc,
+      body.print-all .panel#panel-invest,
+      body.print-all .panel#panel-finance,
+      body.print-all .panel#panel-raci {
+        page-break-inside: auto;
+        break-inside: auto;
       }
-      .hero, .tile, .notice, .invest-card, .effect-total, .org-canvas-wrap {
-        box-shadow: none !important;
-      }
-      .hero, .tile, .org-canvas-wrap { page-break-inside: avoid; }
+      .grid-3 { grid-template-columns: repeat(3, 1fr) !important; }
+      .grid-2 { grid-template-columns: repeat(2, 1fr) !important; }
+      .grid-4 { grid-template-columns: repeat(4, 1fr) !important; }
+      .grid-5 { grid-template-columns: repeat(5, 1fr) !important; }
+      .effect-hero { grid-template-columns: 1.2fr 1fr !important; }
+      .person-detail .cols { grid-template-columns: 1fr 1fr !important; }
+      .goal-row { grid-template-columns: 1.3fr .9fr .8fr !important; }
+      .init-row { grid-template-columns: 72px 1.4fr .9fr .85fr !important; }
       .tool-btn, .chip { display: none !important; }
       .table-wrap { max-height: none !important; overflow: visible !important; }
-      table { min-width: 0 !important; font-size: 8pt; width: 100%; }
-      th, td { padding: 4px 6px !important; }
       .org-canvas-wrap { overflow: visible !important; }
       .org-canvas {
-        min-width: 0 !important;
-        width: 100% !important;
-        min-height: 580px !important;
-        height: 580px !important;
-        transform: scale(0.78);
-        transform-origin: top left;
+        min-width: 960px !important;
+        min-height: 760px !important;
+        height: auto !important;
+        transform: none !important;
       }
-      .org-node { box-shadow: none !important; cursor: default; }
-      .org-node:hover, .org-node.active { transform: none !important; }
+      .org-node { cursor: default; }
+      .org-node:hover { transform: none !important; }
       #personDetail { display: none !important; }
       .print-person-list { display: block !important; }
       .print-person-list .person-detail {
         display: block !important;
         page-break-inside: avoid;
-        margin-bottom: 8mm;
-        box-shadow: none !important;
+        break-inside: avoid-page;
+        margin-bottom: 1rem;
       }
-      .init-row, .goal-row { page-break-inside: avoid; }
     }
 
     @media (max-width: 980px) {
@@ -622,7 +632,7 @@
         <button class="chip" data-jump="invest">Инвестцели</button>
         <button class="chip" data-jump="finance">Эффект</button>
         <button class="chip" data-jump="raci">RACI</button>
-        <button class="tool-btn" id="printBtn" title="Печать на А4">🖨 Печать</button>
+        <button class="tool-btn" id="printBtn" title="Печать на А4 альбом, все разделы">🖨 Печать</button>
         <button class="tool-btn primary" id="exportBtn" title="Скачать файл">⬇ Скачать</button>
       </div>
     </header>
@@ -2009,22 +2019,76 @@
     }
 
     let printPrepared = false;
+    let printRestore = null;
+
     function preparePrint() {
       if (printPrepared) return;
       printPrepared = true;
       document.body.classList.add("print-all");
+
+      document.querySelectorAll(".panel").forEach(p => {
+        p.dataset.wasActive = p.classList.contains("active") ? "1" : "0";
+        p.classList.add("active");
+      });
+
+      const app = document.querySelector(".app");
+      const stage = document.querySelector(".stage");
+      printRestore = {
+        htmlOverflow: document.documentElement.style.overflow,
+        bodyOverflow: document.body.style.overflow,
+        bodyHeight: document.body.style.height,
+        appHeight: app.style.height,
+        stageOverflow: stage.style.overflow,
+        stageHeight: stage.style.height,
+        stageMinHeight: stage.style.minHeight
+      };
+      document.documentElement.style.setProperty("overflow", "visible", "important");
+      document.body.style.setProperty("overflow", "visible", "important");
+      document.body.style.setProperty("height", "auto", "important");
+      app.style.setProperty("height", "auto", "important");
+      stage.style.setProperty("overflow", "visible", "important");
+      stage.style.setProperty("height", "auto", "important");
+      stage.style.setProperty("min-height", "auto", "important");
+
       renderPrintPeople();
+      void document.body.offsetHeight;
     }
+
     function cleanupPrint() {
+      if (!printPrepared) return;
       printPrepared = false;
       document.body.classList.remove("print-all");
+
+      document.querySelectorAll(".panel").forEach(p => {
+        if (p.dataset.wasActive !== "1") p.classList.remove("active");
+        delete p.dataset.wasActive;
+      });
+
+      if (printRestore) {
+        document.documentElement.style.overflow = printRestore.htmlOverflow;
+        document.body.style.overflow = printRestore.bodyOverflow;
+        document.body.style.height = printRestore.bodyHeight;
+        document.querySelector(".app").style.height = printRestore.appHeight;
+        const stage = document.querySelector(".stage");
+        stage.style.overflow = printRestore.stageOverflow;
+        stage.style.height = printRestore.stageHeight;
+        stage.style.minHeight = printRestore.stageMinHeight;
+        printRestore = null;
+      }
+
       document.getElementById("printPersonList").innerHTML = "";
     }
 
-    document.getElementById("printBtn").addEventListener("click", () => {
+    function triggerPrint() {
       preparePrint();
-      requestAnimationFrame(() => window.print());
-    });
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          setTimeout(() => window.print(), 80);
+        });
+      });
+    }
+
+    document.getElementById("printBtn").addEventListener("click", triggerPrint);
     window.addEventListener("beforeprint", preparePrint);
     window.addEventListener("afterprint", cleanupPrint);
 
