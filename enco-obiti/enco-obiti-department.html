@@ -513,7 +513,10 @@
     }
     .toast.show { display: block; animation: fadeUp .25s ease; }
 
-    .print-person-list { display: none; }
+    @media screen {
+      .print-person-list,
+      #panel-org-profiles { display: none !important; }
+    }
     .print-people-title {
       font-size: 1rem;
       color: var(--navy);
@@ -573,13 +576,18 @@
         margin: 0 auto 1.5rem !important;
         page-break-before: always;
         break-before: page;
-        page-break-inside: avoid;
-        break-inside: avoid-page;
       }
       body.print-all .panel#panel-org {
         page-break-inside: auto;
         break-inside: auto;
         overflow: visible !important;
+      }
+      body.print-all .panel#panel-org-profiles {
+        page-break-before: always;
+        break-before: page;
+        page-break-inside: auto;
+        break-inside: auto;
+        margin-top: 0 !important;
       }
       body.print-all .panel#panel-initiatives,
       body.print-all .panel#panel-usc,
@@ -611,11 +619,12 @@
       .org-node:hover { transform: none !important; }
       #personDetail { display: none !important; }
       .print-person-list,
-      body.print-all .print-person-list {
+      #panel-org-profiles {
         display: block !important;
         visibility: visible !important;
         height: auto !important;
         overflow: visible !important;
+        opacity: 1 !important;
       }
       .person-print-card,
       .print-person-list .person-print-card {
@@ -1077,7 +1086,128 @@
           </div>
 
           <div class="person-detail open" id="personDetail"></div>
-          <div class="print-person-list" id="printPersonList"></div>
+        </section>
+
+        <!-- 06b ORG PROFILES (print) -->
+        <section class="panel" id="panel-org-profiles" aria-label="Профили команды">
+          <div class="section-head">
+            <div>
+              <h2>06 · Оргструктура · Профили команды</h2>
+              <p>Развёрнутые компетенции и зоны ответственности всех участников департамента.</p>
+            </div>
+          </div>
+          <div class="print-person-list">
+            <article class="person-print-card">
+              <h3>Нигматуллина Эльвира</h3>
+              <div class="meta">Руководитель ОБИТИ · Переход</div>
+              <div class="cols">
+                <div><h4>Ключевые задачи</h4><p>Портфель проектов (MDM, ДО, BI, Управление строительным циклом, экосистема), качество данных, взаимодействие с топ-менеджментом.</p></div>
+                <div><h4>Зона ответственности</h4><p>Стратегия и бюджет департамента, KPI, взаимодействие с финансовым директором.</p></div>
+                <div><h4>Hard skills</h4><p>1С:Бухгалтерия, БИТ.Финанс, Agile/Waterfall, Power BI, MDM, Data Quality.</p></div>
+                <div><h4>Soft skills</h4><p>Стратегическое мышление, управление изменениями, C-level коммуникации, бюджетирование.</p></div>
+              </div>
+            </article>
+            <article class="person-print-card">
+              <h3>Ануфриев Павел</h3>
+              <div class="meta">Руководитель блока процессной аналитики и AI-трансформации · Senior/Lead · переход из РП / экс-Нач. ООБП</div>
+              <div class="cols">
+                <div><h4>Ключевые задачи</h4><p>Методология MDM, As-Is/To-Be, учётная политика; аудит процессов на применимость AI; управление промптами и бизнес-правилами; обучение пользователей AI; оценка эффекта AI-внедрений.</p></div>
+                <div><h4>Зона ответственности</h4><p>Методология цифровизации, AI-трансформация процессов (бизнес-логика AI), описание и оптимизация БП, управление изменениями, обучение пользователей.</p></div>
+                <div><h4>Hard skills</h4><p>Управление строительным циклом, 1С:ДО, БИТ.Финанс, BPMN, As-Is/To-Be, Jira, Confluence; GigaChat / OpenAI / DeepSeek; prompt engineering; методологии внедрения AI в БП.</p></div>
+                <div><h4>Soft skills</h4><p>Стратегическое мышление, управление изменениями, фасилитация, обучение, коммуникации.</p></div>
+              </div>
+            </article>
+            <article class="person-print-card">
+              <h3>Сергеева Ксения</h3>
+              <div class="meta">Старший бизнес-аналитик · Senior · переход</div>
+              <div class="cols">
+                <div><h4>Ключевые задачи</h4><p>Сбор и формализация требований (MacroCRM, 1С, экосистема, портал, Управление строительным циклом), CJM и процессы с клиентами, приоритизация потребностей бизнеса для инженерии.</p></div>
+                <div><h4>Зона ответственности</h4><p>Бизнес-требования и процессная аналитика продуктов; связка процессов с блоком продуктов и инженерии.</p></div>
+                <div><h4>Hard skills</h4><p>Управление строительным циклом, БИТ.Финанс, MacroCRM, Битрикс24, Jira, Confluence, As-Is/To-Be.</p></div>
+                <div><h4>Soft skills</h4><p>Аналитика требований, приоритизация, работа с заказчиками, фасилитация.</p></div>
+              </div>
+            </article>
+            <article class="person-print-card">
+              <h3>Краева Александра</h3>
+              <div class="meta">Консультант-аналитик · Junior/Middle · переход</div>
+              <div class="cols">
+                <div><h4>Ключевые задачи</h4><p>Описание процессов (CJM, MacroCRM), инструкции, обучение пользователей, участие в экосистемных проектах.</p></div>
+                <div><h4>Зона ответственности</h4><p>Процессы работы с клиентами, инструкции, обучение, поддержка портала и чат-ботов.</p></div>
+                <div><h4>Hard skills</h4><p>BPMN, MacroCRM, 1С:ДО, Confluence, Jira, описание As-Is/To-Be.</p></div>
+                <div><h4>Soft skills</h4><p>Коммуникабельность, фасилитация, написание регламентов, обучение.</p></div>
+              </div>
+            </article>
+            <article class="person-print-card">
+              <h3>Владельщикова Ирина</h3>
+              <div class="meta">Главный инженер-архитектор · Senior · переход</div>
+              <div class="cols">
+                <div><h4>Ключевые задачи</h4><p>Datareon ESB, маршруты ДО, Диадок; Управление строительным циклом (КС, М-15, сметы); техническая интеграция AI-API; продуктовая доставка.</p></div>
+                <div><h4>Зона ответственности</h4><p>Архитектура интеграций и продуктов, УСЦ, техдолг, стандарты API, техническая интеграция AI, менторинг Матвеева.</p></div>
+                <div><h4>Hard skills</h4><p>Datareon ESB, Kafka, ClickHouse, PostgreSQL, MinIO, API, Управление строительным циклом, интеграции 1С, AI-API.</p></div>
+                <div><h4>Soft skills</h4><p>Архитектурное мышление, техлидерство, стратегическое планирование.</p></div>
+              </div>
+            </article>
+            <article class="person-print-card">
+              <h3>Галюк Семён</h3>
+              <div class="meta">Инженер-разработчик · Middle · переход</div>
+              <div class="cols">
+                <div><h4>Ключевые задачи</h4><p>Интеграции по ТЗ архитектора, поддержка обменов 1С ↔ внешние системы.</p></div>
+                <div><h4>Зона ответственности</h4><p>Интеграционные сценарии, ESB, мониторинг потоков, L3 по интеграциям.</p></div>
+                <div><h4>Hard skills</h4><p>Datareon ESB, Kafka, SQL, Python, интеграции с 1С.</p></div>
+                <div><h4>Soft skills</h4><p>Сложные техзадачи, командная работа, документирование кода.</p></div>
+              </div>
+            </article>
+            <article class="person-print-card">
+              <h3>Матвеев Александр</h3>
+              <div class="meta">Инженер-разработчик · Junior · рост до Middle</div>
+              <div class="cols">
+                <div><h4>Ключевые задачи</h4><p>Разработка интеграций под руководством архитектора, обучение 1С и ESB, постепенное освоение стека.</p></div>
+                <div><h4>Зона ответственности</h4><p>Интеграционные задачи по ТЗ, L3-поддержка, трек роста до Middle за 1–2 года.</p></div>
+                <div><h4>Hard skills</h4><p>Datareon ESB, 1С-стек, MacroCRM, API, SQL, базовое тестирование.</p></div>
+                <div><h4>Soft skills</h4><p>Аналитическое мышление, обучаемость, командная работа.</p></div>
+              </div>
+            </article>
+            <article class="person-print-card">
+              <h3>Головкова Эльза</h3>
+              <div class="meta">Руководитель блока данных · Senior · переход</div>
+              <div class="cols">
+                <div><h4>Ключевые задачи</h4><p>MDM, нормализация с ИИ, Data Quality, BI-отчёты, приоритизация аналитики.</p></div>
+                <div><h4>Зона ответственности</h4><p>Архитектура данных, качество, приоритеты аналитики, данные для AI, Data-культура.</p></div>
+                <div><h4>Hard skills</h4><p>DWH ClickHouse/PostgreSQL, MinIO S3, Power BI, Superset, ETL, Data Governance.</p></div>
+                <div><h4>Soft skills</h4><p>Управление командой, стратегия, коммуникация с бизнесом по данным.</p></div>
+              </div>
+            </article>
+            <article class="person-print-card">
+              <h3>Data Engineer — вакансия</h3>
+              <div class="meta">Инженер данных · Middle/Senior · вакансия уже открыта</div>
+              <div class="cols">
+                <div><h4>Ключевые задачи</h4><p>Витрины для BI, данные из 1С, CRM, ДО в ClickHouse.</p></div>
+                <div><h4>Зона ответственности</h4><p>ETL-пайплайны, витрины, мониторинг качества, L3 по данным.</p></div>
+                <div><h4>Hard skills</h4><p>ETL ClickHouse, PostgreSQL, Kafka, MinIO, SQL, Python.</p></div>
+                <div><h4>Soft skills</h4><p>Внимание к деталям, большие объёмы данных, оптимизация запросов.</p></div>
+              </div>
+            </article>
+            <article class="person-print-card">
+              <h3>Каша Мария</h3>
+              <div class="meta">Бизнес-аналитик · Middle · переход</div>
+              <div class="cols">
+                <div><h4>Ключевые задачи</h4><p>Сбор требований к данным и дашбордам, метрики и KPI, участие в формировании витрин, согласование бизнес-терминов; связка с AI по качеству данных для моделей.</p></div>
+                <div><h4>Зона ответственности</h4><p>Бизнес-требования к аналитике, метрики девелопера, данные для AI совместно с Головковой.</p></div>
+                <div><h4>Hard skills</h4><p>Управление строительным циклом, БИТ.Финанс, Power BI, Superset, ClickHouse, Jira, Confluence.</p></div>
+                <div><h4>Soft skills</h4><p>Мультизадачность, самоорганизация, коммуникабельность.</p></div>
+              </div>
+            </article>
+            <article class="person-print-card">
+              <h3>Морева Анастасия</h3>
+              <div class="meta">Системный аналитик · Middle/Senior · переход</div>
+              <div class="cols">
+                <div><h4>Ключевые задачи</h4><p>Анализ требований к интеграциям с точки зрения данных: источники, периодичность, API-контракты.</p></div>
+                <div><h4>Зона ответственности</h4><p>Системная аналитика данных, API-контракты, документация интеграций с точки зрения данных.</p></div>
+                <div><h4>Hard skills</h4><p>Datareon, Kafka, ClickHouse, SQL, описание API, документирование потоков данных.</p></div>
+                <div><h4>Soft skills</h4><p>Системное мышление, внимание к деталям, коммуникация с инженерией и бизнесом.</p></div>
+              </div>
+            </article>
+          </div>
         </section>
 
         <!-- 07 VALUE -->
@@ -2042,29 +2172,6 @@
       node.addEventListener("click", () => showPerson(node.dataset.person));
     });
 
-    function personCardHtml(p) {
-      return `
-        <article class="person-print-card">
-          <h3>${p.name}</h3>
-          <div class="meta">${p.role} · ${p.meta}</div>
-          <div class="cols">
-            <div><h4>Ключевые задачи</h4><p>${p.tasks}</p></div>
-            <div><h4>Зона ответственности</h4><p>${p.zone}</p></div>
-            <div><h4>Hard skills</h4><p>${p.hard}</p></div>
-            <div><h4>Soft skills</h4><p>${p.soft}</p></div>
-          </div>
-        </article>`;
-    }
-
-    function renderPrintPeople() {
-      const order = ["nigmatullina","anufriev","sergeeva","kraeva","vladelschikova","galyuk","matveev","golovkova","dataeng","kasha","moreva"];
-      const list = document.getElementById("printPersonList");
-      list.innerHTML = `<h3 class="print-people-title">Профили команды</h3>` +
-        order.map(id => personCardHtml(people[id])).join("");
-    }
-
-    renderPrintPeople();
-
     let printPrepared = false;
     let printRestore = null;
 
@@ -2097,7 +2204,6 @@
       stage.style.setProperty("height", "auto", "important");
       stage.style.setProperty("min-height", "auto", "important");
 
-      renderPrintPeople();
       void document.body.offsetHeight;
     }
 
