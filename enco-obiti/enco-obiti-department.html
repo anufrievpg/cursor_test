@@ -551,6 +551,10 @@
         page-break-inside: avoid;
         break-inside: avoid-page;
       }
+      body.print-all .panel + .panel {
+        page-break-before: always;
+        break-before: page;
+      }
       body.print-all .panel#panel-initiatives,
       body.print-all .panel#panel-usc,
       body.print-all .panel#panel-invest,
