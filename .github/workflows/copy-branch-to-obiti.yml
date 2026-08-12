@@ -1,0 +1,30 @@
+name: Copy branch to OBITI
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  copy-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source branch
+        uses: actions/checkout@v4
+        with:
+          ref: cursor/obiti-department-canvas-00af
+          fetch-depth: 0
+
+      - name: Push branch to anufrievpg/OBITI
+        env:
+          OBITI_TOKEN: ${{ secrets.OBITI_PUSH_TOKEN }}
+        run: |
+          if [ -z "$OBITI_TOKEN" ]; then
+            echo "Repository secret OBITI_PUSH_TOKEN is missing."
+            echo "Create a classic PAT with repo scope and add it at:"
+            echo "https://github.com/anufrievpg/cursor_test/settings/secrets/actions"
+            exit 1
+          fi
+          git push "https://x-access-token:${OBITI_TOKEN}@github.com/anufrievpg/OBITI.git" \
+            HEAD:cursor/obiti-department-canvas-00af
