@@ -475,6 +475,12 @@
     .zone-fn .n {
       font-weight: 800; color: var(--blue);
     }
+    .zone-fn.vacancy-fn {
+      grid-template-columns: minmax(5.75rem, auto) 1fr;
+    }
+    .zone-fn.vacancy-fn .n {
+      white-space: nowrap;
+    }
     .invest-card .money {
       display: inline-flex; align-items: center;
       margin-top: .65rem; padding: .25rem .6rem;
@@ -1608,20 +1614,20 @@
               <div class="roadmap-q">
                 <h4>Q1 · Закрытие базового контура</h4>
                 <ul>
-                  <li>Методология смет (Ануфриев + Сергеева)</li>
+                  <li>Методология MDM / смет (Ануфриев + Сергеева)</li>
                   <li>Базовая интеграция УСЦ ↔ 1С (Владельщикова + Галюк)</li>
-                  <li>Процесс КС-2/КС-3 As-Is/To-Be (Ануфриев + Краева)</li>
+                  <li>КС-2/КС-3 · оплата / лимиты As-Is/To-Be</li>
                   <li>Пилот УСЦ ↔ ESB (Владельщикова + Матвеев)</li>
-                  <li>Сметы → Excel (Галюк)</li>
+                  <li>Пилот расчёта ВОР / ЛСР</li>
                 </ul>
               </div>
               <div class="roadmap-q" style="border-left-color:var(--eng)">
                 <h4>Q2 · Автоматизация и контроль</h4>
                 <ul>
-                  <li>Автоматизация КС-2/КС-3 на объектах</li>
-                  <li>М-15 ↔ 1С Бухгалтерия</li>
+                  <li>Автоматизация КС-2/КС-3 · лимиты на объектах</li>
                   <li>УСЦ ↔ Диадок (ЭДО с подрядчиками)</li>
-                  <li>УСЦ ↔ Jira (вехи / EVM)</li>
+                  <li>УСЦ ↔ PPM (вехи / EVM)</li>
+                  <li>Запуск Админ данных + DQ (центр компетенций)</li>
                   <li>Пилот ИИ-нормализации справочников</li>
                 </ul>
               </div>
@@ -1632,19 +1638,19 @@
                 <ul>
                   <li>BI-дашборды по строительству</li>
                   <li>Сводный проектный отчёт онлайн</li>
-                  <li>Отчёт стоимости материалов и работ</li>
-                  <li>DQ-алерты по УСЦ</li>
+                  <li>Витрины качества НСИ / DQ-алерты</li>
                   <li>Расширение УСЦ ↔ MacroCRM</li>
+                  <li>Пилот ОЖР с доступом подрядчиков</li>
                 </ul>
               </div>
               <div class="roadmap-q" style="border-left-color:var(--process)">
                 <h4>Q4 · Масштабирование и AI</h4>
                 <ul>
-                  <li>Исполнительная документация в УСЦ</li>
-                  <li>ИИ-нормализация на все справочники</li>
-                  <li>Пилот NLP-анализа чатов подрядчиков</li>
+                  <li>СОД (CDE) проектной / разрешительной документации</li>
+                  <li>ИИ-нормализация на все справочники УСЦ</li>
+                  <li>ВОР / ЛСР на все тендерные процедуры</li>
                   <li>Предиктивная аналитика отклонений</li>
-                  <li>Подготовка данных УСЦ к 1С:УХ</li>
+                  <li>Масштабирование ОЖР / ИД online</li>
                 </ul>
               </div>
             </article>
@@ -1921,34 +1927,34 @@
             <article class="tile">
               <div class="label">Процессы + AI · Middle/Senior</div>
               <h3>Руководитель проекта MacroCRM</h3>
-              <div class="zone-fn"><span class="n">Почему</span><span>MacroCRM — стратегический CRM-контур; без выделенного РП delivery размыт между аналитиками и инженерией</span></div>
-              <div class="zone-fn"><span class="n">Кто</span><span>Кому помогает: Краева (продуктовая аналитика), Сергеева (требования), блок инженерии (интеграции)</span></div>
-              <div class="zone-fn"><span class="n">Зачем</span><span>Ведение проекта MacroCRM: сроки, ресурсы, риски, координация с Краевой и инженерией</span></div>
-              <div class="zone-fn"><span class="n">Польза</span><span>Предсказуемый delivery CRM-инициатив, меньше хаоса в приоритетах, ускорение продуктовых релизов</span></div>
+              <div class="zone-fn vacancy-fn"><span class="n">Почему</span><span>MacroCRM — стратегический CRM-контур; без выделенного РП delivery размыт между аналитиками и инженерией</span></div>
+              <div class="zone-fn vacancy-fn"><span class="n">Кто</span><span>Кому помогает: Краева (продуктовая аналитика), Сергеева (требования), блок инженерии (интеграции)</span></div>
+              <div class="zone-fn vacancy-fn"><span class="n">Зачем</span><span>Ведение проекта MacroCRM: сроки, ресурсы, риски, координация с Краевой и инженерией</span></div>
+              <div class="zone-fn vacancy-fn"><span class="n">Польза</span><span>Предсказуемый delivery CRM-инициатив, меньше хаоса в приоритетах, ускорение продуктовых релизов</span></div>
             </article>
             <article class="tile">
               <div class="label">Инженерия · Middle</div>
               <h3>Администратор данных</h3>
-              <div class="zone-fn"><span class="n">Почему</span><span>MDM нельзя оставить только методологам: нужны ежедневное ведение справочников, валидация и права</span></div>
-              <div class="zone-fn"><span class="n">Кто</span><span>Кому помогает: Владельщикова (архитектура), Ануфриев (регламенты), бизнес-владельцы НСИ</span></div>
-              <div class="zone-fn"><span class="n">Зачем</span><span>Создание / блокировка / изменение позиций; настройка валидации; регламенты заполнения; контроль доступа</span></div>
-              <div class="zone-fn"><span class="n">Польза</span><span>«Единая версия правды» в операционном режиме; меньше ручных правок в 1С и ошибок в УО</span></div>
+              <div class="zone-fn vacancy-fn"><span class="n">Почему</span><span>MDM нельзя оставить только методологам: нужны ежедневное ведение справочников, валидация и права</span></div>
+              <div class="zone-fn vacancy-fn"><span class="n">Кто</span><span>Кому помогает: Владельщикова (архитектура), Ануфриев (регламенты), бизнес-владельцы НСИ</span></div>
+              <div class="zone-fn vacancy-fn"><span class="n">Зачем</span><span>Создание / блокировка / изменение позиций; настройка валидации; регламенты заполнения; контроль доступа</span></div>
+              <div class="zone-fn vacancy-fn"><span class="n">Польза</span><span>«Единая версия правды» в операционном режиме; меньше ручных правок в 1С и ошибок в УО</span></div>
             </article>
             <article class="tile">
               <div class="label">Инженерия · Middle</div>
               <h3>Data Quality Specialist</h3>
-              <div class="zone-fn"><span class="n">Почему</span><span>Качество данных — отдельная дисциплина; разработчики и аналитики не закрывают мониторинг и очистку</span></div>
-              <div class="zone-fn"><span class="n">Кто</span><span>Кому помогает: Администратор данных (синергия), Головкова/Каша (дашборды), бизнес по УО</span></div>
-              <div class="zone-fn"><span class="n">Зачем</span><span>Дубли / пропуски / форматы; автопроверки; алерты; SQL/ETL-очистка; Data Observability</span></div>
-              <div class="zone-fn"><span class="n">Польза</span><span>Решения на точных фактах; раннее обнаружение аномалий до влияния на выплаты и отчёты</span></div>
+              <div class="zone-fn vacancy-fn"><span class="n">Почему</span><span>Качество данных — отдельная дисциплина; разработчики и аналитики не закрывают мониторинг и очистку</span></div>
+              <div class="zone-fn vacancy-fn"><span class="n">Кто</span><span>Кому помогает: Администратор данных (синергия), Головкова/Каша (дашборды), бизнес по УО</span></div>
+              <div class="zone-fn vacancy-fn"><span class="n">Зачем</span><span>Дубли / пропуски / форматы; автопроверки; алерты; SQL/ETL-очистка; Data Observability</span></div>
+              <div class="zone-fn vacancy-fn"><span class="n">Польза</span><span>Решения на точных фактах; раннее обнаружение аномалий до влияния на выплаты и отчёты</span></div>
             </article>
             <article class="tile">
               <div class="label">Отдел данных · Middle/Senior</div>
               <h3>Data Engineer</h3>
-              <div class="zone-fn"><span class="n">Почему</span><span>С2/С3 требуют пайплайнов и витрин; без DE отдел данных упирается в ручной сбор</span></div>
-              <div class="zone-fn"><span class="n">Кто</span><span>Кому помогает: Головкова (BI/DWH), Каша (метрики), Морева (контракты потоков)</span></div>
-              <div class="zone-fn"><span class="n">Зачем</span><span>ETL 1С/CRM/ДО → ClickHouse; витрины УО и качества; мониторинг пайплайнов</span></div>
-              <div class="zone-fn"><span class="n">Польза</span><span>УО за минуты вместо дней; масштабируемый DWH под AI и стройку</span></div>
+              <div class="zone-fn vacancy-fn"><span class="n">Почему</span><span>С2/С3 требуют пайплайнов и витрин; без DE отдел данных упирается в ручной сбор</span></div>
+              <div class="zone-fn vacancy-fn"><span class="n">Кто</span><span>Кому помогает: Головкова (BI/DWH), Каша (метрики), Морева (контракты потоков)</span></div>
+              <div class="zone-fn vacancy-fn"><span class="n">Зачем</span><span>ETL 1С/CRM/ДО → ClickHouse; витрины УО и качества; мониторинг пайплайнов</span></div>
+              <div class="zone-fn vacancy-fn"><span class="n">Польза</span><span>УО за минуты вместо дней; масштабируемый DWH под AI и стройку</span></div>
             </article>
           </div>
 
