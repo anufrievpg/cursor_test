@@ -320,6 +320,37 @@
     .org-node.vacancy { border-style: dashed; opacity: .92; }
     .org-node.vacancy .name { color: var(--data); }
 
+    .eco-map {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: .65rem;
+      margin-top: 1rem;
+    }
+    .eco-map .eco-item {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: .75rem .8rem;
+      border-top: 4px solid var(--process);
+      box-shadow: var(--shadow);
+    }
+    .eco-map .eco-item .eco-num {
+      font-size: .7rem; font-weight: 800; letter-spacing: .06em;
+      text-transform: uppercase; color: var(--process); margin-bottom: .3rem;
+    }
+    .eco-map .eco-item h4 {
+      margin: 0 0 .35rem; font-size: .88rem; color: var(--navy); line-height: 1.25;
+    }
+    .eco-map .eco-item p {
+      margin: 0; font-size: .78rem; color: var(--muted); line-height: 1.35;
+    }
+    @media (max-width: 1100px) {
+      .eco-map { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 640px) {
+      .eco-map { grid-template-columns: 1fr; }
+    }
+
     .block-label {
       position: absolute;
       font-size: .7rem; font-weight: 800; letter-spacing: .08em;
@@ -592,6 +623,7 @@
         overflow: hidden !important;
       }
       body.print-all .panel#panel-vacancies,
+      body.print-all .panel#panel-ecosystem,
       body.print-all .panel#panel-org-profiles {
         page-break-before: always;
         break-before: page;
@@ -730,6 +762,7 @@
         <button class="chip" data-jump="invest">Инвестцели</button>
         <button class="chip" data-jump="finance">Эффект</button>
         <button class="chip" data-jump="vacancies">Вакансии</button>
+        <button class="chip" data-jump="ecosystem">Экосистема</button>
         <button class="chip" data-jump="raci">RACI</button>
         <button class="tool-btn" id="printBtn" title="Печать на А4 альбом, все разделы">🖨 Печать</button>
         <button class="tool-btn primary" id="exportBtn" title="Скачать файл">⬇ Скачать</button>
@@ -757,7 +790,7 @@
         </button>
         <button class="nav-btn" data-panel="directions">
           <span class="nav-num">05</span>
-          <span><div class="nav-label">Направления</div><div class="nav-sub">5 ключевых контуров</div></span>
+          <span><div class="nav-label">Направления</div><div class="nav-sub">Ключевые контуры</div></span>
         </button>
         <button class="nav-btn" data-panel="org">
           <span class="nav-num">06</span>
@@ -791,8 +824,12 @@
           <span class="nav-num">13</span>
           <span><div class="nav-label">Вакансии</div><div class="nav-sub">Почему · кто · зачем · польза</div></span>
         </button>
-        <button class="nav-btn" data-panel="raci">
+        <button class="nav-btn" data-panel="ecosystem">
           <span class="nav-num">14</span>
+          <span><div class="nav-label">Экосистема сервисов</div><div class="nav-sub">CRM-бэкофис ЭНКО</div></span>
+        </button>
+        <button class="nav-btn" data-panel="raci">
+          <span class="nav-num">15</span>
           <span><div class="nav-label">Матрица RACI</div><div class="nav-sub">Процессы + инициативы + MDM</div></span>
         </button>
       </aside>
@@ -1035,6 +1072,11 @@
             </article>
             <article class="tile">
               <div class="label">Бизнес + инновации</div>
+              <h3>Экосистема сервисов ЭНКО</h3>
+              <p>Умный дом, соседский центр, брокер, Family, вторичка «От своих» — сервисы на CRM-контуре; бэкофис в компетенции ОБИТИ.</p>
+            </article>
+            <article class="tile">
+              <div class="label">Бизнес + инновации</div>
               <h3>Data Driven</h3>
               <p>Дашборды, корпоративная отчётность, прогнозные модели. Каждая инновация проходит проверку «что говорят данные?».</p>
             </article>
@@ -1155,6 +1197,42 @@
             </div>
           </div>
 
+          <article class="tile" style="margin-top:1.15rem">
+            <div class="label">На карте ОБИТИ · бэкофис CRM</div>
+            <h3>Экосистема сервисов ЭНКО</h3>
+            <p>То, что конкуренты не копируют быстро: собственные сервисы, опирающиеся на CRM-контур. Обеспечение бэкофиса (процессы и методологии CRM — блок процессов / Ануфриев) — в компетенции ОБИТИ.</p>
+            <div class="eco-map">
+              <div class="eco-item">
+                <div class="eco-num">2.1</div>
+                <h4>Умный дом</h4>
+                <p>smarthome.enco.ru · подписка в ЭНКО.Family · домофон как крючок удержания</p>
+              </div>
+              <div class="eco-item">
+                <div class="eco-num">2.2</div>
+                <h4>Соседский центр</h4>
+                <p>Офлайн-хаб + запись, голосование, трансляции в приложении</p>
+              </div>
+              <div class="eco-item">
+                <div class="eco-num">2.3</div>
+                <h4>ЭНКО.Брокер</h4>
+                <p>Трейд-ин и вторичка внутри контура, без сторонних агентов</p>
+              </div>
+              <div class="eco-item">
+                <div class="eco-num">2.4</div>
+                <h4>ЭНКО.Family</h4>
+                <p>УК + ремонт · 5 типов · 100% маржа собственных сервисов</p>
+              </div>
+              <div class="eco-item">
+                <div class="eco-num">2.5</div>
+                <h4>Вторичка «От своих»</h4>
+                <p>Закрытый верифицированный рынок перепродажи внутри ЖК</p>
+              </div>
+            </div>
+            <div class="hero-cta" style="margin-top:.9rem">
+              <button class="tool-btn primary" data-panel="ecosystem">Развернуть экосистему →</button>
+            </div>
+          </article>
+
           <div class="person-detail open" id="personDetail"></div>
         </section>
         <!-- 06b ORG PROFILES (print) -->
@@ -1167,7 +1245,7 @@
           </div>
           <div class="print-person-list">
             <article class="person-print-card"><h3>Нигматуллина Эльвира</h3><div class="meta">Руководитель ОБИТИ · Зам. директора ДОФ по цифровизации</div><div class="cols"><div><h4>Ключевые задачи</h4><p>Стратегия цифровизации, портфель (MDM, УСЦ, BI, MacroCRM), бюджет, KPI, взаимодействие с топ-менеджментом.</p></div><div><h4>Зона ответственности</h4><p>Руководство ОБИТИ, утверждение приоритетов, RACI, согласование с директором ДОФ.</p></div><div><h4>Hard skills</h4><p>1С, БИТ.Финанс, Agile/Waterfall, Power BI, MDM, PPM.</p></div><div><h4>Soft skills</h4><p>Стратегическое мышление, управление изменениями, C-level коммуникации.</p></div></div></article>
-            <article class="person-print-card"><h3>Ануфриев Павел</h3><div class="meta">Рук. процессной аналитики и AI-трансформации · Senior/Lead</div><div class="cols"><div><h4>Ключевые задачи</h4><p>Методология MDM, регламенты справочников, AI в БП, УСЦ (методология), методология проектного управления, методика управления целями (OKR), промпты, обучение, оценка эффекта.</p></div><div><h4>Зона ответственности</h4><p>MDM-методология, AI-трансформация, оптимизация БП, со-лидерство по инициативе УСЦ (С4).</p></div><div><h4>Hard skills</h4><p>УСЦ, 1С:ДО, BPMN, PPM; GigaChat / OpenAI / DeepSeek; prompt engineering.</p></div><div><h4>Soft skills</h4><p>Фасилитация, управление изменениями, обучение.</p></div></div></article>
+                        <article class="person-print-card"><h3>Ануфриев Павел</h3><div class="meta">Рук. процессной аналитики и AI-трансформации · Senior/Lead</div><div class="cols"><div><h4>Ключевые задачи</h4><p>Методология MDM, регламенты справочников, AI в БП, УСЦ (методология), процессы и методологии CRM, методология проектного управления, методика управления целями (OKR), промпты, обучение, оценка эффекта.</p></div><div><h4>Зона ответственности</h4><p>MDM-методология, процессы и методологии CRM (без привязки к конкретной платформе), AI-трансформация, оптимизация БП, со-лидерство по инициативе УСЦ (С4).</p></div><div><h4>Hard skills</h4><p>УСЦ, 1С:ДО, BPMN, PPM; GigaChat / OpenAI / DeepSeek; prompt engineering.</p></div><div><h4>Soft skills</h4><p>Фасилитация, управление изменениями, обучение.</p></div></div></article>
             <article class="person-print-card"><h3>Сергеева Ксения</h3><div class="meta">Главный бизнес-аналитик · Senior</div><div class="cols"><div><h4>Ключевые задачи</h4><p>Требования к системам и справочникам MDM, приоритезация, связка с инженерией и MacroCRM.</p></div><div><h4>Зона ответственности</h4><p>Системные требования MDM: какие справочники, связи, обязательные атрибуты.</p></div><div><h4>Hard skills</h4><p>УСЦ, MacroCRM, Битрикс24, PPM, As-Is/To-Be.</p></div><div><h4>Soft skills</h4><p>Аналитика требований, фасилитация, работа с заказчиками.</p></div></div></article>
             <article class="person-print-card"><h3>Краева Александра</h3><div class="meta">БА / продуктовый аналитик MacroCRM · Middle</div><div class="cols"><div><h4>Ключевые задачи</h4><p>Продуктовая аналитика MacroCRM, CJM, инструкции, поддержка РП MacroCRM.</p></div><div><h4>Зона ответственности</h4><p>Процессы и продуктовая логика MacroCRM, обучение пользователей.</p></div><div><h4>Hard skills</h4><p>MacroCRM, BPMN, 1С:ДО, PPM, As-Is/To-Be.</p></div><div><h4>Soft skills</h4><p>Коммуникабельность, регламенты, обучение.</p></div></div></article>
             <article class="person-print-card"><h3>Руководитель проекта MacroCRM — вакансия</h3><div class="meta">РП MacroCRM · Middle/Senior · найм</div><div class="cols"><div><h4>Ключевые задачи</h4><p>Ведение проекта MacroCRM: сроки, ресурсы, риски, координация с Краевой и инженерией.</p></div><div><h4>Зона ответственности</h4><p>Delivery MacroCRM-инициатив в блоке процессов.</p></div><div><h4>Hard skills</h4><p>Управление проектами, PPM, CRM-внедрения, 1С-контур.</p></div><div><h4>Soft skills</h4><p>Лидерство, stakeholder management, приоритизация.</p></div></div></article>
@@ -1284,6 +1362,11 @@
               <span>Продуктовая аналитика и проектное управление CRM-контуром</span>
             </div>
             <div class="goal-row">
+              <strong>Экосистема сервисов ЭНКО · CRM-бэкофис</strong>
+              <span><span class="pill process">Процессы</span> Ануфриев · методологии CRM · <span class="pill eng">Инженерия</span> интеграции</span>
+              <span>Умный дом · соседский центр · брокер · Family · вторичка «От своих»</span>
+            </div>
+            <div class="goal-row">
               <strong>Центр компетенций по качеству данных</strong>
               <span><span class="pill eng">Инженерия</span> Админ данных + DQ Specialist</span>
               <span>Ведение НСИ + автопроверки, алерты, очистка</span>
@@ -1325,19 +1408,19 @@
               </div>
             </article>
             <article class="tile">
+              <div class="label">Клиент</div>
+              <h3>Экосистема сервисов</h3>
+              <p>Умный дом, соседский центр, брокер, Family, вторичка — CRM-бэкофис ОБИТИ.</p>
+              <div class="hero-cta" style="margin-top:.85rem">
+                <button class="tool-btn primary" data-panel="ecosystem">Открыть экосистему →</button>
+              </div>
+            </article>
+            <article class="tile">
               <div class="label">Найм</div>
               <h3>4 вакансии</h3>
               <p>Почему, кто, зачем и какая польза бизнесу.</p>
               <div class="hero-cta" style="margin-top:.85rem">
                 <button class="tool-btn primary" data-panel="vacancies">Открыть вакансии →</button>
-              </div>
-            </article>
-            <article class="tile">
-              <div class="label">Стройка</div>
-              <h3>УСЦ · 2027</h3>
-              <p>Зоны блоков и квартальная дорожная карта.</p>
-              <div class="hero-cta" style="margin-top:.85rem">
-                <button class="tool-btn primary" data-panel="usc">Положение УСЦ →</button>
               </div>
             </article>
           </div>
@@ -1481,7 +1564,7 @@
             <article class="tile">
               <div class="label">Процессы + AI</div>
               <h3>Ануфриев · Сергеева · Краева · РП MacroCRM</h3>
-              <p>MDM-методология, требования к НСИ, AI в БП, УСЦ-методология, MacroCRM-продукт.</p>
+              <p>MDM-методология, требования к НСИ, AI в БП, УСЦ-методология, процессы и методологии CRM; продукт MacroCRM — Краева + РП.</p>
             </article>
             <article class="tile">
               <div class="label">Инженерия</div>
@@ -1751,12 +1834,12 @@
             <article class="tile invest-card">
               <div class="label">Цель 7</div>
               <h3>Клиентская экосистема</h3>
-              <p><strong>Проблема:</strong> нет онлайн-сервиса статуса → ниже лояльность, выше нагрузка на колл-центр.</p>
-              <p style="margin-top:.4rem"><strong>Цель:</strong> портал + учётные системы, ЛК и чат-боты по договорам, платежам, ремонтам.</p>
+              <p><strong>Проблема:</strong> нет онлайн-сервиса статуса → ниже лояльность, выше нагрузка на колл-центр; конкуренты не могут быстро скопировать физически уникальные сервисы ЭНКО.</p>
+              <p style="margin-top:.4rem"><strong>Цель:</strong> экосистема (умный дом, соседский центр, брокер, Family, вторичка «От своих») на CRM-бэкофисе ОБИТИ + ЛК и чат-боты.</p>
               <ul>
                 <li>−30% нагрузка на колл-центр</li>
                 <li>+10–15 пунктов NPS</li>
-                <li>Быстрее гарантийные вопросы</li>
+                <li>100% выручки подписок / сервисов внутри контура</li>
               </ul>
               <div class="money">~6 млн ₽/год</div>
             </article>
@@ -2001,7 +2084,78 @@
           </div>
         </section>
 
-        <!-- 14 RACI -->
+        <!-- 14 ECOSYSTEM -->
+        <section class="panel" id="panel-ecosystem">
+          <div class="section-head">
+            <div>
+              <h2>Экосистема сервисов ЭНКО</h2>
+              <p>Сервисы, которые конкуренты не копируют быстро — у них этого нет физически. Контур опирается на инструменты CRM; обеспечение бэкофиса — компетенция ОБИТИ.</p>
+            </div>
+            <div style="display:flex;gap:.4rem;flex-wrap:wrap">
+              <span class="pill process">CRM-бэкофис</span>
+              <span class="pill process">Процессы · Ануфриев</span>
+              <span class="pill eng">Интеграции</span>
+            </div>
+          </div>
+
+          <div class="notice">
+            <strong>Роль ОБИТИ.</strong> Экосистема в значительной степени опирается на CRM. Процессы и методологии CRM (без привязки к MacroCRM или 1С CRM) — зона Ануфриева (ДИ). Delivery конкретной платформы — Краева + РП MacroCRM; инженерия закрывает интеграции.
+          </div>
+
+          <div class="grid-2">
+            <article class="tile">
+              <div class="label">2.1 · Подписка · удержание</div>
+              <h3>Собственный умный дом</h3>
+              <p><strong>smarthome.enco.ru</strong> — без посредника, 100% выручки подписки в ЭНКО.Family, независимость от Яндекса. Домофон = ежедневный аппаратный крючок удержания.</p>
+            </article>
+            <article class="tile">
+              <div class="label">2.2 · Уникально для РФ</div>
+              <h3>Соседский центр (офлайн)</h3>
+              <p>Уникальная для РФ практика; цифро-физический хаб в приложении: запись на события, голосование, трансляции. Ни у кого нет.</p>
+            </article>
+            <article class="tile">
+              <div class="label">2.3 · Замкнутый контур</div>
+              <h3>ЭНКО.Брокер</h3>
+              <p>Позволяет замкнуть трейд-ин и вторичку внутри, без сторонних агентов.</p>
+            </article>
+            <article class="tile">
+              <div class="label">2.4 · 100% маржа</div>
+              <h3>ЭНКО.Family</h3>
+              <p>УК + ремонт — собственные сервисы с 100% маржой (5 типов ремонта), а не комиссия с партнёров.</p>
+            </article>
+            <article class="tile" style="grid-column:1/-1">
+              <div class="label">2.5 · Белое пятно рынка №3</div>
+              <h3>Вторичка «От своих»</h3>
+              <p>Закрытый верифицированный рынок перепродажи внутри ЖК (история дома, обслуживания, УК) — то, чего нет у конкурентов как системного продукта.</p>
+            </article>
+          </div>
+
+          <div class="section-head" style="margin-top:1.35rem">
+            <div>
+              <h2>Бэкофис на карте ОБИТИ</h2>
+              <p>Как блоки закрывают экосистему без размытия ответственности.</p>
+            </div>
+          </div>
+          <div class="grid-3">
+            <article class="tile">
+              <div class="label">Процессы + AI</div>
+              <h3>Методология CRM</h3>
+              <p>Ануфриев — процессы и методологии CRM для сервисов экосистемы. Краева + РП — продуктовый delivery MacroCRM.</p>
+            </article>
+            <article class="tile">
+              <div class="label">Инженерия</div>
+              <h3>Интеграции и данные в контуре</h3>
+              <p>Связка CRM ↔ 1С / УК / IoT / приложение; ESB-потоки и качество мастер-данных клиента.</p>
+            </article>
+            <article class="tile">
+              <div class="label">Отдел данных</div>
+              <h3>Метрики экосистемы</h3>
+              <p>Витрины подписок, NPS, повторных продаж, загрузки сервисов Family и вторички.</p>
+            </article>
+          </div>
+        </section>
+
+        <!-- 15 RACI -->
         <section class="panel" id="panel-raci">
           <div class="section-head">
             <div>
@@ -2045,6 +2199,7 @@
                 <tr><td>О5 ОЖР / исполнительная документация</td><td><span class="raci A">A</span></td><td><span class="raci R">R</span></td><td><span class="raci R">R</span>/<span class="raci A">A</span></td><td><span class="raci C">C</span></td><td><span class="raci I">I</span></td></tr>
                 <tr><td>О6 СОД (CDE)</td><td><span class="raci A">A</span></td><td><span class="raci C">C</span></td><td><span class="raci R">R</span>/<span class="raci A">A</span></td><td><span class="raci C">C</span></td><td><span class="raci I">I</span></td></tr>
                 <tr><td>MacroCRM · delivery</td><td><span class="raci A">A</span></td><td><span class="raci R">R</span>/<span class="raci A">A</span></td><td><span class="raci C">C</span></td><td><span class="raci I">I</span></td><td><span class="raci I">I</span></td></tr>
+                <tr><td>Экосистема сервисов · CRM-бэкофис</td><td><span class="raci A">A</span></td><td><span class="raci R">R</span>/<span class="raci A">A</span></td><td><span class="raci R">R</span></td><td><span class="raci C">C</span></td><td><span class="raci I">I</span></td></tr>
                 <tr><td>Инцидент L3</td><td><span class="raci A">A</span></td><td><span class="raci C">C</span></td><td><span class="raci R">R</span></td><td><span class="raci R">R</span></td><td><span class="raci I">I</span></td></tr>
               </tbody>
             </table>
@@ -2096,10 +2251,10 @@
         name: "Ануфриев Павел",
         role: "Руководитель блока процессной аналитики и AI-трансформации",
         meta: "Senior/Lead",
-        tasks: "Методология MDM, регламенты справочников, AI в БП, методология УСЦ, методология проектного управления, методика управления целями (OKR), промпты, обучение, оценка эффекта.",
+        tasks: "Методология MDM, регламенты справочников, AI в БП, методология УСЦ, процессы и методологии CRM, методология проектного управления, методика управления целями (OKR), промпты, обучение, оценка эффекта.",
         hard: "УСЦ, 1С:ДО, BPMN, PPM; GigaChat / OpenAI / DeepSeek; prompt engineering.",
         soft: "Стратегическое мышление, фасилитация, управление изменениями, обучение.",
-        zone: "MDM-методология, AI-трансформация процессов, со-лидерство по С4 УСЦ."
+        zone: "MDM-методология, процессы и методологии CRM (без привязки к конкретной платформе), AI-трансформация процессов, со-лидерство по С4 УСЦ."
       },
       sergeeva: {
         name: "Сергеева Ксения",
@@ -2232,7 +2387,7 @@
     function activatePanel(id) {
       document.querySelectorAll(".panel").forEach(p => p.classList.toggle("active", p.id === "panel-" + id));
       document.querySelectorAll(".nav-btn").forEach(b => b.classList.toggle("active", b.dataset.panel === id));
-      const chipMap = { overview: "overview", org: "org", goals: "initiatives", initiatives: "initiatives", usc: "usc", invest: "invest", finance: "finance", vacancies: "vacancies", raci: "raci" };
+      const chipMap = { overview: "overview", org: "org", goals: "initiatives", initiatives: "initiatives", usc: "usc", invest: "invest", finance: "finance", vacancies: "vacancies", ecosystem: "ecosystem", raci: "raci" };
       const chipId = chipMap[id] || null;
       document.querySelectorAll(".chip[data-jump]").forEach(c => c.classList.toggle("active", chipId !== null && c.dataset.jump === chipId));
       document.querySelector(".stage").scrollTop = 0;
