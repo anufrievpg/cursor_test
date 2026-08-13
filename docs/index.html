@@ -573,29 +573,22 @@
         display: block !important;
         visibility: visible !important;
         max-width: 1180px !important;
-        margin: 0 auto 1.5rem !important;
+        margin: 0 auto 0 !important;
         page-break-before: always;
         break-before: page;
-      }
-      body.print-all .panel#panel-org {
         page-break-inside: auto;
         break-inside: auto;
         overflow: visible !important;
       }
+      body.print-all .panel.print-fit-page {
+        page-break-inside: avoid;
+        break-inside: avoid-page;
+        overflow: hidden !important;
+      }
       body.print-all .panel#panel-org-profiles {
         page-break-before: always;
         break-before: page;
-        page-break-inside: auto;
-        break-inside: auto;
         margin-top: 0 !important;
-      }
-      body.print-all .panel#panel-initiatives,
-      body.print-all .panel#panel-usc,
-      body.print-all .panel#panel-invest,
-      body.print-all .panel#panel-finance,
-      body.print-all .panel#panel-raci {
-        page-break-inside: auto;
-        break-inside: auto;
       }
       .grid-3 { grid-template-columns: repeat(3, 1fr) !important; }
       .grid-2 { grid-template-columns: repeat(2, 1fr) !important; }
@@ -613,6 +606,8 @@
         min-width: 960px !important;
         min-height: 760px !important;
         height: auto !important;
+      }
+      body.print-all .panel.print-fit-page .org-canvas {
         transform: none !important;
       }
       .org-node { cursor: default; }
@@ -626,12 +621,42 @@
         overflow: visible !important;
         opacity: 1 !important;
       }
+
+      /* Не резать карточки/блоки между страницами — переносить целиком */
+      .hero,
+      .tile,
+      .notice,
+      .section-head,
+      .letter-card,
+      .principle,
+      .benefit,
+      .org-canvas-wrap,
       .person-print-card,
-      .print-person-list .person-print-card {
+      .print-person-list .person-print-card,
+      .invest-card,
+      .effect-total,
+      .effect-hero,
+      .calc-block,
+      .roadmap-q,
+      .init-row,
+      .goal-row,
+      .table-wrap,
+      .audience > .tile,
+      .grid-2 > .tile,
+      .grid-3 > .tile,
+      .grid-4 > .tile,
+      .grid-5 > .tile {
+        page-break-inside: avoid !important;
+        break-inside: avoid-page !important;
+        -webkit-column-break-inside: avoid !important;
+      }
+      .section-head {
+        page-break-after: avoid;
+        break-after: avoid-page;
+      }
+      .person-print-card {
         display: block !important;
         visibility: visible !important;
-        page-break-inside: avoid;
-        break-inside: avoid-page;
         margin-bottom: 1rem;
       }
     }
@@ -2175,6 +2200,52 @@
     let printPrepared = false;
     let printRestore = null;
 
+    function mmToPx(mm) {
+      return (mm * 96) / 25.4;
+    }
+
+    function clearPrintFit(panel) {
+      panel.classList.remove("print-fit-page", "print-multipage");
+      panel.style.zoom = "";
+      panel.style.transform = "";
+      panel.style.transformOrigin = "";
+      panel.style.width = "";
+      panel.style.height = "";
+      panel.style.maxHeight = "";
+    }
+
+    function fitPanelsForPrint() {
+      // A4 landscape printable area: 297×210 mm, margins 12×10 mm → ~273×190 mm
+      const pageW = mmToPx(273);
+      const pageH = mmToPx(190);
+      const minScale = 0.58;
+
+      document.querySelectorAll(".panel").forEach(panel => {
+        clearPrintFit(panel);
+        void panel.offsetHeight;
+        const w = Math.max(panel.scrollWidth, panel.offsetWidth);
+        const h = Math.max(panel.scrollHeight, panel.offsetHeight);
+        if (!h || !w) {
+          panel.classList.add("print-multipage");
+          return;
+        }
+
+        const scale = Math.min(pageW / w, pageH / h, 1);
+        if (h <= pageH * 1.01 && w <= pageW * 1.02) {
+          panel.classList.add("print-fit-page");
+          return;
+        }
+        if (scale >= minScale) {
+          panel.style.zoom = String(scale);
+          panel.classList.add("print-fit-page");
+          return;
+        }
+        // Слишком высокий раздел: оставляем многостраничным,
+        // карточки/блоки не режем (break-inside: avoid в CSS)
+        panel.classList.add("print-multipage");
+      });
+    }
+
     function preparePrint() {
       if (printPrepared) return;
       printPrepared = true;
@@ -2183,6 +2254,7 @@
       document.querySelectorAll(".panel").forEach(p => {
         p.dataset.wasActive = p.classList.contains("active") ? "1" : "0";
         p.classList.add("active");
+        clearPrintFit(p);
       });
 
       const app = document.querySelector(".app");
@@ -2205,6 +2277,8 @@
       stage.style.setProperty("min-height", "auto", "important");
 
       void document.body.offsetHeight;
+      fitPanelsForPrint();
+      void document.body.offsetHeight;
     }
 
     function cleanupPrint() {
@@ -2215,6 +2289,7 @@
       document.querySelectorAll(".panel").forEach(p => {
         if (p.dataset.wasActive !== "1") p.classList.remove("active");
         delete p.dataset.wasActive;
+        clearPrintFit(p);
       });
 
       if (printRestore) {
@@ -2234,7 +2309,7 @@
       preparePrint();
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
-          setTimeout(() => window.print(), 80);
+          setTimeout(() => window.print(), 120);
         });
       });
     }
