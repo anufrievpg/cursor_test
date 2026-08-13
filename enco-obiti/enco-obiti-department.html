@@ -320,37 +320,6 @@
     .org-node.vacancy { border-style: dashed; opacity: .92; }
     .org-node.vacancy .name { color: var(--data); }
 
-    .eco-map {
-      display: grid;
-      grid-template-columns: repeat(5, minmax(0, 1fr));
-      gap: .65rem;
-      margin-top: 1rem;
-    }
-    .eco-map .eco-item {
-      background: #fff;
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      padding: .75rem .8rem;
-      border-top: 4px solid var(--process);
-      box-shadow: var(--shadow);
-    }
-    .eco-map .eco-item .eco-num {
-      font-size: .7rem; font-weight: 800; letter-spacing: .06em;
-      text-transform: uppercase; color: var(--process); margin-bottom: .3rem;
-    }
-    .eco-map .eco-item h4 {
-      margin: 0 0 .35rem; font-size: .88rem; color: var(--navy); line-height: 1.25;
-    }
-    .eco-map .eco-item p {
-      margin: 0; font-size: .78rem; color: var(--muted); line-height: 1.35;
-    }
-    @media (max-width: 1100px) {
-      .eco-map { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    }
-    @media (max-width: 640px) {
-      .eco-map { grid-template-columns: 1fr; }
-    }
-
     .block-label {
       position: absolute;
       font-size: .7rem; font-weight: 800; letter-spacing: .08em;
@@ -1196,42 +1165,6 @@
               </div>
             </div>
           </div>
-
-          <article class="tile" style="margin-top:1.15rem">
-            <div class="label">На карте ОБИТИ · бэкофис CRM</div>
-            <h3>Экосистема сервисов ЭНКО</h3>
-            <p>То, что конкуренты не копируют быстро: собственные сервисы, опирающиеся на CRM-контур. Обеспечение бэкофиса (процессы и методологии CRM — блок процессов / Ануфриев) — в компетенции ОБИТИ.</p>
-            <div class="eco-map">
-              <div class="eco-item">
-                <div class="eco-num">2.1</div>
-                <h4>Умный дом</h4>
-                <p>smarthome.enco.ru · подписка в ЭНКО.Family · домофон как крючок удержания</p>
-              </div>
-              <div class="eco-item">
-                <div class="eco-num">2.2</div>
-                <h4>Соседский центр</h4>
-                <p>Офлайн-хаб + запись, голосование, трансляции в приложении</p>
-              </div>
-              <div class="eco-item">
-                <div class="eco-num">2.3</div>
-                <h4>ЭНКО.Брокер</h4>
-                <p>Трейд-ин и вторичка внутри контура, без сторонних агентов</p>
-              </div>
-              <div class="eco-item">
-                <div class="eco-num">2.4</div>
-                <h4>ЭНКО.Family</h4>
-                <p>УК + ремонт · 5 типов · 100% маржа собственных сервисов</p>
-              </div>
-              <div class="eco-item">
-                <div class="eco-num">2.5</div>
-                <h4>Вторичка «От своих»</h4>
-                <p>Закрытый верифицированный рынок перепродажи внутри ЖК</p>
-              </div>
-            </div>
-            <div class="hero-cta" style="margin-top:.9rem">
-              <button class="tool-btn primary" data-panel="ecosystem">Развернуть экосистему →</button>
-            </div>
-          </article>
 
           <div class="person-detail open" id="personDetail"></div>
         </section>
