@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Кроссоверы 4WD — поиск в радиусе 400 км от Тюмени</title>
+  <style>
+    :root {
+      --bg: #0f1419;
+      --surface: #1a2332;
+      --surface-2: #243044;
+      --text: #e8edf4;
+      --text-muted: #8b9cb3;
+      --accent: #3b82f6;
+      --accent-hover: #60a5fa;
+      --success: #22c55e;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --border: #2d3a4f;
+      --radius: 12px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 2rem 1rem;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    header {
+      margin-bottom: 2rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    h1 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.02em;
+    }
+
+    .subtitle {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .meta {
+      margin-top: 0.75rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      margin-bottom: 1.25rem;
+    }
+
+    h2 {
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+      color: var(--text);
+    }
+
+    h3 {
+      font-size: 1rem;
+      margin: 1.25rem 0 0.75rem;
+      color: var(--text-muted);
+    }
+
+    p { margin-bottom: 0.75rem; }
+
+    .alert {
+      background: rgba(245, 158, 11, 0.12);
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1rem;
+    }
+
+    .alert-success {
+      background: rgba(34, 197, 94, 0.1);
+      border-color: rgba(34, 197, 94, 0.35);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+
+    th, td {
+      padding: 0.65rem 0.75rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+
+    th {
+      background: var(--surface-2);
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    tr:last-child td { border-bottom: none; }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: var(--accent-hover);
+      text-decoration: underline;
+    }
+
+    .link-btn {
+      display: inline-block;
+      background: var(--accent);
+      color: #fff !important;
+      padding: 0.35rem 0.75rem;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      text-decoration: none !important;
+      margin-top: 0.25rem;
+    }
+
+    .link-btn:hover {
+      background: var(--accent-hover);
+      color: #fff !important;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .badge-ok { background: rgba(34, 197, 94, 0.2); color: #4ade80; }
+    .badge-warn { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
+    .badge-fail { background: rgba(239, 68, 68, 0.2); color: #f87171; }
+
+    .criteria-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 0.75rem;
+    }
+
+    .criteria-item {
+      background: var(--surface-2);
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+    }
+
+    .criteria-item strong {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-bottom: 0.25rem;
+    }
+
+    .card-list {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .card {
+      background: var(--surface-2);
+      border-radius: 8px;
+      padding: 1.25rem;
+      border: 1px solid var(--border);
+    }
+
+    .card-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 0.5rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .card-title {
+      font-weight: 600;
+      font-size: 1.05rem;
+    }
+
+    .card-price {
+      font-weight: 700;
+      color: var(--accent);
+      font-size: 1.1rem;
+    }
+
+    .card-specs {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 0.5rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 0.75rem;
+    }
+
+    .card-specs span strong { color: var(--text); }
+
+    .card-links a {
+      margin-right: 0.5rem;
+    }
+
+    ul { padding-left: 1.25rem; margin-bottom: 0.75rem; }
+    li { margin-bottom: 0.35rem; }
+
+    footer {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      margin-top: 2rem;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Кроссоверы 4WD в радиусе 400 км от Тюмени</h1>
+      <p class="subtitle">Дизель или гибрид · левый руль · пробег до 50 000 км · бюджет до 3 000 000 ₽</p>
+      <p class="meta">Обновлено: 28 июля 2026 · Не российские / не китайские бренды</p>
+    </header>
+
+    <section>
+      <h2>Критерии поиска</h2>
+      <div class="criteria-grid">
+        <div class="criteria-item"><strong>Кузов</strong>Кроссовер / SUV</div>
+        <div class="criteria-item"><strong>Привод</strong>Полный (4WD)</div>
+        <div class="criteria-item"><strong>Двигатель</strong>Дизель или гибрид</div>
+        <div class="criteria-item"><strong>Руль</strong>Левый</div>
+        <div class="criteria-item"><strong>Пробег</strong>До 50 000 км</div>
+        <div class="criteria-item"><strong>Бюджет</strong>До 3 000 000 ₽</div>
+        <div class="criteria-item"><strong>География</strong>До 400 км от Тюмени</div>
+        <div class="criteria-item"><strong>Города в радиусе</strong>Тюмень, Екатеринбург (~330 км), Курган (~320 км), Челябинск (~400 км)</div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Главный вывод</h2>
+      <div class="alert">
+        <strong>Все критерии вместе почти не сочетаются.</strong> На рынке в радиусе 400 км либо дизель с левым рулём и низким пробегом, но чуть выше бюджета, либо гибрид с левым рулём — но с большим пробегом или ценой от 3,5–4 млн ₽.
+      </div>
+      <div class="alert alert-success">
+        <strong>Лучший вариант:</strong> Volkswagen Tiguan II 2.0 TDI 4Motion, 2022 — Тюмень, 40 000 км, левый руль, дизель, 4WD. Цена ~3 250 000 ₽ (торг до 3 млн реалистичен).
+      </div>
+      <p><strong>Гибрид + левый руль + 4WD + ≤50 тыс. км + ≤3 млн</strong> — готовых вариантов в регионе <em>нет</em>. Близкие гибриды с 4WD в бюджете — в основном праворульный импорт из Японии.</p>
+    </section>
+
+    <section>
+      <h2>Ближайшие совпадения (левый руль)</h2>
+      <div class="card-list">
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Volkswagen Tiguan II 2.0 TDI 4Motion, 2022</span>
+            <span class="card-price">3 250 000 ₽</span>
+          </div>
+          <p><span class="badge badge-warn">+250 тыс. к бюджету</span> <span class="badge badge-ok">Лучший матч</span></p>
+          <div class="card-specs">
+            <span><strong>Город:</strong> Тюмень (0 км)</span>
+            <span><strong>Пробег:</strong> 40 000 км</span>
+            <span><strong>Двигатель:</strong> Дизель 2.0, 150 л.с.</span>
+            <span><strong>Привод:</strong> 4Motion (полный)</span>
+            <span><strong>Руль:</strong> Левый</span>
+            <span><strong>КПП:</strong> Автомат</span>
+          </div>
+          <p>Единственный вариант, который закрывает почти все критерии. Торг 200–250 тыс. ₽ может уложить в 3 млн.</p>
+          <div class="card-links">
+            <a class="link-btn" href="https://tyumen.mbib.ru/volkswagen/tiguan/ii/suv/used/28892943-3871a3" target="_blank" rel="noopener">Объявление на mbib.ru</a>
+            <a href="https://auto.ru/tyumen/cars/volkswagen/tiguan/used/" target="_blank" rel="noopener">Все Tiguan в Тюмени (Auto.ru)</a>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Skoda Kodiaq I 2.0 TDI 4WD, 2020</span>
+            <span class="card-price">3 087 000 ₽</span>
+          </div>
+          <p><span class="badge badge-fail">Пробег 124 825 км</span> <span class="badge badge-ok">В бюджете</span></p>
+          <div class="card-specs">
+            <span><strong>Город:</strong> Тюмень</span>
+            <span><strong>Пробег:</strong> 124 825 км</span>
+            <span><strong>Двигатель:</strong> Дизель 2.0, 150 л.с.</span>
+            <span><strong>Привод:</strong> Полный</span>
+            <span><strong>Руль:</strong> Левый</span>
+          </div>
+          <div class="card-links">
+            <a class="link-btn" href="https://tyumen.mbib.ru/skoda/kodiaq/i/suv/used/28792802-ae4576" target="_blank" rel="noopener">Объявление на mbib.ru</a>
+            <a href="https://auto.drom.ru/tyumen/skoda/kodiaq/" target="_blank" rel="noopener">Kodiaq на Drom</a>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Volkswagen Tiguan II 2.0 TDI 4Motion Sportline, 2018</span>
+            <span class="card-price">2 760 000 – 2 972 000 ₽</span>
+          </div>
+          <p><span class="badge badge-warn">Пробег 88 603 км</span> <span class="badge badge-ok">В бюджете</span></p>
+          <div class="card-specs">
+            <span><strong>Город:</strong> Тюмень</span>
+            <span><strong>Пробег:</strong> 88 603 км</span>
+            <span><strong>Двигатель:</strong> Дизель 2.0, 150 л.с.</span>
+            <span><strong>Привод:</strong> 4WD</span>
+            <span><strong>Руль:</strong> Левый</span>
+            <span><strong>Комплектация:</strong> Sportline</span>
+          </div>
+          <div class="card-links">
+            <a class="link-btn" href="https://auto.drom.ru/tyumen/volkswagen/tiguan/224387297.html" target="_blank" rel="noopener">Drom — 2 760 000 ₽</a>
+            <a class="link-btn" href="https://auto.drom.ru/tyumen/volkswagen/tiguan/886938159.html" target="_blank" rel="noopener">Drom — другой 2018 TDI</a>
+            <a href="https://tyumen.mbib.ru/volkswagen/tiguan/ii/suv/used/" target="_blank" rel="noopener">Tiguan на mbib.ru</a>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Skoda Kodiaq I 2.0 TDI 4WD, 2019</span>
+            <span class="card-price">~1 427 800 ₽ (кредит)</span>
+          </div>
+          <p><span class="badge badge-fail">Пробег 154 500 км</span></p>
+          <div class="card-specs">
+            <span><strong>Город:</strong> Тюмень</span>
+            <span><strong>Пробег:</strong> 154 500 км</span>
+            <span><strong>Двигатель:</strong> Дизель 2.0, 150 л.с.</span>
+            <span><strong>Привод:</strong> Полный</span>
+            <span><strong>Руль:</strong> Левый</span>
+          </div>
+          <div class="card-links">
+            <a class="link-btn" href="https://autocentr-city.ru/catalog/skoda/kodiaq/94507" target="_blank" rel="noopener">Автоцентр City</a>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">BMW X3 20d xDrive III (G01), 2018–2020</span>
+            <span class="card-price">от 3 274 000 ₽</span>
+          </div>
+          <p><span class="badge badge-fail">Выше бюджета</span> <span class="badge badge-fail">Пробег 83–195 тыс. км</span></p>
+          <div class="card-specs">
+            <span><strong>Город:</strong> Тюмень / Екатеринбург</span>
+            <span><strong>Двигатель:</strong> Дизель 2.0, 190 л.с.</span>
+            <span><strong>Привод:</strong> xDrive</span>
+            <span><strong>Руль:</strong> Левый</span>
+          </div>
+          <div class="card-links">
+            <a class="link-btn" href="https://auto.ru/tyumen/cars/bmw/x3-20d/21029610/used/" target="_blank" rel="noopener">X3 20d в Тюмени (Auto.ru)</a>
+            <a href="https://auto.ru/cars/used/sale/bmw/x3/1131830428-627a83f5/" target="_blank" rel="noopener">X3 2020, 83 тыс. км — 5 млн (Auto.ru)</a>
+            <a href="https://ekaterinburg.mbib.ru/bmw/x3/suv/used/29188482-473af6" target="_blank" rel="noopener">X3 2020, Екб — mbib.ru</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Гибриды с левым рулём</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Модель</th>
+            <th>Город</th>
+            <th>Цена</th>
+            <th>Пробег</th>
+            <th>Статус</th>
+            <th>Ссылки</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Lexus NX300h AWD, 2015</td>
+            <td>Тюмень</td>
+            <td>~3 000 000 ₽</td>
+            <td>~165 000 км</td>
+            <td><span class="badge badge-fail">Пробег</span></td>
+            <td>
+              <a href="https://auto.drom.ru/tyumen/lexus/nx300h/" target="_blank" rel="noopener">Drom Тюмень</a><br>
+              <a href="https://auto.ru/tyumen/cars/lexus/nx-300h/used/" target="_blank" rel="noopener">Auto.ru Тюмень</a>
+            </td>
+          </tr>
+          <tr>
+            <td>Lexus NX300h AWD, 2014</td>
+            <td>Екатеринбург (~330 км)</td>
+            <td>2 600 000 – 2 949 000 ₽</td>
+            <td>117 000 – 188 000 км</td>
+            <td><span class="badge badge-fail">Пробег</span></td>
+            <td>
+              <a href="https://auto.drom.ru/ekaterinburg/lexus/nx300h/" target="_blank" rel="noopener">Drom Екб</a><br>
+              <a href="https://auto.ru/ekaterinburg/cars/lexus/nx-300h/all/drive-4x4_wheel/" target="_blank" rel="noopener">Auto.ru Екб 4WD</a>
+            </td>
+          </tr>
+          <tr>
+            <td>Lexus NX300h AWD Executive, 2018</td>
+            <td>Тюмень</td>
+            <td>~4 000 000 ₽</td>
+            <td>85 000 км</td>
+            <td><span class="badge badge-fail">Цена</span></td>
+            <td>
+              <a href="https://auto.drom.ru/tyumen/lexus/nx300h/757848950.html" target="_blank" rel="noopener">Drom — NX 2018</a>
+            </td>
+          </tr>
+          <tr>
+            <td>Toyota RAV4 hybrid AWD</td>
+            <td>Импорт (Корея)</td>
+            <td>от ~6 000 000 ₽</td>
+            <td>низкий</td>
+            <td><span class="badge badge-fail">Цена</span></td>
+            <td>
+              <a href="https://jpkorea.ru/auto/toyota/rav4/2442548/" target="_blank" rel="noopener">JP Korea — RAV4 hybrid</a><br>
+              <a href="https://ekaterinburg.mbib.ru/toyota/rav4/suv/new/28947239-310081" target="_blank" rel="noopener">Новый RAV4 hybrid Екб</a>
+            </td>
+          </tr>
+          <tr>
+            <td>Toyota RAV4 2.0 AWD (бензин, не гибрид)</td>
+            <td>Екатеринбург</td>
+            <td>2 975 000 ₽</td>
+            <td>135 961 км</td>
+            <td><span class="badge badge-fail">Не гибрид, пробег</span></td>
+            <td>
+              <a href="https://ekt.avtomir.ru/used-cars/26844624-5919-11f1-add1-00155dd23101/" target="_blank" rel="noopener">Автомир Екб</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Для сравнения: правый руль (не подходит по критерию)</h2>
+      <p style="color: var(--text-muted); margin-bottom: 1rem;">По цене и пробегу близко, но руль правый — импорт из Японии.</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Модель</th>
+            <th>Город</th>
+            <th>Цена</th>
+            <th>Пробег</th>
+            <th>Руль</th>
+            <th>Ссылки</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Mitsubishi Eclipse Cross Diesel Turbo 4WD, 2019</td>
+            <td>Екатеринбург</td>
+            <td>2 201 000 ₽</td>
+            <td>50 000 км</td>
+            <td><span class="badge badge-fail">Правый</span></td>
+            <td><a href="https://atmkorp.ru/goods/102996573/krossover-turbo-mitsubishi" target="_blank" rel="noopener">ATM Корп</a></td>
+          </tr>
+          <tr>
+            <td>Mitsubishi Eclipse Cross Diesel Turbo 4WD, 2020</td>
+            <td>Екатеринбург</td>
+            <td>2 237 000 ₽</td>
+            <td>50 000 км</td>
+            <td><span class="badge badge-fail">Правый</span></td>
+            <td><a href="https://atmkorp.ru/goods/102997725/krossover-turbo-mitsubishi" target="_blank" rel="noopener">ATM Корп</a></td>
+          </tr>
+          <tr>
+            <td>Mitsubishi Eclipse Cross PHEV 4WD, 2020</td>
+            <td>Екатеринбург</td>
+            <td>2 519 000 ₽</td>
+            <td>59 000 км</td>
+            <td><span class="badge badge-fail">Правый</span></td>
+            <td><a href="https://atmkorp.ru/goods/102979357/krossover-gibrid-mitsubishi" target="_blank" rel="noopener">ATM Корп</a></td>
+          </tr>
+          <tr>
+            <td>Subaru XV Advance Hybrid 4WD, 2020</td>
+            <td>Екатеринбург</td>
+            <td>1 663 000 ₽</td>
+            <td>16 000 км</td>
+            <td><span class="badge badge-fail">Правый</span></td>
+            <td><a href="https://atmkorp.ru/goods/98747607/krossover-gibrid-subaru" target="_blank" rel="noopener">ATM Корп</a></td>
+          </tr>
+          <tr>
+            <td>Toyota Yaris Cross Hybrid, 2020</td>
+            <td>Екатеринбург</td>
+            <td>1 840 000 ₽</td>
+            <td>низкий</td>
+            <td><span class="badge badge-fail">Правый</span></td>
+            <td><a href="https://auto.ru/cars/used/sale/toyota/yaris_cross/1133304720-99b6d2e9/" target="_blank" rel="noopener">Auto.ru</a></td>
+          </tr>
+        </tbody>
+      </table>
+      <p style="margin-top: 1rem;">
+        <a href="https://atmkorp.ru/groups/1069613/4wd-polniy-privod-krossover-hybrid-gibrid" target="_blank" rel="noopener">Все гибридные 4WD кроссоверы ATM Корп (Екб)</a>
+      </p>
+    </section>
+
+    <section>
+      <h2>Сводная таблица</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Автомобиль</th>
+            <th>Город</th>
+            <th>Цена</th>
+            <th>Пробег</th>
+            <th>Двигатель</th>
+            <th>4WD</th>
+            <th>Левый руль</th>
+            <th>Ссылка</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>VW Tiguan II TDI 4Motion, 2022</strong></td>
+            <td>Тюмень</td>
+            <td>3 250 000 ₽</td>
+            <td>40 000 км</td>
+            <td>Дизель</td>
+            <td>✓</td>
+            <td>✓</td>
+            <td><a href="https://tyumen.mbib.ru/volkswagen/tiguan/ii/suv/used/28892943-3871a3" target="_blank" rel="noopener">Открыть</a></td>
+          </tr>
+          <tr>
+            <td>Skoda Kodiaq TDI 4WD, 2020</td>
+            <td>Тюмень</td>
+            <td>3 087 000 ₽</td>
+            <td>124 825 км</td>
+            <td>Дизель</td>
+            <td>✓</td>
+            <td>✓</td>
+            <td><a href="https://tyumen.mbib.ru/skoda/kodiaq/i/suv/used/28792802-ae4576" target="_blank" rel="noopener">Открыть</a></td>
+          </tr>
+          <tr>
+            <td>VW Tiguan II TDI 4Motion, 2018</td>
+            <td>Тюмень</td>
+            <td>2 760 000 ₽</td>
+            <td>88 603 км</td>
+            <td>Дизель</td>
+            <td>✓</td>
+            <td>✓</td>
+            <td><a href="https://auto.drom.ru/tyumen/volkswagen/tiguan/224387297.html" target="_blank" rel="noopener">Открыть</a></td>
+          </tr>
+          <tr>
+            <td>Lexus NX300h AWD, 2015</td>
+            <td>Тюмень</td>
+            <td>~3 000 000 ₽</td>
+            <td>~165 000 км</td>
+            <td>Гибрид</td>
+            <td>✓</td>
+            <td>✓</td>
+            <td><a href="https://auto.drom.ru/tyumen/lexus/nx300h/" target="_blank" rel="noopener">Открыть</a></td>
+          </tr>
+          <tr>
+            <td>BMW X3 20d xDrive, 2020</td>
+            <td>Тюмень</td>
+            <td>5 000 000 ₽</td>
+            <td>83 190 км</td>
+            <td>Дизель</td>
+            <td>✓</td>
+            <td>✓</td>
+            <td><a href="https://auto.ru/cars/used/sale/bmw/x3/1131830428-627a83f5/" target="_blank" rel="noopener">Открыть</a></td>
+          </tr>
+          <tr>
+            <td>Mitsubishi Eclipse Cross Diesel</td>
+            <td>Екб</td>
+            <td>2 201 000 ₽</td>
+            <td>50 000 км</td>
+            <td>Дизель</td>
+            <td>✓</td>
+            <td>✗</td>
+            <td><a href="https://atmkorp.ru/goods/102996573/krossover-turbo-mitsubishi" target="_blank" rel="noopener">Открыть</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Рекомендации</h2>
+      <h3>Вариант A — приоритет дизель + левый руль + низкий пробег</h3>
+      <p><strong>VW Tiguan II TDI 4Motion 2022</strong> в Тюмени. Торг с 3,25 до 3,0 млн реалистичен.</p>
+      <p><a class="link-btn" href="https://tyumen.mbib.ru/volkswagen/tiguan/ii/suv/used/28892943-3871a3" target="_blank" rel="noopener">Открыть объявление Tiguan 2022</a></p>
+
+      <h3>Вариант B — строгий бюджет 3 млн</h3>
+      <p><strong>Tiguan 2018 TDI</strong> (~2,76 млн) или <strong>Kodiaq 2020 TDI</strong> (~3,09 млн), пробег 88–125 тыс. км.</p>
+
+      <h3>Вариант C — приоритет гибрид</h3>
+      <p><strong>Lexus NX300h</strong> с пробегом 150+ тыс. км (~3 млн) или бюджет 3,5–4 млн за рестайлинг 2018–2019.</p>
+
+      <h3>Поиск новых объявлений</h3>
+      <ul>
+        <li><a href="https://auto.ru/tyumen/cars/all/?drive=ALL_WHEEL_DRIVE&engine_diesel=1" target="_blank" rel="noopener">Auto.ru — Тюмень, 4WD, дизель</a></li>
+        <li><a href="https://auto.ru/ekaterinburg/cars/all/?drive=ALL_WHEEL_DRIVE&engine_diesel=1" target="_blank" rel="noopener">Auto.ru — Екатеринбург, 4WD, дизель</a></li>
+        <li><a href="https://auto.drom.ru/tyumen/all/?drive=4WD" target="_blank" rel="noopener">Drom — Тюмень, полный привод</a></li>
+        <li><a href="https://auto.drom.ru/ekaterinburg/all/?drive=4WD" target="_blank" rel="noopener">Drom — Екатеринбург, полный привод</a></li>
+        <li><a href="https://auto.ru/tyumen/cars/volkswagen/tiguan/used/" target="_blank" rel="noopener">Auto.ru — все Tiguan в Тюмени</a></li>
+        <li><a href="https://auto.drom.ru/tyumen/volkswagen/tiguan/" target="_blank" rel="noopener">Drom — Tiguan в Тюмени</a></li>
+        <li><a href="https://auto.drom.ru/tyumen/lexus/nx300h/" target="_blank" rel="noopener">Drom — Lexus NX300h в Тюмени</a></li>
+      </ul>
+    </section>
+
+    <footer>
+      Цены и наличие могут измениться. Перед покупкой проверьте актуальность объявлений и историю автомобиля по VIN.
+    </footer>
+  </div>
+</body>
+</html>
