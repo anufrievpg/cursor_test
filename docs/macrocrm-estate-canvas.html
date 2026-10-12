@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MacroCRM · ЖК → дома</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --navy: #122A4B;
+      --blue: #0072BC;
+      --bg: #EAEFF2;
+      --surface: #fff;
+      --line: #D5DEE8;
+      --muted: #758795;
+      --complex: #0072BC;
+      --house: #5B6B8C;
+      --shadow: 0 10px 30px rgba(18, 42, 75, 0.08);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: Manrope, system-ui, sans-serif;
+      color: #262626;
+      background:
+        radial-gradient(900px 420px at 8% -8%, rgba(0,114,188,.12), transparent 55%),
+        linear-gradient(180deg, #F4F7FA 0%, var(--bg) 100%);
+      min-height: 100dvh;
+    }
+    header {
+      display: flex; flex-wrap: wrap; align-items: center; gap: .75rem;
+      padding: .85rem 1.25rem;
+      background: rgba(255,255,255,.92);
+      border-bottom: 1px solid var(--line);
+      position: sticky; top: 0; z-index: 30;
+    }
+    header h1 { font-size: 1.05rem; color: var(--navy); font-weight: 800; }
+    header p { font-size: .78rem; color: var(--muted); }
+    .badge {
+      font-size: .72rem; font-weight: 800; letter-spacing: .04em;
+      text-transform: uppercase; padding: .35rem .65rem; border-radius: 999px;
+      background: rgba(31, 138, 112, .12); color: #1F8A70;
+    }
+    .toolbar { margin-left: auto; display: flex; flex-wrap: wrap; gap: .45rem; align-items: center; }
+    .btn {
+      border: 1px solid var(--line); background: var(--surface);
+      border-radius: 999px; font: inherit; font-size: .82rem; font-weight: 700;
+      padding: .45rem .85rem; cursor: pointer;
+    }
+    .btn:hover { border-color: var(--blue); color: var(--blue); }
+    .btn.primary { background: var(--navy); border-color: var(--navy); color: #fff; }
+    .btn.primary:hover { opacity: .92; color: #fff; }
+    .stats {
+      display: flex; gap: 1rem; flex-wrap: wrap;
+      padding: .65rem 1.25rem; font-size: .82rem; color: var(--muted);
+      border-bottom: 1px solid var(--line); background: rgba(255,255,255,.6);
+    }
+    .stats strong { color: var(--navy); }
+    .status { padding: .65rem 1.25rem; font-size: .85rem; }
+    .status.error { color: #b42318; background: #fef3f2; }
+    .status.ok { color: #027a48; background: #ecfdf3; }
+    .status.info { color: var(--navy); background: #f0f5fa; }
+    .legend {
+      display: flex; gap: 1rem; flex-wrap: wrap;
+      padding: .5rem 1.25rem 0; font-size: .75rem; color: var(--muted);
+    }
+    .legend span::before {
+      content: ""; display: inline-block; width: 10px; height: 10px;
+      border-radius: 2px; margin-right: .35rem; vertical-align: middle;
+    }
+    .legend .c::before { background: var(--complex); }
+    .legend .h::before { background: var(--house); }
+    .canvas-wrap {
+      margin: 1rem;
+      background: rgba(255,255,255,.75);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      overflow: auto;
+      max-height: calc(100dvh - 200px);
+    }
+    .canvas {
+      position: relative;
+      min-width: 720px;
+      padding: 1.25rem;
+      transform-origin: top left;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1rem;
+    }
+    .complex-card {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      border-top: 4px solid var(--complex);
+      background: #fff;
+      padding: .9rem 1rem 1rem;
+      animation: fadeIn .35s ease both;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: none; }
+    }
+    .complex-card h2 {
+      font-size: .98rem; font-weight: 800; color: var(--navy);
+      margin-bottom: .2rem;
+    }
+    .complex-card .sub {
+      font-size: .72rem; color: var(--muted); margin-bottom: .65rem;
+    }
+    .house-list { list-style: none; display: grid; gap: .35rem; }
+    .house-list li {
+      font-size: .8rem; font-weight: 600;
+      padding: .4rem .55rem;
+      border-radius: 8px;
+      background: #f7fafc;
+      border: 1px solid var(--line);
+      border-left: 3px solid var(--house);
+    }
+    .house-list .empty {
+      color: var(--muted); font-weight: 500; border-left-color: #ccc;
+    }
+    a.back { color: var(--blue); text-decoration: none; font-size: .82rem; font-weight: 700; }
+    a.back:hover { text-decoration: underline; }
+    dialog {
+      border: 1px solid var(--line); border-radius: 16px; padding: 1.25rem;
+      max-width: 520px; width: calc(100% - 2rem);
+    }
+    dialog input {
+      width: 100%; margin: .5rem 0 1rem; padding: .55rem .65rem;
+      border: 1px solid var(--line); border-radius: 10px; font: inherit;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <a class="back" href="index.html">← ОБИТИ</a>
+      <h1>MacroCRM · ЖК → дома</h1>
+      <p>Жилые комплексы и корпуса. Только чтение: <code>estateComplexes/list</code>, <code>estateHouses/list</code>.</p>
+    </div>
+    <span class="badge">Read-only</span>
+    <div class="toolbar">
+      <button type="button" class="btn" id="tokenBtn">API-токен</button>
+      <button type="button" class="btn" id="reloadBtn">Обновить</button>
+      <button type="button" class="btn" id="zoomOut">−</button>
+      <button type="button" class="btn" id="zoomIn">+</button>
+      <button type="button" class="btn primary" id="snapshotBtn">Снимок</button>
+    </div>
+  </header>
+
+  <div class="stats" id="stats">Загрузка…</div>
+  <div class="status info" id="status">Подключение к <code>macrocrm-api.enco.ru/v2</code></div>
+  <div class="legend">
+    <span class="c">Жилой комплекс</span>
+    <span class="h">Дом / корпус</span>
+  </div>
+
+  <div class="canvas-wrap">
+    <div class="canvas" id="canvas"></div>
+  </div>
+
+  <dialog id="tokenDialog">
+    <form method="dialog" id="tokenForm">
+      <h3>Bearer-токен API (read-only)</h3>
+      <p style="font-size:.85rem;color:var(--muted);margin:.5rem 0">Только <code>sessionStorage</code> этой вкладки. На сервер не отправляется.</p>
+      <input type="password" id="tokenInput" autocomplete="off" placeholder="macro-3-T824_…" />
+      <div style="display:flex;gap:.5rem;justify-content:flex-end">
+        <button type="button" class="btn" id="clearToken">Очистить</button>
+        <button type="submit" class="btn primary">Сохранить и загрузить</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script>
+    const API_BASE = "https://macrocrm-api.enco.ru/v2";
+    const TOKEN_KEY = "macrocrm_estate_canvas_token";
+    const params = new URLSearchParams(location.search);
+    let scale = 1;
+
+    const els = {
+      canvas: document.getElementById("canvas"),
+      stats: document.getElementById("stats"),
+      status: document.getElementById("status"),
+      tokenDialog: document.getElementById("tokenDialog"),
+      tokenInput: document.getElementById("tokenInput"),
+    };
+
+    function setStatus(kind, html) {
+      els.status.className = "status " + kind;
+      els.status.innerHTML = html;
+    }
+
+    function getToken() {
+      return sessionStorage.getItem(TOKEN_KEY) || "";
+    }
+
+    function escapeHtml(s) {
+      return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
+    }
+
+    /** Group houses under complexes: ЖК → дом */
+    function buildTree(complexes, houses) {
+      const byId = new Map(
+        complexes.map((c) => [c.id, { ...c, houses: [] }])
+      );
+      const orphan = {
+        id: "__orphan__",
+        publicName: "Дома без ЖК",
+        houses: [],
+      };
+
+      for (const house of houses) {
+        const parent = byId.get(house.complexId);
+        if (parent) parent.houses.push(house);
+        else orphan.houses.push(house);
+      }
+
+      const sortRu = (a, b) => String(a).localeCompare(String(b), "ru");
+      const tree = [...byId.values()].sort((a, b) =>
+        sortRu(a.publicName || a.id, b.publicName || b.id)
+      );
+      for (const cx of tree) {
+        cx.houses.sort((a, b) =>
+          sortRu(a.name || a.privateName || a.id, b.name || b.privateName || b.id)
+        );
+      }
+      if (orphan.houses.length) {
+        orphan.houses.sort((a, b) =>
+          sortRu(a.name || a.privateName || a.id, b.name || b.privateName || b.id)
+        );
+        tree.push(orphan);
+      }
+      return tree;
+    }
+
+    function renderTree(tree, meta) {
+      els.stats.innerHTML =
+        "<span><strong>" + (meta.complexes ?? 0) + "</strong> ЖК</span>" +
+        "<span><strong>" + (meta.houses ?? 0) + "</strong> домов</span>" +
+        (meta.fetchedAt ? "<span>обновлено: " + meta.fetchedAt + "</span>" : "");
+
+      if (!tree.length) {
+        els.canvas.innerHTML = "<p style=\"padding:2rem;color:var(--muted)\">Нет данных.</p>";
+        return;
+      }
+
+      els.canvas.innerHTML = tree.map((cx, i) => {
+        const housesHtml = cx.houses.length
+          ? cx.houses.map((h) => {
+              const title = h.name || h.privateName || ("Дом #" + h.id);
+              const extra = [h.houseNumber, h.floorsCount ? h.floorsCount + " эт." : "", h.inServiceYear]
+                .filter(Boolean).join(" · ");
+              return (
+                "<li><strong>" + escapeHtml(title) + "</strong>" +
+                (extra ? "<br><span style=\"color:var(--muted);font-weight:500\">" + escapeHtml(extra) + "</span>" : "") +
+                "</li>"
+              );
+            }).join("")
+          : "<li class=\"empty\">Нет домов</li>";
+
+        return (
+          "<article class=\"complex-card\" style=\"animation-delay:" + (i * 0.04) + "s\">" +
+          "<h2>" + escapeHtml(cx.publicName || ("ЖК #" + cx.id)) + "</h2>" +
+          "<div class=\"sub\">" +
+          (cx.id !== "__orphan__" ? "ID " + cx.id : "без complexId") +
+          (cx.district ? " · " + escapeHtml(cx.district) : "") +
+          (cx.region ? " · " + escapeHtml(cx.region) : "") +
+          " · " + cx.houses.length + " дом." +
+          "</div>" +
+          "<ul class=\"house-list\">" + housesHtml + "</ul>" +
+          "</article>"
+        );
+      }).join("");
+      applyScale();
+    }
+
+    async function postList(token, path) {
+      const items = [];
+      let from = null;
+      for (let i = 0; i < 200; i++) {
+        const payload = from != null ? { from } : {};
+        const res = await fetch(API_BASE + "/" + path, {
+          method: "POST",
+          headers: {
+            Authorization: "Bearer " + token,
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        });
+        const text = await res.text();
+        if (!res.ok) {
+          const err = new Error(path + " → HTTP " + res.status);
+          err.status = res.status;
+          err.body = text.slice(0, 400);
+          throw err;
+        }
+        const json = JSON.parse(text);
+        items.push(...(json.data || []));
+        const next = json.meta?.next;
+        if (next == null || next === "") break;
+        from = next;
+      }
+      return items;
+    }
+
+    async function loadLive(token) {
+      setStatus("info", "Загрузка <code>estateComplexes/list</code> и <code>estateHouses/list</code>…");
+      const [complexes, houses] = await Promise.all([
+        postList(token, "estateComplexes/list"),
+        postList(token, "estateHouses/list"),
+      ]);
+      renderTree(buildTree(complexes, houses), {
+        complexes: complexes.length,
+        houses: houses.length,
+        fetchedAt: new Date().toLocaleString("ru-RU"),
+      });
+      setStatus("ok", "Данные из API (только чтение).");
+    }
+
+    async function loadSnapshot() {
+      setStatus("info", "Загрузка снимка <code>data/macrocrm-estate.json</code>…");
+      const res = await fetch("data/macrocrm-estate.json", { cache: "no-store" });
+      if (!res.ok) {
+        throw new Error("Снимок не найден (HTTP " + res.status + "). Запустите sync-скрипт или укажите токен.");
+      }
+      const data = await res.json();
+      const complexes = data.complexes || [];
+      const houses = data.houses || [];
+      renderTree(data.tree || buildTree(complexes, houses), {
+        complexes: data.counts?.complexes ?? complexes.length,
+        houses: data.counts?.houses ?? houses.length,
+        fetchedAt: data.fetchedAt || "snapshot",
+      });
+      setStatus("ok", "Локальный снимок (read-only файл).");
+    }
+
+    function demoTree() {
+      const complexes = [
+        { id: 101, publicName: "ЖК «Речной»", district: "Центральный", region: "Тюмень" },
+        { id: 102, publicName: "ЖК «Парковый»", district: "Север", region: "Тюмень" },
+        { id: 103, publicName: "ЖК «Садовый»", district: "Запад", region: "Тюмень" },
+      ];
+      const houses = [
+        { id: 1001, complexId: 101, name: "Корпус 1", houseNumber: "1", floorsCount: 24, inServiceYear: 2025 },
+        { id: 1002, complexId: 101, name: "Корпус 2", houseNumber: "2", floorsCount: 18, inServiceYear: 2026 },
+        { id: 1003, complexId: 102, name: "Корпус A", houseNumber: "A", floorsCount: 12 },
+        { id: 1004, complexId: 102, name: "Корпус B", houseNumber: "B", floorsCount: 16 },
+        { id: 1005, complexId: 103, name: "Корпус 1", houseNumber: "1", floorsCount: 9 },
+      ];
+      return { tree: buildTree(complexes, houses), complexes, houses };
+    }
+
+    async function boot() {
+      try {
+        if (params.get("demo") === "1") {
+          const d = demoTree();
+          renderTree(d.tree, { complexes: d.complexes.length, houses: d.houses.length, fetchedAt: "demo" });
+          setStatus("info", "Демо (<code>?demo=1</code>). Для боевых данных — API-токен или снимок.");
+          return;
+        }
+        if (params.get("snapshot") === "1") {
+          await loadSnapshot();
+          return;
+        }
+        const token = getToken();
+        if (token) {
+          await loadLive(token);
+          return;
+        }
+        try {
+          await loadSnapshot();
+        } catch {
+          const d = demoTree();
+          renderTree(d.tree, { complexes: d.complexes.length, houses: d.houses.length, fetchedAt: "demo" });
+          setStatus("info", "Укажите <strong>API-токен</strong> или снимок. Сейчас демо-canvas «ЖК → дом».");
+        }
+      } catch (e) {
+        const d = demoTree();
+        renderTree(d.tree, { complexes: d.complexes.length, houses: d.houses.length, fetchedAt: "demo" });
+        setStatus(
+          "error",
+          escapeHtml(e.message) +
+            (e.body ? "<br><small>" + escapeHtml(e.body) + "</small>" : "") +
+            "<br>Показан демо-canvas."
+        );
+      }
+    }
+
+    function applyScale() {
+      els.canvas.style.transform = "scale(" + scale + ")";
+    }
+
+    document.getElementById("tokenBtn").addEventListener("click", () => {
+      els.tokenInput.value = getToken();
+      els.tokenDialog.showModal();
+    });
+    document.getElementById("clearToken").addEventListener("click", () => {
+      sessionStorage.removeItem(TOKEN_KEY);
+      els.tokenInput.value = "";
+    });
+    document.getElementById("tokenForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const v = els.tokenInput.value.trim();
+      if (v) sessionStorage.setItem(TOKEN_KEY, v);
+      els.tokenDialog.close();
+      boot();
+    });
+    document.getElementById("reloadBtn").addEventListener("click", () => boot());
+    document.getElementById("snapshotBtn").addEventListener("click", () => {
+      loadSnapshot().catch((e) => setStatus("error", escapeHtml(e.message)));
+    });
+    document.getElementById("zoomIn").addEventListener("click", () => {
+      scale = Math.min(1.4, scale + 0.08);
+      applyScale();
+    });
+    document.getElementById("zoomOut").addEventListener("click", () => {
+      scale = Math.max(0.6, scale - 0.08);
+      applyScale();
+    });
+
+    boot();
+  </script>
+</body>
+</html>
